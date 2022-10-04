@@ -24,9 +24,15 @@ if(isset($_GET['api'])){
 }
 
 else{
-	echo '<pre>';
-	print_r($db->listPackages());
-	echo '</pre>';
+	$package=$db->listPackages();
+	if (empty($package)){
+		echo "ERREUR : Aucun paquet n'est présent.";
+	}
+	else{
+		for ($i=0; $i<count($package); $i++){
+			echo '<h3><a href="package.php?name='.$package[$i]->getShortName().'">';
+			print_r($package[$i]->getLongName());
+			echo '</a></h3>';
+		}
+	}
 }
-
-

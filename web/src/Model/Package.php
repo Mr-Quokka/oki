@@ -5,7 +5,7 @@ class Package implements JsonSerializable{
 	private int $id_package;
 
 	private string $short_name;
-
+	
 	private string $long_name;
 	
 	/**
@@ -30,5 +30,13 @@ class Package implements JsonSerializable{
 			$dict["versions"]=$this->versions;
 		}
 		return $dict;
+	}
+
+	public function getShortName(): string{
+		return $this->short_name;
+	}
+
+	public function getLongName(): string{
+		return $this->long_name;
 	}
 }
