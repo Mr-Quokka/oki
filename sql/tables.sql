@@ -1,4 +1,4 @@
-CREATE TABLE langage (
+CREATE TABLE language (
 	id SERIAL PRIMARY KEY,
 	designation VARCHAR(30)
 );

@@ -2,3 +2,6 @@
 .vscode
 .idea
 *.swp
+
+# Database
+*.db
