@@ -5,3 +5,9 @@
 
 # Database
 *.db
+
+# Compilation
+build
+
+# Executables
+oki
