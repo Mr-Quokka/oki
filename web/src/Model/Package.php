@@ -29,7 +29,6 @@ class Package implements JsonSerializable{
 		if(!empty($this->versions)){
 			$dict["versions"]=$this->versions;
 		}
-		// return ["id"=>$this->id_package,"versions"=>$this->versions];
 		return $dict;
 	}
 }

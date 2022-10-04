@@ -32,4 +32,14 @@ class Database {
 		$packet->setVersions($versions);
 		return $packet;
 	}
+
+	public function getPackageVersion(string $version, string $name): ?string{
+		$req = $this->pdo->prepare('SELECT v.identifier, p.short_name FROM version v, package p WHERE p.id_package=v.package_id AND :version=v.identifier AND :name=p.short_name');
+		$req->execute(['name' => $name, 'version' => $version]);
+		$res = $req->fetch();
+		if($res == false)
+			return NULL;
+
+        return $res["short_name"] . "_" . $res["identifier"] . ".zip";
+	}
 }
