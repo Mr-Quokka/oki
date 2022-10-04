@@ -1,5 +1,7 @@
 #!/bin/sh
 
+rm ../web/oki_packages.db
+
 sqlite3 ../web/oki_packages.db < tables.sql
 
 sqlite3 ../web/oki_packages.db << EOF
