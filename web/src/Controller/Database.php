@@ -1,6 +1,8 @@
 <?php declare(strict_types = 1);
 
 require __DIR__ . '/../Model/Package.php';
+require __DIR__ . '/../Model/PackageVersion.php';
+
 
 class Database {
 	private PDO $pdo;
@@ -16,9 +18,18 @@ class Database {
 	}
 
 	public function getPackageInfo(string $packageName): ?Package {
-		$req = $this->pdo->prepare('SELECT * FROM package p INNER JOIN version v ON v.package_id = p.id WHERE short_name = :name;');
-		$req->execute(['name' => $packageName]);
-		$req->setFetchMode(PDO::FETCH_CLASS, Package::class);
-		return $req->fetch();
+		$reqPacket = $this->pdo->prepare('SELECT * FROM package WHERE short_name = :name;');
+		$reqPacket->execute(['name' => $packageName]);
+		$reqPacket->setFetchMode(PDO::FETCH_CLASS, Package::class);
+		$packet = $reqPacket->fetch();
+		if(!$packet)
+			return NULL;
+
+		$reqVersion = $this->pdo->prepare('SELECT * FROM version v WHERE v.package_id = :id');
+		$reqVersion->execute(['id' => $packet->getId()]);
+		$versions = $reqVersion->fetchAll(PDO::FETCH_CLASS, PackageVersion::class);
+
+		$packet->setVersions($versions);
+		return $packet;
 	}
 }
