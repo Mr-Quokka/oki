@@ -5,16 +5,6 @@ $short_name=$_GET['name'];
 
 $pa = new Package();
 $db = new Database();
-
-/*
-for ($i=0; $i<count($db); $i++){
-	if ($db[$i]->getShortName() == $short_name){
-		$pa=$db[$i];
-		break;
-	}
-}
-*/
-
 $pa=$db->getPackageInfo($short_name);
 
 $paVersions=$pa->getVersions();

@@ -1,3 +1,15 @@
+<center><pre>
+ ██████╗ ██╗  ██╗██╗
+██╔═══██╗██║ ██╔╝██║
+██║   ██║█████╔╝ ██║
+██║   ██║██╔═██╗ ██║
+╚██████╔╝██║  ██╗██║
+ ╚═════╝ ╚═╝  ╚═╝╚═╝
+</pre></center>
+<br/>
+<center><h2><a href="publish.php">Publier un paquet</a></h2></center>
+<hr/>
+
 <?php
 require __DIR__ . '/../src/Controller/Database.php';
 

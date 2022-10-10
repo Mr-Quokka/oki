@@ -13,4 +13,3 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 <p>Fichier du packet : <input type="file" name="packet" accept=".zip"></p>
 <p><input type="submit" value="OK"></p>
 </form>
-
