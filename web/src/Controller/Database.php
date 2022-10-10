@@ -40,6 +40,6 @@ class Database {
 		if($res == false)
 			return NULL;
 
-        return $res["short_name"] . "_" . $res["identifier"] . ".zip";
+        return "packages/" . $res["short_name"] . "_" . $res["identifier"] . ".zip";
 	}
 }

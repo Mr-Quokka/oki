@@ -10,3 +10,7 @@ INSERT INTO package VALUES (1, 'linked-list', 'My amazing linked list package', 
 INSERT INTO version VALUES (1,1,'1.0.0-ALPHA',CURRENT_TIMESTAMP);
 INSERT INTO package VALUES (2, 'linked-list2', 'My second amazing linked list package', 1);
 EOF
+
+if [ ! -f ../web/public/packages/linked-list_1.0.0-ALPHA.zip ] ; then 
+    touch ../web/public/packages/linked-list_1.0.0-ALPHA.zip
+fi
