@@ -21,19 +21,41 @@ if(isset($_GET['api'])){
 	header('Content-type: application/json');
 	if($_GET['api'] == 'info'){
 		if(isset($_GET['package']))
-			echo json_encode($db->getPackageInfo($_GET['package']));
+			$packageInfo=$db->getPackageInfo($_GET['package']);
+			if(empty($packageInfo))
+				echo json_encode(["error"=>"this packet does not exists"]);
+			else
+				echo json_encode($packageInfo);
 	}
 
-	if($_GET['api'] == 'list')
-		echo json_encode($db->listPackages());
+	if($_GET['api'] == 'list'){
+		$packageList=$db->listPackages();
+		if(empty($packageList))
+			echo json_encode(["error"=>"there's no packages in the database"]);
+		else
+			echo json_encode($db->listPackages());
+	}
 
 	if($_GET['api'] == 'version'){
-		
-		$packageName=$_GET['name'];
-		$packageVersion=$_GET['version'];
 
-		$version=$db->getPackageVersion($packageVersion,$packageName);
-		echo json_encode($version);
+		if(empty($_GET['name']))
+			echo json_encode(["error"=>"must have a package name"]);
+		else{
+			$packageName=$_GET['name'];
+
+			if(empty($_GET['version']))
+				echo json_encode(["error"=>"must have a package version name"]);
+			else{
+			$packageVersion=$_GET['version'];
+
+				$version=$db->getPackageVersion($packageVersion,$packageName);
+
+				if(empty($version))
+					echo json_encode(["error"=>"this version of the package does not exists"]);
+				else
+					echo json_encode($version);
+			}
+		}
 	}
 }
 
