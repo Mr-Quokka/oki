@@ -25,7 +25,7 @@ class Database {
 		if(!$packet)
 			return NULL;
 
-		$reqVersion = $this->pdo->prepare('SELECT * FROM version v WHERE v.package_id = :id');
+		$reqVersion = $this->pdo->prepare('SELECT * FROM version v WHERE v.package_id = :id ORDER BY published_date DESC');
 		$reqVersion->execute(['id' => $packet->getId()]);
 		$versions = $reqVersion->fetchAll(PDO::FETCH_CLASS, PackageVersion::class);
 
@@ -41,5 +41,16 @@ class Database {
 			return NULL;
 
         return "packages/" . $res["short_name"] . "_" . $res["identifier"] . ".zip";
+	}
+
+	public function insererPacket(string $short, string $long, string $language, string $version){
+
+		$req = $this->pdo->prepare('INSERT INTO package (short_name,long_name,langage_id) values (:short,:long,:language);');
+		$req->execute(['short'=>$short,'long'=>$long,'language'=>$language]);
+		$package_id=$this->pdo->lastInsertId();
+
+		var_dump($package_id);
+        $req = $this->pdo->prepare('INSERT INTO version (package_id,identifier,published_date) values (:package_id,:version,CURRENT_DATE);');
+		$req->execute(['package_id'=>$package_id,'version'=>$version]);
 	}
 }
