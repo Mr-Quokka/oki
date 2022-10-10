@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-class PackageVersion {
+class PackageVersion implements JsonSerializable{
 	private int $id_version;
 
 	private string $identifier;
@@ -17,5 +17,13 @@ class PackageVersion {
 
 	public function getPublishedDate(): string{
 		return $this->published_date;
+	}
+
+	public function jsonSerialize(){
+		$dict=[];
+		$dict["id_version"]=$this->id_version;
+		$dict["identifier"]=$this->identifier;
+		$dict["published_date"]=$this->published_date;
+		return $dict;
 	}
 }

@@ -21,4 +21,14 @@ namespace oki{
     void RemoteRepository::download(std::string_view packageName, const std::filesystem::path &destination) {
 
     }
+
+    std::optional<Package> RemoteRepository::showPackage(std::string_view packageName){
+        HttpRequest request{apiUrl + "?api=info&package=" + std::string{packageName}};
+        json data = json::parse(request.get());
+        std::vector<Version> versions;
+        for (const auto &item : data.at("versions")){
+            versions.emplace_back(item.at("identifier").get<std::string>(), item.at("published_date").get<std::string>());
+        }
+        return Package(data.at("short_name").get<std::string>(),data.at("long_name").get<std::string>(), versions);
+    }
 }

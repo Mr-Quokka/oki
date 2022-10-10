@@ -22,4 +22,9 @@ namespace oki{
     void LocalRepository::download(std::string_view packageName, const fs::path& destination) {
         std::cerr << "TODO : downloading " << packageName << "\n";
     }
+
+    std::optional<Package> LocalRepository::showPackage(std::string_view packageName){
+        std::cerr << "TODO : show " << packageName << "\n";
+        return {};
+    }
 }

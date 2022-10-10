@@ -11,6 +11,7 @@ namespace oki{
     void help(std::ostream &os) {
         os << "help: Show this help\n";
         os << "list: List available packages\n";
+        os << "show: Show the informations of the package\n";
         os << "install: Install a new package\n";
     }
 
@@ -31,6 +32,13 @@ namespace oki{
                 exit(1);
             }
             return InstallAction{argv[2]};
+        } else if (strcmp("show", argv[1]) == 0) {
+            if (argc < 3) {
+                invalidUsage(std::cerr);
+                std::cerr << "Add a package name after show.\n";
+                exit(1);
+            }
+            return ShowAction{argv[2]};
         } else {
             exit(1);
         }
