@@ -13,7 +13,7 @@ void LocalRepository::createIfNotExists() {
 std::vector<Package> LocalRepository::listPackages() {
     std::vector<Package> packages;
     for (const auto& file : fs::directory_iterator(root)) {
-        packages.push_back(Package{file.path().filename().string()});
+        packages.emplace_back(file.path().filename().string(), "");
     }
     return packages;
 }

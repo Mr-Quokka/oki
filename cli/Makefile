@@ -6,18 +6,19 @@ CXXFLAGS := -std=c++20 \
 	-Wnon-virtual-dtor \
 	-Wsuggest-override \
 	-pedantic \
-	-g -MMD -MP
-#LDLIBS := -lboost_program_options # Libraries utilisées pour l'édition des liens
+	-g -MMD -MP \
+	-fdiagnostics-color=always
+LDLIBS := -lcurl # Libraries utilisées pour l'édition des liens
 
 # Nom de l'exécutable final
 TARGET_EXE := oki 
 
 # Répertoires des fichiers compilés et de sources
 BUILD_DIR := build
-SRC_DIR := src src/config src/package src/repository
+SRC_DIR := src src/cli src/config src/io src/package src/repository
 
 # Répertoires où rechercher les fichiers header
-CPPFLAGS=-Ithird-party $(addprefix -I,$(SRC_DIR))
+CPPFLAGS=-Ithird-party
 
 # Liste tous les fichiers sources .cpp
 sources := $(foreach dir,$(SRC_DIR),$(wildcard $(dir)/*.cpp))
