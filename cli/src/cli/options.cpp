@@ -5,7 +5,7 @@
 
 namespace oki{
     void invalidUsage(std::ostream &os) {
-    std::cerr << "Invalid usage. Hint: ";
+        os << "Invalid usage. Hint: ";
     }
 
     void help(std::ostream &os) {
@@ -21,6 +21,7 @@ namespace oki{
         }
         if (strcmp("help", argv[1]) == 0) {
             help(std::cout);
+            exit(0);
         } else if (strcmp("list", argv[1]) == 0) {
             return ListAction{};
         } else if (strcmp("install", argv[1]) == 0) {
