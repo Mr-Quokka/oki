@@ -2,4 +2,6 @@
 
 #include <filesystem>
 
-std::filesystem::path getDefaultLocalRepository();
+namespace oki{
+	std::filesystem::path getDefaultLocalRepository();
+}

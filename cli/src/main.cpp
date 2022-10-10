@@ -4,6 +4,8 @@
 #include "cli/options.h"
 #include "repository/RemoteRepository.h"
 
+using namespace oki;
+
 std::size_t writeCallback(char *in, size_t size, size_t nmemb, std::string *out){ 
     std::size_t total_size = size * nmemb;
     if (total_size){
