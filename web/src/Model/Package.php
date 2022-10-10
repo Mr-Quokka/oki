@@ -21,6 +21,18 @@ class Package implements JsonSerializable{
 		return $this->id_package;
 	}
 
+	public function getShortName(): string{
+		return $this->short_name;
+	}
+
+	public function getLongName(): string{
+		return $this->long_name;
+	}
+
+	public function getVersions(): array{
+		return $this->versions;
+	}
+
 	public function jsonSerialize(){
 		$dict=[];
 		$dict["id_package"]=$this->id_package;
@@ -30,13 +42,5 @@ class Package implements JsonSerializable{
 			$dict["versions"]=$this->versions;
 		}
 		return $dict;
-	}
-
-	public function getShortName(): string{
-		return $this->short_name;
-	}
-
-	public function getLongName(): string{
-		return $this->long_name;
 	}
 }

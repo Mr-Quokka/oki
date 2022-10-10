@@ -26,7 +26,7 @@ if(isset($_GET['api'])){
 else{
 	$package=$db->listPackages();
 	if (empty($package)){
-		echo "ERREUR : Aucun paquet n'est présent.";
+		echo "ERREUR : Aucun paquet n'est présent";
 	}
 	else{
 		for ($i=0; $i<count($package); $i++){
