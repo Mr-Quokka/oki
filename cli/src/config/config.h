@@ -4,4 +4,5 @@
 
 namespace oki{
 	std::filesystem::path getDefaultLocalRepository();
+	bool acceptColor();
 }

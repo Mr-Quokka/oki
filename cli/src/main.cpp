@@ -2,6 +2,7 @@
 #include <string>
 
 #include "cli/options.h"
+#include "config/config.h"
 #include "repository/RemoteRepository.h"
 
 using namespace oki;
@@ -16,6 +17,7 @@ std::size_t writeCallback(char *in, size_t size, size_t nmemb, std::string *out)
 }
 
 int main(int argc, char *argv[]) {
+    bool color = acceptColor();
     CliAction action = parseArguments(argc, argv);
     RemoteRepository repository{"http://localhost:8000"};
     if (std::holds_alternative<ListAction>(action)) {
@@ -24,13 +26,19 @@ int main(int argc, char *argv[]) {
         }
     } else if (auto* install = std::get_if<InstallAction>(&action)) {
         std::cout << "Installing " << install->packageName << "...\n";
-    } else if(auto* show = std::get_if<ShowAction>(&action)){
+    } else if (auto* show = std::get_if<ShowAction>(&action)){
         std::optional<Package> p = repository.showPackage(show->packageName);
         if(p == std::nullopt){
             std::cout << "Le package n'existe pas\n";
+        } else {
+            if (color) {
+                std::cout << "\e[32m" << p->getShortName() << "\e[0m/";
+            } else {
+                std::cout << p->getShortName() << "/";
+            }
+            const Version& latest = p->getVersions().front();
+            std::cout << latest.getIdentifier() << latest.getPublishedDate()<< "\n\t" << p->getLongName() << "\n";
         }
-        else std::cout << p->getShortName() << "/" << p->getVersions().front().getIdentifier() << "\t"
-            << p->getVersions().front().getPublishedDate()<< "\n\t" << p->getLongName() << "\n";
     }
     return 0;
 }

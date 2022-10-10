@@ -1,6 +1,7 @@
 #include "config.h"
 
 #include <cstdlib>
+#include <unistd.h>
 
 namespace fs = std::filesystem;
 
@@ -12,5 +13,9 @@ namespace oki{
             return std::getenv("HOME") / fs::path{".local/share/oki"};
         }
         return xdgData / fs::path{"oki"};
+    }
+
+    bool acceptColor() {
+        return isatty(fileno(stdout));
     }
 }
