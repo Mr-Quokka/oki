@@ -1,6 +1,20 @@
 <?php
 require __DIR__ . '/../src/Controller/Database.php';
 
+function errorPage(int $code){
+	switch ($code) {
+		case '404':
+			$code="404 NOT_FOUND";
+			$message="Le paquet demandé n'existe pas";
+			break;
+		
+		default:
+			break;
+	}
+	print_r("<html><head><meta charset=\"utf-8\"><head/><title>$code</title>
+		<body><center><h1>$code</h1><hr/><h2>$message<h2/></center></body></html>");
+}
+
 $db = new Database();
 
 if(isset($_GET['api'])){
