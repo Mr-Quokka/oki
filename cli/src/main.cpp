@@ -7,15 +7,6 @@
 
 using namespace oki;
 
-std::size_t writeCallback(char *in, size_t size, size_t nmemb, std::string *out){ 
-    std::size_t total_size = size * nmemb;
-    if (total_size){
-        out->append(in, total_size);
-        return total_size;
-    }
-    return 0;
-}
-
 int main(int argc, char *argv[]) {
     bool color = acceptColor();
     CliAction action = parseArguments(argc, argv);
