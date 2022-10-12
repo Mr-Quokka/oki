@@ -3,7 +3,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     var_dump($_POST);
 }
 ?>
-
+<h1><a href="index.php"><</a></h1>
 <form enctype="multipart/form-data" action="" method="post">
 <h1>Formulaire de publication d'un packet</h1>
 <p>Surnom du packet : <input type="text" name="short_name" /></p>
@@ -26,14 +26,12 @@ if( !empty($_POST['short_name']) or !empty($_POST['long_name']) or !empty($_POST
     $long=$_POST['long_name'];
     $language=$_POST['language'];
     $version=$_POST['version'];
-    $packet=$_POST['packet'];
 
-    if($db->getPackageVersion($short,$version) == NULL){
+    $db->insererPacket($short,$long,$language,$version);
+    
+    $name = basename($_FILES['packet']['name']);
 
-        $db->insererPacket($short,$long,$language,$version);
-
-        move_uploaded_file($_FILES, "packages/");
-    }
+    move_uploaded_file($_FILES['packet']['tmp_name'], "packages/$name");
 }
 
 ?>

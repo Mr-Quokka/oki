@@ -46,11 +46,21 @@ class Database {
 	public function insererPacket(string $short, string $long, string $language, string $version){
 
 		$req = $this->pdo->prepare('INSERT INTO package (short_name,long_name,langage_id) values (:short,:long,:language);');
-		$req->execute(['short'=>$short,'long'=>$long,'language'=>$language]);
-		$package_id=$this->pdo->lastInsertId();
+		
+		try {
+			$res = $req->execute(['short'=>$short,'long'=>$long,'language'=>$language]);
+			if(!$res)
+				throw new Exception('CPT');
+		}catch(Exception $e){
+			echo '<p style="color: red">A package with this short name already exists</p>';
+			http_response_code(500);
+			return ;
+		}
+			$package_id=$this->pdo->lastInsertId();
 
-		var_dump($package_id);
         $req = $this->pdo->prepare('INSERT INTO version (package_id,identifier,published_date) values (:package_id,:version,CURRENT_DATE);');
-		$req->execute(['package_id'=>$package_id,'version'=>$version]);
+
+		$res = $req->execute(['package_id'=>$package_id,'version'=>$version]);
 	}
 }
+?>
