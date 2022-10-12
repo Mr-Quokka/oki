@@ -2,7 +2,7 @@
 
 rm -f ../web/oki_packages.db
 
-sqlite3 ../web/oki_packages.db < tables.sql
+sed 's/SERIAL PRIMARY KEY/INTEGER PRIMARY KEY AUTOINCREMENT/g' tables.sql | sqlite3 ../web/oki_packages.db
 
 sqlite3 ../web/oki_packages.db << EOF
 INSERT INTO language VALUES (1, 'C');
@@ -11,6 +11,7 @@ INSERT INTO version VALUES (1,1,'1.0.0-ALPHA',CURRENT_TIMESTAMP);
 INSERT INTO package VALUES (2, 'linked-list2', 'My second amazing linked list package', 1);
 EOF
 
-if [ ! -f ../web/public/packages/linked-list_1.0.0-ALPHA.zip ] ; then 
+if [ ! -f ../web/public/packages/linked-list_1.0.0-ALPHA.zip ] ; then
+    mkdir -p ../web/public/packages
     touch ../web/public/packages/linked-list_1.0.0-ALPHA.zip
 fi
