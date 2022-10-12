@@ -12,6 +12,10 @@ namespace oki{
         return 0;
     }
 
+    static std::size_t writeDataCallback(char *in, std::size_t size, std::size_t nmemb, FILE *out) {
+        return fwrite(in, size, nmemb, out);
+    }
+
     HttpRequest::HttpRequest(std::string_view url) : curl{curl_easy_init()}, url{url} {
         curl_easy_setopt(curl, CURLOPT_URL, this->url.c_str());
     }
@@ -25,6 +29,20 @@ namespace oki{
             throw RequestException{static_cast<int>(res)};
         }
         return buffer;
+    }
+
+    void HttpRequest::download(const std::filesystem::path& path) {
+        // Utilisation de l'API C FILE plutôt qu'ofstream pour pouvoir faire un simple fwrite() avec les arguments renseignés par CURL.
+        FILE *file = fopen(path.c_str(), "wb");
+        if (file == nullptr) {
+            throw std::system_error(errno, std::generic_category(), path);
+        }
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
+        CURLcode res = curl_easy_perform(curl);
+        if (res != CURLE_OK) {
+            throw RequestException{static_cast<int>(res)};
+        }
     }
 
     HttpRequest::~HttpRequest() {

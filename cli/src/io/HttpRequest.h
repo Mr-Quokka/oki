@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <string>
 
 namespace oki{
@@ -10,6 +11,7 @@ namespace oki{
     public:
         explicit HttpRequest(std::string_view url);
         std::string get();
+        void download(const std::filesystem::path& path);
         ~HttpRequest();
     };
 
