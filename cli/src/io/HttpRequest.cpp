@@ -40,6 +40,7 @@ namespace oki{
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writeDataCallback);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
         CURLcode res = curl_easy_perform(curl);
+        fclose(file);
         if (res != CURLE_OK) {
             throw RequestException{static_cast<int>(res)};
         }
