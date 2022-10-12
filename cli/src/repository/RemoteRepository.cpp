@@ -29,8 +29,10 @@ namespace oki{
         if(data.contains("error")){
             throw APIExeption(data.at("error").get<std::string>());
         }
-        for (const auto &item : data.at("versions")){
-            versions.emplace_back(item.at("identifier").get<std::string>(), item.at("published_date").get<std::string>());
+        if(data.contains("versions")){
+            for (const auto &item : data.at("versions")){
+                versions.emplace_back(item.at("identifier").get<std::string>(), item.at("published_date").get<std::string>());
+            }
         }
         return Package(data.at("short_name").get<std::string>(),data.at("long_name").get<std::string>(), versions);
     }
