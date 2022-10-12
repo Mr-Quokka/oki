@@ -7,9 +7,9 @@ namespace oki{
     class Version {
     private:
         std::string identifier;
-        std::string published_date;
+        std::string publishedDate;
     public:
-        Version(std::string_view identifier, std::string_view published_date);
+        Version(std::string_view identifier, std::string_view publishedDate);
         const std::string& getIdentifier() const;
         const std::string& getPublishedDate() const;
     };
