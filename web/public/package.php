@@ -4,7 +4,7 @@ require __DIR__ . '/../src/Controller/Database.php';
 function errorPage(int $code){
 	switch ($code) {
 		case '404':
-			$code="404 NOT_FOUND";
+			$code="404 NOT FOUND";
 			$message="Le paquet demandé n'existe pas";
 			http_response_code(404);
 			break;
@@ -37,14 +37,14 @@ if (! empty($pa)){
 	echo '</h4></center><hr/><br/>';
 
 	if(empty($paVersions)){
-		echo "<h2><center>Aucune versions du packet n'a été implémentée</center></h2>";
+		echo "<h2><center>Aucune version du packet n'a été implémentée</center></h2>";
 	}
 	else{
-		for ($i=0; $i<count($paVersions); $i++){
+		foreach ($paVersions as $i){
 			echo '<center><strong>';
-			print_r($paVersions[$i]->getIdentifier());
+			print_r($i->getIdentifier());
 			echo "</strong> : Publié le <strong>";
-			print_r($paVersions[$i]->getPublishedDate());
+			print_r($i->getPublishedDate());
 			echo '</strong></center>';
 		}
 	}

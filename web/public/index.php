@@ -1,6 +1,11 @@
 <?php
 require __DIR__ . '/../src/Controller/Database.php';
 
+function errorMess(string $message, int $httpCode){
+	echo json_encode(["error"=>"$message"]);
+	http_response_code($httpCode);
+}
+
 $db = new Database();
 
 if(isset($_GET['api'])){
@@ -8,48 +13,50 @@ if(isset($_GET['api'])){
 
 	switch ($_GET['api']){
 
-	case 'info':
-		if(isset($_GET['package']))
-			$packageInfo=$db->getPackageInfo($_GET['package']);
-			if(empty($packageInfo))
-				echo json_encode(["error"=>"this packet does not exists"]);
+		case 'info':
+			if(empty($_GET['package']))
+				errorMess("must have a package name", 400);
+			else{
+				$packageInfo=$db->getPackageInfo($_GET['package']);
+				if(empty($packageInfo))
+					errorMess("this packet does not exists", 404);
+				else
+					echo json_encode($packageInfo);
+			}
+				break;
+
+		case 'list':
+			$packageList=$db->listPackages();
+			if(empty($packageList))
+				errorMess("there is no packages in the database", 404);
 			else
-				echo json_encode($packageInfo);
+				echo json_encode($db->listPackages());
 			break;
 
-	case 'list':
-		$packageList=$db->listPackages();
-		if(empty($packageList))
-			echo json_encode(["error"=>"there's no packages in the database"]);
-		else
-			echo json_encode($db->listPackages());
-		break;
-
-	case 'version':
-
-		if(empty($_GET['name']))
-			echo json_encode(["error"=>"must have a package name"]);
-		else{
-			$packageName=$_GET['name'];
-
-			if(empty($_GET['version']))
-				echo json_encode(["error"=>"must have a package version name"]);
+		case 'version':
+			if(empty($_GET['name']))
+				errorMess("must have a package name", 400);
 			else{
-			$packageVersion=$_GET['version'];
 
-				$version=$db->getPackageVersion($packageVersion,$packageName);
+				if(empty($_GET['version']))
+					errorMess("must have a package version name", 400);
+				else{
+				$packageName=$_GET['name'];
+				$packageVersion=$_GET['version'];
 
-				if(empty($version))
-					echo json_encode(["error"=>"this version of the package does not exists"]);
-				else
-					echo json_encode($version);
+					$version=$db->getPackageVersion($packageVersion,$packageName);
+
+					if(empty($version))
+						errorMess("this version of the package does not exists", 404);
+					else
+						echo json_encode($version);
+				}
 			}
-		}
-		break;
+			break;
 
-	default:
-		echo json_encode(["error"=>"unknown action"]);
-		break;
+		default:
+			errorMess("unknown action", 400);
+			break;
 	}
 }
 
@@ -71,9 +78,9 @@ else{
 		echo "ERREUR : Aucun paquet n'est présent";
 	}
 	else{
-		for ($i=0; $i<count($package); $i++){
-			echo '<h3><a href="package.php?name='.$package[$i]->getShortName().'">';
-			print_r($package[$i]->getLongName());
+		foreach ($package as $i){
+			echo '<h3><a href="package.php?name='.$i->getShortName().'">';
+			print_r($i->getLongName());
 			echo '</a></h3>';
 		}
 	}
