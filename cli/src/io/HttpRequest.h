@@ -20,4 +20,12 @@ namespace oki{
         explicit RequestException(int code);
         const char *what() const noexcept override;
     };
+
+    class APIExeption : public std::exception {
+    private:
+        std::string msg;
+    public:
+        explicit APIExeption(std::string_view msg);
+        const char *what() const noexcept override;
+    };
 }

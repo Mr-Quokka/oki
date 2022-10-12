@@ -26,6 +26,9 @@ namespace oki{
         HttpRequest request{apiUrl + "?api=info&package=" + std::string{packageName}};
         json data = json::parse(request.get());
         std::vector<Version> versions;
+        if(data.contains("error")){
+            throw APIExeption(data.at("error").get<std::string>());
+        }
         for (const auto &item : data.at("versions")){
             versions.emplace_back(item.at("identifier").get<std::string>(), item.at("published_date").get<std::string>());
         }
