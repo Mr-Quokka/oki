@@ -32,12 +32,18 @@ int main(int argc, char *argv[]) {
             std::cout << "Le package n'existe pas\n";
         } else {
             if (color) {
-                std::cout << "\e[32m" << p->getShortName() << "\e[0m/";
+                std::cout << "\e[32m" << p->getShortName() << "\e[0m";
             } else {
-                std::cout << p->getShortName() << "/";
+                std::cout << p->getShortName();
             }
-            const Version& latest = p->getVersions().front();
-            std::cout << latest.getIdentifier() << latest.getPublishedDate()<< "\n\t" << p->getLongName() << "\n";
+            if (!p->getVersions().empty()) {
+                const Version& latest = p->getVersions().front();
+                std::cout << "/" << latest.getIdentifier() << " (" << latest.getPublishedDate() << ")";
+            }
+            std::cout << "\n\t" << p->getLongName() << "\n\n";
+            for (const Version& version : p->getVersions()) {
+                std::cout << "\t" << version.getIdentifier() << " (" << version.getPublishedDate() << ")\n";
+            }
         }
     }
     return 0;
