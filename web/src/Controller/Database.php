@@ -29,6 +29,9 @@ class Database {
 		$reqVersion->execute(['id' => $packet->getId()]);
 		$versions = $reqVersion->fetchAll(PDO::FETCH_CLASS, PackageVersion::class);
 
+		foreach($versions as $version)
+			$version->setPackage($packet);
+
 		$packet->setVersions($versions);
 		return $packet;
 	}

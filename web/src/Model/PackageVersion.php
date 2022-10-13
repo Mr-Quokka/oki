@@ -3,21 +3,25 @@
 class PackageVersion implements JsonSerializable{
 	private int $id_version;
 
-	private int $id_package;
+	private Package $package;
 
 	private string $identifier;
 
 	private string $published_date;
 
-	private string $url;
 
 	public function getIdVersion(): int{
 		return $this->id_version;
 	}
 
-	public function getIdPackage(): int{
-		return $this->id_package;
+	public function getPackage(): int{
+		return $this->package;
 	}
+
+	public function setPackage(Package $pck){
+		$this->package = $pck;
+	}
+
 
 	public function getIdentifier(): string{
 		return $this->identifier;
@@ -27,15 +31,13 @@ class PackageVersion implements JsonSerializable{
 		return $this->published_date;
 	}
 
-	public function getPublishedDate(): string{
-		return $this->url;
-	}
 
 	public function jsonSerialize(){
 		$dict=[];
 		$dict["id_version"]=$this->id_version;
 		$dict["identifier"]=$this->identifier;
 		$dict["published_date"]=$this->published_date;
+		$dict["download_url"]= "/packages/" . $this->package->getShortName() . "_" . $this->identifier . ".zip";
 		return $dict;
 	}
 }
