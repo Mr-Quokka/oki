@@ -5,6 +5,8 @@
 #include "config/config.h"
 #include "repository/RemoteRepository.h"
 
+namespace fs = std::filesystem;
+
 using namespace oki;
 
 int main(int argc, char *argv[]) {
@@ -20,7 +22,9 @@ int main(int argc, char *argv[]) {
         if (p == std::nullopt || p->getVersions().empty()) {
             std::cerr << "This packet doesn't exist or doesn't have any version\n";
         } else {
-            repository.download(p->getVersions().front(), "dependencies");
+            fs::path packagesPath{"oki-packages"};
+            fs::create_directories(packagesPath);
+            repository.download(p->getVersions().front(), packagesPath);
         }
     } else if (auto* show = std::get_if<ShowAction>(&action)){
         std::optional<Package> p = repository.showPackage(show->packageName);
