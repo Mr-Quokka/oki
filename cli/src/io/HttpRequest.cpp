@@ -56,9 +56,9 @@ namespace oki{
         return curl_easy_strerror(static_cast<CURLcode>(code));
     }
 
-    APIExeption::APIExeption(std::string_view msg) : msg{msg} {}
+    APIException::APIException(std::string_view msg) : msg{msg} {}
 
-    const char *APIExeption::what() const noexcept {
+    const char *APIException::what() const noexcept {
         return this->msg.c_str();
     }
 }

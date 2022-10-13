@@ -8,7 +8,7 @@ CXXFLAGS := -std=c++20 \
 	-pedantic \
 	-g -MMD -MP \
 	-fdiagnostics-color=always
-LDLIBS := -lcurl # Libraries utilisées pour l'édition des liens
+LDLIBS := -lcurl -lminizip # Bibliothèques utilisées pour l'édition des liens
 
 # Nom de l'exécutable final
 TARGET_EXE := oki 

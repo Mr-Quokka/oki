@@ -11,6 +11,6 @@ namespace oki{
         void createIfNotExists();
         std::vector<Package> listPackages() override;
         std::optional<Package> showPackage(std::string_view packageName) override;
-        void download(std::string_view packageName, const std::filesystem::path& destination) override;
+        void download(const Version &packageVersion, const std::filesystem::path& destination) override;
     };
 }

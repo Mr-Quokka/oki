@@ -33,9 +33,8 @@ php -S localhost:8000 -t web/public
 ### Compile the cli
 #### At home
 ```bash
-cd cli 
-apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev 
-make
+apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev
+cd cli && make
 ```
 #### At the IUT
 ```bash

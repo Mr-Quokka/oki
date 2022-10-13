@@ -22,8 +22,8 @@ vdn-ssh root@$VDN_SYSTEM << EOF
 route del default gw 192.168.2.1
 route add default gw 10.0.2.2
 export http_proxy=http://193.49.118.36:8080/
-if ! pkg-config nlohmann_json --exists || ! pkg-config libcurl --exists; then
-  apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev
+if ! pkg-config nlohmann_json --exists || ! pkg-config libcurl --exists || ! pkg-config libminizip --exists; then
+  apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev
 fi
 make
 EOF

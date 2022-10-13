@@ -16,14 +16,19 @@ int main(int argc, char *argv[]) {
             std::cout << package.getShortName() << ": " << package.getLongName() << "\n";
         }
     } else if (auto* install = std::get_if<InstallAction>(&action)) {
-        std::cout << "Installing " << install->packageName << "...\n";
+        std::optional<Package> p = repository.showPackage(install->packageName);
+        if (p == std::nullopt || p->getVersions().empty()) {
+            std::cerr << "This packet doesn't exist or doesn't have any version\n";
+        } else {
+            repository.download(p->getVersions().front(), "dependencies");
+        }
     } else if (auto* show = std::get_if<ShowAction>(&action)){
         std::optional<Package> p = repository.showPackage(show->packageName);
-        if(p == std::nullopt){
-            std::cout << "Le package n'existe pas\n";
+        if (p == std::nullopt) {
+            std::cerr << "This packet doesn't exist\n";
         } else {
             if (color) {
-                std::cout << "\e[32m" << p->getShortName() << "\e[0m";
+                std::cout << "\x1B[32m" << p->getShortName() << "\x1B[0m";
             } else {
                 std::cout << p->getShortName();
             }
