@@ -3,12 +3,20 @@
 class PackageVersion implements JsonSerializable{
 	private int $id_version;
 
+	private int $id_package;
+
 	private string $identifier;
 
 	private string $published_date;
 
+	private string $url;
+
 	public function getIdVersion(): int{
 		return $this->id_version;
+	}
+
+	public function getIdPackage(): int{
+		return $this->id_package;
 	}
 
 	public function getIdentifier(): string{
@@ -17,6 +25,10 @@ class PackageVersion implements JsonSerializable{
 
 	public function getPublishedDate(): string{
 		return $this->published_date;
+	}
+
+	public function getPublishedDate(): string{
+		return $this->url;
 	}
 
 	public function jsonSerialize(){
