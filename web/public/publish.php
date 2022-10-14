@@ -13,29 +13,29 @@
 
 require __DIR__ . '/../src/Controller/Database.php';
 
-$db = new Database();
+$db = new \Controller\Database();
 
 if( !empty($_POST['short_name']) or !empty($_POST['long_name']) or !empty($_POST['language']) or !empty($_POST['version']) or !empty($_POST['packet'])){
-    
+
     $short=$_POST['short_name'];
     $long=$_POST['long_name'];
     $language=$_POST['language'];
     $version=$_POST['version'];
 
     $db->insererPacket($short,$long,$language,$version);
-    
+
     $name = basename($_FILES['packet']['name']);
 
     move_uploaded_file($_FILES['packet']['tmp_name'], "packages/$name");
 
     $extension = new SplFileInfo($_FILES['packet']['name']);
-    
+
     $extension = $extension->getExtension();
-    
+
     chdir("packages/");
 
     rename("$name","$short"."_"."$version"."."."$extension");
- 
+
 }
 
 else{

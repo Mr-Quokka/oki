@@ -1,13 +1,17 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
-class Package implements JsonSerializable{
+namespace Model;
+
+use JsonSerializable;
+
+class Package implements JsonSerializable {
 
 	private int $id_package;
 
 	private string $short_name;
-	
+
 	private string $long_name;
-	
+
 	/**
 	 * @var PackageVersion[]
 	 */

@@ -1,8 +1,14 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
+
+namespace Controller;
 
 require __DIR__ . '/../Model/Package.php';
 require __DIR__ . '/../Model/PackageVersion.php';
 
+use Exception;
+use Model\Package;
+use Model\PackageVersion;
+use PDO;
 
 class Database {
 	private PDO $pdo;
@@ -49,7 +55,7 @@ class Database {
 	public function insererPacket(string $short, string $long, string $language, string $version){
 
 		$req = $this->pdo->prepare('INSERT INTO package (short_name,long_name,langage_id) values (:short,:long,:language);');
-		
+
 		try {
 			$res = $req->execute(['short'=>$short,'long'=>$long,'language'=>$language]);
 			if(!$res)
@@ -66,4 +72,3 @@ class Database {
 		$res = $req->execute(['package_id'=>$package_id,'version'=>$version]);
 	}
 }
-?>

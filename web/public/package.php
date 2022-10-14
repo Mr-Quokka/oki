@@ -8,7 +8,7 @@ function errorPage(int $code){
 			$message="Le paquet demandé n'existe pas";
 			http_response_code(404);
 			break;
-		
+
 		default:
 			break;
 	}
@@ -18,8 +18,8 @@ function errorPage(int $code){
 
 $short_name=$_GET['name'];
 
-$pa = new Package();
-$db = new Database();
+$pa = new \Model\Package();
+$db = new \Controller\Database();
 $pa=$db->getPackageInfo($short_name);
 
 if (! empty($pa)){

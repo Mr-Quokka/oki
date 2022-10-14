@@ -1,6 +1,10 @@
-<?php declare(strict_types = 1);
+<?php declare(strict_types=1);
 
-class PackageVersion implements JsonSerializable{
+namespace Model;
+
+use JsonSerializable;
+
+class PackageVersion implements JsonSerializable {
 	private int $id_version;
 
 	private Package $package;
@@ -14,14 +18,13 @@ class PackageVersion implements JsonSerializable{
 		return $this->id_version;
 	}
 
-	public function getPackage(): int{
+	public function getPackage(): Package{
 		return $this->package;
 	}
 
 	public function setPackage(Package $pck){
 		$this->package = $pck;
 	}
-
 
 	public function getIdentifier(): string{
 		return $this->identifier;

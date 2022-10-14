@@ -6,7 +6,7 @@ function errorMess(string $message, int $httpCode){
 	http_response_code($httpCode);
 }
 
-$db = new Database();
+$db = new \Controller\Database();
 
 if(isset($_GET['api'])){
 	header('Content-type: application/json');
