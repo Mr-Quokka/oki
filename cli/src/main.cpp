@@ -4,6 +4,7 @@
 #include "cli/options.h"
 #include "config/config.h"
 #include "repository/RemoteRepository.h"
+#include "io/HttpRequest.h"
 
 namespace fs = std::filesystem;
 
@@ -19,8 +20,11 @@ int main(int argc, char *argv[]) {
         }
     } else if (auto* install = std::get_if<InstallAction>(&action)) {
         std::optional<Package> p = repository.showPackage(install->packageName);
-        if (p == std::nullopt || p->getVersions().empty()) {
-            std::cerr << "This packet doesn't exist or doesn't have any version\n";
+        if(p->getVersions().empty()){
+            throw APIException{"The packet doesn't have any version"};
+        }
+        else if(p == std::nullopt){
+            throw APIException("This packet doesn't exist");
         } else {
             fs::path packagesPath{"oki-packages"};
             fs::create_directories(packagesPath);
