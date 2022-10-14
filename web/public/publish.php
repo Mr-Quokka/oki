@@ -15,29 +15,27 @@ require __DIR__ . '/../src/Controller/Database.php';
 
 $db = new \Controller\Database();
 
-if( !empty($_POST['short_name']) or !empty($_POST['long_name']) or !empty($_POST['language']) or !empty($_POST['version']) or !empty($_POST['packet'])){
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	if (empty($_POST['short_name']) || empty($_POST['long_name']) || empty($_POST['language']) || empty($_POST['version'])) {
+        http_response_code(400);
+		echo '<p style="color: red">Please enter informations in fields</p>';
+	} else {
+		$short = $_POST['short_name'];
+		$long = $_POST['long_name'];
+		$language = $_POST['language'];
+		$version = $_POST['version'];
 
-    $short=$_POST['short_name'];
-    $long=$_POST['long_name'];
-    $language=$_POST['language'];
-    $version=$_POST['version'];
-
-    $db->insererPacket($short,$long,$language,$version);
-
-    $name = basename($_FILES['packet']['name']);
-
-    move_uploaded_file($_FILES['packet']['tmp_name'], "packages/$name");
-
-    $extension = new SplFileInfo($_FILES['packet']['name']);
-
-    $extension = $extension->getExtension();
-
-    chdir("packages/");
-
-    rename("$name","$short"."_"."$version"."."."$extension");
-
-}
-
-else{
-    echo '<p style="color: red">Please enter informations in fields</p>';
+		$error = $db->insertPackage($short, $long, $language, $version);
+		if (is_string($error)) {
+			http_response_code(400);
+			echo '<p style="color: red">' . $error . '</p>';
+		} else {
+			$name = basename($_FILES['packet']['name']);
+			move_uploaded_file($_FILES['packet']['tmp_name'], "packages/$name");
+			$extension = new SplFileInfo($_FILES['packet']['name']);
+			$extension = $extension->getExtension();
+			chdir("packages/");
+			rename("$name", $short . '_' . $version . '.' . $extension);
+		}
+	}
 }
