@@ -13,7 +13,7 @@ requests=''
 for package in packages/*; do
     packageName=$(basename $package)
     existingPackage="$dest"/web/public/packages/${packageName}_0.1.zip
-    rm "$existingPackage"
+    rm -f "$existingPackage"
     cd $package/src && zip -r "$existingPackage" ./*
     cd -
     requests="$requests
