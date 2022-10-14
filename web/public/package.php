@@ -32,18 +32,16 @@ if (! empty($pa)){
 	print_r($pa->getShortName());
 	echo '</h2><h3>';
 	print_r($pa->getLongName());
-	echo '</h3><h4>';
-	print_r($pa->getId());
-	echo '</h4></center><hr/><br/>';
+	echo '</h3></center><hr/><br/>';
 
 	if(empty($paVersions)){
 		echo "<h2><center>Aucune version du packet n'a été implémentée</center></h2>";
 	}
 	else{
-		foreach ($paVersions as $i){
-			echo '<center><strong>';
+		foreach ($paVersions as $p){
+			echo '<center><strong><a href="' . $i->getDownloadUrl() . '">';
 			print_r($i->getIdentifier());
-			echo "</strong> : Publié le <strong>";
+			echo "</a></strong> : Publié le <strong>";
 			print_r($i->getPublishedDate());
 			echo '</strong></center>';
 		}

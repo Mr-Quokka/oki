@@ -78,7 +78,7 @@ else{
 		echo "ERREUR : Aucun paquet n'est présent";
 	}
 	else{
-		foreach ($package as $i){
+		foreach ($package as $p){
 			echo '<h3><a href="package.php?name='.$i->getShortName().'">';
 			print_r($i->getLongName());
 			echo '</a></h3>';

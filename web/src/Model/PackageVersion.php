@@ -31,13 +31,17 @@ class PackageVersion implements JsonSerializable{
 		return $this->published_date;
 	}
 
+	public function getDownloadUrl(): string{
+		return ("/packages/" . $this->package->getShortName() . "_" . $this->identifier . ".zip");
+	}
+
 
 	public function jsonSerialize(){
 		$dict=[];
 		$dict["id_version"]=$this->id_version;
 		$dict["identifier"]=$this->identifier;
 		$dict["published_date"]=$this->published_date;
-		$dict["download_url"]= "/packages/" . $this->package->getShortName() . "_" . $this->identifier . ".zip";
+		$dict["download_url"]=$this->getDownloadUrl();
 		return $dict;
 	}
 }
