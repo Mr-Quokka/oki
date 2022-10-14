@@ -39,10 +39,10 @@ if (! empty($pa)){
 	}
 	else{
 		foreach ($paVersions as $p){
-			echo '<center><strong><a href="' . $i->getDownloadUrl() . '">';
-			print_r($i->getIdentifier());
+			echo '<center><strong><a href="' . $p->getDownloadUrl() . '">';
+			print_r($p->getIdentifier());
 			echo "</a></strong> : Publié le <strong>";
-			print_r($i->getPublishedDate());
+			print_r($p->getPublishedDate());
 			echo '</strong></center>';
 		}
 	}

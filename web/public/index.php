@@ -79,8 +79,8 @@ else{
 	}
 	else{
 		foreach ($package as $p){
-			echo '<h3><a href="package.php?name='.$i->getShortName().'">';
-			print_r($i->getLongName());
+			echo '<h3><a href="package.php?name='.$p->getShortName().'">';
+			print_r($p->getLongName());
 			echo '</a></h3>';
 		}
 	}
