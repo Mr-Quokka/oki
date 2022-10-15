@@ -42,10 +42,17 @@ $(BUILD_DIR)/%.o: src/%.cpp | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir -p $(subst src,$(BUILD_DIR),$(SRC_DIR))
 
+# Génère la documentation avec Doxygen
+doc/html/index.html: Doxyfile $(foreach dir,$(SRC_DIR),$(wildcard $(dir)/*.h))
+	doxygen
+
 # Supprime tous les fichiers issus de la compilation
-.PHONY: clean
 clean:
-	rm -rf $(BUILD_DIR) $(TARGET_EXE)
+	rm -rf $(BUILD_DIR) $(TARGET_EXE) doc
+
+doc: doc/html/index.html
+
+.PHONY: all clean doc
 
 # Inclut les Makefiles de chaque fichier source
 # Le - permet d'ignorer les Makefiles manquants

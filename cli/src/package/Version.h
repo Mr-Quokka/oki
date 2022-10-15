@@ -4,6 +4,9 @@
 #include <vector>
 
 namespace oki{
+    /**
+     * Un modèle de version d'un paquet pour communiquer avec l'API.
+     */
     class Version {
     private:
         std::string identifier;
