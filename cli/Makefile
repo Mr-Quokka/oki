@@ -52,7 +52,11 @@ clean:
 
 doc: doc/html/index.html
 
-.PHONY: all clean doc
+# Formate les sources
+format:
+	find src/ \( -name '*.cpp' -o -name '*.h' \) -exec clang-format -i {} \;
+
+.PHONY: all clean doc format
 
 # Inclut les Makefiles de chaque fichier source
 # Le - permet d'ignorer les Makefiles manquants

@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <unistd.h>
 
-namespace oki{
+namespace oki {
     TmpFile::TmpFile() : filename{"/tmp/oki-XXXXXX"}, fd{mkstemp(this->filename)} {}
 
     const char *TmpFile::getFilename() {

@@ -10,7 +10,7 @@
 
 // Basé sur https://github.com/madler/zlib/blob/master/contrib/minizip/miniunz.c
 
-namespace oki{
+namespace oki {
     Extractor::Extractor(std::filesystem::path destination) : destination{std::move(destination)} {}
 
     void Extractor::extract(const std::filesystem::path &archivePath) {

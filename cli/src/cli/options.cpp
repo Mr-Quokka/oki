@@ -1,9 +1,9 @@
 #include "options.h"
 
-#include <iostream>
 #include <cstring>
+#include <iostream>
 
-namespace oki{
+namespace oki {
     void invalidUsage(std::ostream &os) {
         os << "Invalid usage. Hint: ";
     }
@@ -44,4 +44,3 @@ namespace oki{
         }
     }
 }
-

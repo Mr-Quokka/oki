@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <string>
 
-namespace oki{
+namespace oki {
     /**
      * Une requête HTTP, préparée par CURL.
      */
@@ -31,7 +31,7 @@ namespace oki{
          *
          * @param path Le chemin vers le fichier où télécharger.
          */
-        void download(const std::filesystem::path& path);
+        void download(const std::filesystem::path &path);
 
         /**
          * Vide la requête.

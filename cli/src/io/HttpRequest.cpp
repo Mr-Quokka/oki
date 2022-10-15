@@ -2,7 +2,7 @@
 
 #include <curl/curl.h>
 
-namespace oki{
+namespace oki {
     static std::size_t writeCallback(char *in, std::size_t size, std::size_t nmemb, std::string *out) {
         std::size_t totalSize = size * nmemb;
         if (totalSize) {
@@ -31,7 +31,7 @@ namespace oki{
         return buffer;
     }
 
-    void HttpRequest::download(const std::filesystem::path& path) {
+    void HttpRequest::download(const std::filesystem::path &path) {
         // Utilisation de l'API C FILE plutôt qu'ofstream pour pouvoir faire un simple fwrite() avec les arguments renseignés par CURL.
         FILE *file = fopen(path.c_str(), "wb");
         if (file == nullptr) {

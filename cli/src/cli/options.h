@@ -3,7 +3,7 @@
 #include <string_view>
 #include <variant>
 
-namespace oki{
+namespace oki {
     /**
      * Liste tous les paquets disponibles.
      */
@@ -33,5 +33,3 @@ namespace oki{
 
     CliAction parseArguments(int argc, char *argv[]);
 }
-
-

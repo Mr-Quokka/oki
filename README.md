@@ -21,6 +21,13 @@ The backend is written in PHP >= 7.4.
 Depending on the database you have chosen, the appropriate PDO extensions are also required.
 On Debian (versions may vary): `apt install php7.4-cli php7.4-pgsql php7.4-sqlite3`
 
+### Command Line Interface
+A C++ 17 compiler like GCC is needed, with the [nlohmann/json](https://github.com/nlohmann/json), [curl](https://github.com/curl/curl) and [minizip](https://github.com/madler/zlib/tree/master/contrib/minizip) libraries.
+On Debian: `apt install build-essential nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev`
+
+Some commands also use some clang tools like [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html).
+On Debian: `apt install clang-format`
+
 Quick setup
 -----------
 
@@ -33,7 +40,6 @@ php -S localhost:8000 -t web/public
 ### Compile the cli
 #### At home
 ```bash
-apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev
 cd cli && make
 ```
 #### At the IUT

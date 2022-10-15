@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-namespace oki{
+namespace oki {
     /**
      * Un modèle de version d'un paquet pour communiquer avec l'API.
      */
@@ -14,8 +14,8 @@ namespace oki{
         std::string downloadUrl;
     public:
         Version(std::string_view identifier, std::string_view publishedDate, std::string_view downloadUrl);
-        const std::string& getIdentifier() const;
-        const std::string& getPublishedDate() const;
-        const std::string& getDownloadUrl() const;
+        const std::string &getIdentifier() const;
+        const std::string &getPublishedDate() const;
+        const std::string &getDownloadUrl() const;
     };
 }

@@ -1,13 +1,13 @@
 #pragma once
 
 #include <filesystem>
+#include <optional>
 #include <string_view>
 #include <vector>
-#include <optional>
 
 #include "../package/Package.h"
 
-namespace oki{
+namespace oki {
     /**
      * Un dépôt où sont référencés des paquets.
      */
@@ -27,7 +27,7 @@ namespace oki{
          * @return Les informations de ce paquet.
          */
         virtual std::optional<Package> showPackage(std::string_view packageName) = 0;
-        virtual void download(const Version &packageVersion, const std::filesystem::path& destination) = 0;
+        virtual void download(const Version &packageVersion, const std::filesystem::path &destination) = 0;
         virtual ~Repository() = default;
     };
 }

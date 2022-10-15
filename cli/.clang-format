@@ -1,0 +1,6 @@
+ColumnLimit: 0
+IndentWidth: 4
+EmptyLineBeforeAccessModifier: Leave
+FixNamespaceComments: false
+NamespaceIndentation: All
+AccessModifierOffset: -4
