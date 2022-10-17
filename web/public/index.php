@@ -61,15 +61,8 @@ if(isset($_GET['api'])){
 }
 
 else{
+	ob_start();
 	echo'
-<center><pre>
- ██████╗ ██╗  ██╗██╗
-██╔═══██╗██║ ██╔╝██║
-██║   ██║█████╔╝ ██║
-██║   ██║██╔═██╗ ██║
-╚██████╔╝██║  ██╗██║
- ╚═════╝ ╚═╝  ╚═╝╚═╝
-</pre></center>
 <br/>
 <center><h2><a href="publish.php">Publier un paquet</a></h2></center>
 <hr/>';
@@ -84,4 +77,6 @@ else{
 			echo '</a></h3>';
 		}
 	}
+	$content = ob_get_clean();
+	require __DIR__ . '/../view/layout.php';
 }
