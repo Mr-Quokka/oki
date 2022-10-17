@@ -10,7 +10,7 @@ class Package implements JsonSerializable {
 
 	private string $short_name;
 
-	private string $long_name;
+	private string $description;
 
 	/**
 	 * @var PackageVersion[]
@@ -29,8 +29,8 @@ class Package implements JsonSerializable {
 		return $this->short_name;
 	}
 
-	public function getLongName(): string{
-		return $this->long_name;
+	public function getDescription(): string{
+		return $this->description;
 	}
 
 	public function getVersions(): array{
@@ -41,7 +41,7 @@ class Package implements JsonSerializable {
 		$dict=[];
 		$dict["id_package"]=$this->id_package;
 		$dict["short_name"]=$this->short_name;
-		$dict["long_name"]=$this->long_name;
+		$dict["description"]=$this->description;
 		if(!empty($this->versions)){
 			$dict["versions"]=$this->versions;
 		}

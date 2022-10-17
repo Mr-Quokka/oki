@@ -2,7 +2,7 @@
 <form enctype="multipart/form-data" action="" method="post">
 <h1>Formulaire de publication d'un packet</h1>
 <p>Surnom du packet : <input type="text" name="short_name" /></p>
-<p>Véritable nom du packet : <input type="text" name="long_name" /></p>
+<p>Véritable nom du packet : <input type="text" name="description" /></p>
 <p>Langage du packet : <input type="text" name="language" /></p>
 <p>Version du packet : <input type="text" name="version" /></p>
 <p>Fichier du packet : <input type="file" name="packet" accept=".zip"></p>
@@ -16,12 +16,12 @@ require __DIR__ . '/../src/Controller/Database.php';
 $db = new \Controller\Database();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	if (empty($_POST['short_name']) || empty($_POST['long_name']) || empty($_POST['language']) || empty($_POST['version'])) {
+	if (empty($_POST['short_name']) || empty($_POST['description']) || empty($_POST['language']) || empty($_POST['version'])) {
         http_response_code(400);
 		echo '<p style="color: red">Please enter informations in fields</p>';
 	} else {
 		$short = $_POST['short_name'];
-		$long = $_POST['long_name'];
+		$long = $_POST['description'];
 		$language = $_POST['language'];
 		$version = $_POST['version'];
 

@@ -31,7 +31,7 @@ if (! empty($pa)){
 	echo '<center><h2>';
 	print_r($pa->getShortName());
 	echo '</h2><h3>';
-	print_r($pa->getLongName());
+	print_r($pa->getDescription());
 	echo '</h3></center><hr/><br/>';
 
 	if(empty($paVersions)){

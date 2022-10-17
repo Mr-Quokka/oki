@@ -6,7 +6,7 @@ CREATE TABLE language (
 CREATE TABLE package (
 	id_package SERIAL PRIMARY KEY,
 	short_name VARCHAR(30) NOT NULL UNIQUE,
-	long_name VARCHAR(50) NOT NULL,
+	description VARCHAR(50) NOT NULL,
 	langage_id INT NOT NULL REFERENCES langage(id_language)
 );
 
