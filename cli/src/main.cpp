@@ -30,23 +30,24 @@ int main(int argc, char *argv[]) {
             repository.download(p->getVersions().front(), packagesPath);
         }
     } else if (auto *show = std::get_if<ShowAction>(&action)) {
-        std::optional<Package> p = repository.showPackage(show->packageName);
-        if (p == std::nullopt) {
-            std::cerr << "This packet doesn't exist\n";
-        } else {
+        try {
+            Package p = repository.showPackage(show->packageName);
             if (color) {
-                std::cout << "\x1B[32m" << p->getShortName() << "\x1B[0m";
+                std::cout << "\x1B[32m" << p.getShortName() << "\x1B[0m";
             } else {
-                std::cout << p->getShortName();
+                std::cout << p.getShortName();
             }
-            if (!p->getVersions().empty()) {
-                const Version &latest = p->getVersions().front();
+            if (!p.getVersions().empty()) {
+                const Version &latest = p.getVersions().front();
                 std::cout << "/" << latest.getIdentifier() << " (" << latest.getPublishedDate() << ")";
             }
-            std::cout << "\n\t" << p->getLongName() << "\n\n";
-            for (const Version &version : p->getVersions()) {
+            std::cout << "\n\t" << p.getLongName() << "\n\n";
+            for (const Version &version : p.getVersions()) {
                 std::cout << "\t" << version.getIdentifier() << " (" << version.getPublishedDate() << ")\n";
             }
+        } catch (const APIException &e) {
+            std::cerr << "This package doesn't exist\n";
+            return 1;
         }
     }
     return 0;

@@ -28,7 +28,7 @@ namespace oki {
         extractor.extract(tmp.getFilename());
     }
 
-    std::optional<Package> RemoteRepository::showPackage(std::string_view packageName) {
+    Package RemoteRepository::showPackage(std::string_view packageName) {
         HttpRequest request{apiUrl + "?api=info&package=" + std::string{packageName}};
         json data = json::parse(request.get());
         std::vector<Version> versions;

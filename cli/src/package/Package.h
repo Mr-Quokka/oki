@@ -13,6 +13,7 @@ namespace oki {
         std::string shortName;
         std::string longName;
         std::vector<Version> versions;
+
     public:
         Package(std::string_view shortName, std::string_view longName, std::vector<Version> versions = {});
         const std::string &getShortName() const;

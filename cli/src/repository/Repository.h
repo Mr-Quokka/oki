@@ -26,7 +26,7 @@ namespace oki {
          * @param packageName Le nom du paquet à utiliser.
          * @return Les informations de ce paquet.
          */
-        virtual std::optional<Package> showPackage(std::string_view packageName) = 0;
+        virtual Package showPackage(std::string_view packageName) = 0;
         virtual void download(const Version &packageVersion, const std::filesystem::path &destination) = 0;
         virtual ~Repository() = default;
     };

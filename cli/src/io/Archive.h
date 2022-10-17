@@ -9,6 +9,7 @@ namespace oki {
     class Extractor {
     private:
         std::filesystem::path destination;
+
     public:
         /**
          * Créé un nouvel extracteur.
