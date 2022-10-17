@@ -5,6 +5,9 @@ name: default
 trigger:
   event:
     - push
+  branch:
+    - main
+    - feature/ci
 
 steps:
   - name: build-cli
