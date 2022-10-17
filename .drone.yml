@@ -1,0 +1,14 @@
+kind: pipeline
+type: docker
+name: default
+
+trigger:
+  event:
+    - push
+
+steps:
+  - name: build-cli
+    image: gcc:12
+    commands:
+      - apt-get update && apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev
+      - cd cli && make
