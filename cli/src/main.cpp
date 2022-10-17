@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     RemoteRepository repository{"http://localhost:8000"};
     if (std::holds_alternative<ListAction>(action)) {
         for (const Package &package : repository.listPackages()) {
-            std::cout << package.getShortName() << ": " << package.getLongName() << "\n";
+            std::cout << package.getShortName() << ": " << package.getDescription() << "\n";
         }
     } else if (auto *install = std::get_if<InstallAction>(&action)) {
         std::optional<Package> p = repository.showPackage(install->packageName);
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
                 const Version &latest = p.getVersions().front();
                 std::cout << "/" << latest.getIdentifier() << " (" << latest.getPublishedDate() << ")";
             }
-            std::cout << "\n\t" << p.getLongName() << "\n\n";
+            std::cout << "\n\t" << p.getDescription() << "\n\n";
             for (const Version &version : p.getVersions()) {
                 std::cout << "\t" << version.getIdentifier() << " (" << version.getPublishedDate() << ")\n";
             }
