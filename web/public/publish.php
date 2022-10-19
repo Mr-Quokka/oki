@@ -1,3 +1,4 @@
+<?php ob_start(); ?>
 <h1><a href="index.php"><</a></h1>
 <form enctype="multipart/form-data" action="" method="post">
 <h1>Formulaire de publication d'un packet</h1>
@@ -11,7 +12,10 @@
 
 <?php
 
+$content = ob_get_clean();
+
 require __DIR__ . '/../src/Controller/Database.php';
+require __DIR__ . '/../view/layout.php';
 
 $db = new \Controller\Database();
 
