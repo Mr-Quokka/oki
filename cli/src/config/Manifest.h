@@ -4,9 +4,6 @@
 #include <string>
 #include <toml.hpp>
 #include <unordered_map>
-#include <vector>
-
-#include "../package/Version.h"
 
 namespace oki {
     class Manifest {

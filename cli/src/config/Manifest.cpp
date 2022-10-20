@@ -22,7 +22,6 @@ namespace oki {
     }
 
     void Manifest::addDeclaredPackage(std::string_view packageName, std::string_view version) {
-        //auto& dependencies = *table[DEPENDENCY_SECTION_NAME].as_table();
         addDependencySectionIfNotExists().insert(packageName, version);
     }
 
