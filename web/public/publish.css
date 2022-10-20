@@ -1,0 +1,23 @@
+body{
+    font-family: Helvetica, sans-serif;
+}
+
+#form{
+    text-align: center;
+    font-size: 18px;
+}
+
+input{
+    padding: 10px 5px 10px 5px;
+    background-color: #72A847;
+    border: 2px ;
+    border-radius: 5px;
+}
+
+textarea:focus, input:focus {
+    color: #63F291;
+}
+
+input, select, textarea{
+    color: #63F291;
+}

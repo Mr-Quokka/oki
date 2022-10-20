@@ -64,7 +64,7 @@ else{
 	ob_start();
 	echo'
 <br/>
-<center><h2><a href="publish.php">Publier un paquet</a></h2></center>
+<center><h2><a href="publish.php">Publish a package</a></h2></center>
 <hr/>';
 	$package=$db->listPackages();
 	if (empty($package)){
