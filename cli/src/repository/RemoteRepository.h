@@ -6,6 +6,7 @@ namespace oki {
     class RemoteRepository : public Repository {
     private:
         std::string apiUrl;
+
     public:
         explicit RemoteRepository(std::string_view apiUrl);
         std::vector<Package> listPackages() override;

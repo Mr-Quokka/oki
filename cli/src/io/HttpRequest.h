@@ -11,6 +11,7 @@ namespace oki {
     private:
         void *curl;
         std::string url;
+
     public:
         /**
          * Instancie une nouvelle requête vers une url.
@@ -45,6 +46,7 @@ namespace oki {
     class RequestException : public std::exception {
     private:
         int code;
+
     public:
         explicit RequestException(int code);
         const char *what() const noexcept override;
@@ -56,6 +58,7 @@ namespace oki {
     class APIException : public std::exception {
     private:
         std::string msg;
+
     public:
         explicit APIException(std::string_view msg);
         const char *what() const noexcept override;

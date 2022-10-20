@@ -15,7 +15,7 @@ namespace oki {
         json data = json::parse(request.get());
         std::vector<Package> packages;
         for (const auto &item : data) {
-            packages.emplace_back(item.at("short_name").get<std::string>(), item.at("long_name").get<std::string>());
+            packages.emplace_back(item.at("short_name").get<std::string>(), item.at("description").get<std::string>());
         }
         return packages;
     }
@@ -40,6 +40,6 @@ namespace oki {
                 versions.emplace_back(item.at("identifier").get<std::string>(), item.at("published_date").get<std::string>(), item.at("download_url").get<std::string>());
             }
         }
-        return Package(data.at("short_name").get<std::string>(), data.at("long_name").get<std::string>(), versions);
+        return Package(data.at("short_name").get<std::string>(), data.at("description").get<std::string>(), versions);
     }
 }

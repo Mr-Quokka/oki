@@ -6,6 +6,7 @@ namespace oki {
     class LocalRepository : public Repository {
     private:
         std::filesystem::path root;
+
     public:
         explicit LocalRepository(std::filesystem::path root);
         void createIfNotExists();

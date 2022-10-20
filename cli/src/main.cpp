@@ -2,6 +2,7 @@
 #include <string>
 
 #include "cli/options.h"
+#include "config/Manifest.h"
 #include "config/config.h"
 #include "io/HttpRequest.h"
 #include "repository/RemoteRepository.h"
@@ -25,6 +26,11 @@ int main(int argc, char *argv[]) {
         } else if (p == std::nullopt) {
             throw APIException("This packet doesn't exist");
         } else {
+            Manifest manifest{"oki.toml"};
+            manifest.addDeclaredPackage(install->packageName, p->getVersions().front().getIdentifier());
+            std::ofstream os{"oki.toml"};
+            os << manifest;
+
             fs::path packagesPath{"oki-packages"};
             fs::create_directories(packagesPath);
             repository.download(p->getVersions().front(), packagesPath);
