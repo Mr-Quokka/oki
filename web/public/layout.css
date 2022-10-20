@@ -1,3 +1,33 @@
 body{
-    background-color: darksalmon;
+    background-color: #FAFFFF;
+    font-family: Helvetica, sans-serif;
+}
+
+header{
+    background: linear-gradient(gray, white);
+    border-radius: 0px 0px 10px 10px;
+    box-shadow: 1px 1px 5px gray;
+    padding-top: 5px;
+    border-bottom: solid #C00 1px;
+    top: 0;
+}
+
+header>pre{
+    font-size: 20px;
+    line-height: 23.2px;
+}
+
+a,
+a:visited{
+    text-decoration: none;
+}
+
+a:visited{
+    color: #646464;
+}
+
+a:hover,
+a:visited:hover{
+    color: #C00;
+    text-decoration: underline;
 }

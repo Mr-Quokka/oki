@@ -27,7 +27,7 @@ if (! empty($pa)){
 	$paVersions=$pa->getVersions();
 
 	ob_start();
-	echo '<h1><a href="index.php"><</a></h1>';
+	echo '<h1><a href="index.php">< accueil</a></h1>';
 
 	echo '<div style="text-align:center"><h2>';
 	print_r($pa->getShortName());
