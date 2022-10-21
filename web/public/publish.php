@@ -15,6 +15,7 @@
 
 <?php
 
+$title = "Publish";
 $content = ob_get_clean();
 
 require __DIR__ . '/../src/Controller/Database.php';

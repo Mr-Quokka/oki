@@ -36,7 +36,7 @@ if (! empty($pa)){
 	echo '</h3><hr/><br/></div>';
 
 	if(empty($paVersions)){
-		echo "<h2 style='text-align:center'>Any version of this package has been added</h2>";
+		echo "<h2 style='text-align:center'>This package do not have any version</h2>";
 	}
 	else{
 		echo "<h3 style='font-weight:bold; display:inline'>Version listing:</h3>";
@@ -49,6 +49,7 @@ if (! empty($pa)){
 		}
 	}
 	$content = ob_get_clean();
+	$title = "Package (" . ($pa->getShortName() . ")");
 	require __DIR__ . '/../view/layout.php';
 }
 else {

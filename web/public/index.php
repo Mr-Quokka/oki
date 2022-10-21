@@ -62,13 +62,12 @@ if(isset($_GET['api'])){
 
 else{
 	ob_start();
-	echo'
-<br/>
-<center><h2><a href="publish.php">Publish a package</a></h2></center>
+	echo'<h2 style="text-align:center"><a href="publish.php">Publish a package</a></h2></center>
 <hr/>';
 	$package=$db->listPackages();
 	if (empty($package)){
-		echo "ERREUR : Aucun paquet n'est présent";
+		echo "<h2 style='text-align:center'>ERROR : no such packages found in the data base</h2>";
+		http_response_code(418);
 	}
 	else{
 		foreach ($package as $p){
@@ -78,5 +77,6 @@ else{
 		}
 	}
 	$content = ob_get_clean();
+	$title = "Home";
 	require __DIR__ . '/../view/layout.php';
 }

@@ -10,6 +10,14 @@ header{
     padding-top: 5px;
     border-bottom: solid #C00 1px;
     top: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+}
+
+main{
+    margin-top: 220px;
+    position: relative;
 }
 
 a{

@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="layout.css" >
-        <title>OKI</title>
+        <title><?php echo $title; ?> - OKI</title>
     </head>
 
     <body> 
