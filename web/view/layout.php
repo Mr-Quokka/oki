@@ -9,14 +9,14 @@
 
     <body> 
         <header>
-        <pre style="text-align:center">
+        <a href="index.php" class="logo"><pre style="text-align:center">
  ██████╗ ██╗  ██╗██╗
 ██╔═══██╗██║ ██╔╝██║
 ██║   ██║█████╔╝ ██║
 ██║   ██║██╔═██╗ ██║
 ╚██████╔╝██║  ██╗██║
  ╚═════╝ ╚═╝  ╚═╝╚═╝
-</pre>
+</pre></a>
         </header>
 
         <main>

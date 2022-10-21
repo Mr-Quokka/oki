@@ -5,7 +5,7 @@ function errorPage(int $code){
 	switch ($code) {
 		case '404':
 			$code="404 NOT FOUND";
-			$message="Le paquet demandé n'existe pas";
+			$message="Unknown package";
 			http_response_code(404);
 			break;
 
@@ -27,7 +27,7 @@ if (! empty($pa)){
 	$paVersions=$pa->getVersions();
 
 	ob_start();
-	echo '<h1><a href="index.php">< accueil</a></h1>';
+	echo '<link rel="stylesheet" href="package.css">';
 
 	echo '<div style="text-align:center"><h2>';
 	print_r($pa->getShortName());
@@ -36,14 +36,14 @@ if (! empty($pa)){
 	echo '</h3><hr/><br/></div>';
 
 	if(empty($paVersions)){
-		echo "<h2 style='text-align:center'>Aucune version du packet n'a été implémentée</h2>";
+		echo "<h2 style='text-align:center'>Any version of this package has been added</h2>";
 	}
 	else{
-		echo "<h3 style='font-weight:bold; display:inline'>Liste des versions :</h3>";
+		echo "<h3 style='font-weight:bold; display:inline'>Version listing:</h3>";
 		foreach ($paVersions as $p){
 			echo '<div style="text-align:center"><a style="font-weight:bold" href="' . $p->getDownloadUrl() . '">';
 			print_r($p->getIdentifier());
-			echo '</a>: Publié le <strong>';
+			echo '</a>: Published the <strong>';
 			print_r($p->getPublishedDate());
 			echo '</strong></div>';
 		}

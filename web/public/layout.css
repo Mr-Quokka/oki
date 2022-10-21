@@ -12,22 +12,21 @@ header{
     top: 0;
 }
 
-header>pre{
-    font-size: 20px;
-    line-height: 23.2px;
-}
-
-a,
-a:visited{
+a{
     text-decoration: none;
 }
 
-a:visited{
+a:visited:not(.logo){
     color: #646464;
 }
 
-a:hover,
-a:visited:hover{
+a:hover:not(.logo){
     color: #C00;
     text-decoration: underline;
+}
+
+.logo{
+    font-size: 20px;
+    line-height: 23.2px;
+    color: black;
 }

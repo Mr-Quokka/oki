@@ -2,7 +2,6 @@
 
 <link rel="stylesheet" href="publish.css" >
 
-<h1><a href="index.php"><</a></h1>
 <form enctype="multipart/form-data" action="" method="post" id="form">
 <h1>Form to publish a package</h1>
 <p>Package nickname  <br> <input type="text" name="short_name" /></p>
