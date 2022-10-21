@@ -54,6 +54,15 @@ int main(int argc, char *argv[]) {
                 std::cout << "\t" << version.getIdentifier() << " (" << version.getPublishedDate() << ")\n";
             }
         }
+    } else if (std::holds_alternative<ReInstallAction>(action)){
+        Manifest manifest{"oki.toml"};
+        fs::path packagesPath{"oki-packages"};
+        fs::create_directories(packagesPath);
+        std::cout << "Reinstalling all the packages in the manifest ...\nPackage -> Version\n";
+        for (const std::pair<std::string_view, std::string> package : manifest.listDeclaredPackages()) {
+            std::cout << package.first << " -> " << package.second << "\n";
+            repository.download(Version{package.second,"",repository.getPackageURL(package.first,package.second)},packagesPath);
+        }
     }
     return 0;
 }

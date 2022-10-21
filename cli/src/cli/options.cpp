@@ -13,6 +13,7 @@ namespace oki {
         os << "list: List available packages\n";
         os << "show: Show the informations of the package\n";
         os << "install: Install a new package\n";
+        os << "reinstall: Install all the package of the manifest\n";
     }
 
     CliAction parseArguments(int argc, char *argv[]) {
@@ -39,6 +40,8 @@ namespace oki {
                 exit(1);
             }
             return ShowAction{argv[2]};
+        } else if (strcmp("reinstall", argv[1]) == 0) {
+            return ReInstallAction{};
         } else {
             exit(1);
         }

@@ -27,6 +27,7 @@ namespace oki {
          * @return Les informations de ce paquet.
          */
         virtual std::optional<Package> showPackage(std::string_view packageName) = 0;
+        virtual std::string getPackageURL(std::string_view packageName, std::string packageVersion) = 0;
         virtual void download(const Version &packageVersion, const std::filesystem::path &destination) = 0;
         virtual ~Repository() = default;
     };

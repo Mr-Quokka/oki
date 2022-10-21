@@ -17,3 +17,6 @@ oki
 third-party
 oki-packages
 packages
+
+# Config
+*.toml

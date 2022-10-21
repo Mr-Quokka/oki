@@ -19,6 +19,12 @@ namespace oki {
     };
 
     /**
+     * Reinstalle tous les paquets present dans le manifeste.
+     */
+    struct ReInstallAction {
+    };
+
+    /**
      * Affiche les informations d'un paquet d'après son nom.
      */
     struct ShowAction {
@@ -29,7 +35,7 @@ namespace oki {
     /**
      * Toutes les actions possibles.
      */
-    using CliAction = std::variant<ListAction, InstallAction, ShowAction>;
+    using CliAction = std::variant<ListAction, InstallAction, ShowAction, ReInstallAction>;
 
     CliAction parseArguments(int argc, char *argv[]);
 }
