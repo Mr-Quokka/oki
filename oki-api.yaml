@@ -10,15 +10,34 @@ paths:
   /api/list:
     get:
       summary: List all available packages
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 1
+            minimum: 0
+            maximum: 100
+          description: The maximum amount of items to return
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            example: 0
+            minimum: 0
+          description: Where to start searching
       responses:
         200:
           description: All available packages
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Package'
+                type: object
+                properties:
+                  pagination:
+                    $ref: '#/components/schemas/PaginatedResult'
+                  result:
+                    $ref: '#/components/schemas/Package'
   /api/info/{package}:
     get:
       summary: Get package details and all its versions
@@ -98,3 +117,14 @@ components:
         download_url:
           type: string
           example: /packages/l/linked-list_1.3.zip
+    PaginatedResult:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: The number of elements found
+          example: 10
+        total:
+          type: integer
+          description: The number of total elements
+          example: 162
