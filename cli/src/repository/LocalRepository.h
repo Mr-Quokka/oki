@@ -11,7 +11,8 @@ namespace oki {
         explicit LocalRepository(std::filesystem::path root);
         void createIfNotExists();
         std::vector<Package> listPackages() override;
-        Package showPackage(std::string_view packageName) override;
+        std::optional<Package> showPackage(std::string_view packageName) override;
+        std::string getPackageURL(std::string_view packageName, std::string packageVersion) override;
         void download(const Version &packageVersion, const std::filesystem::path &destination) override;
     };
 }

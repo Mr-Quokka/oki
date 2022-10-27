@@ -10,7 +10,8 @@ namespace oki {
     public:
         explicit RemoteRepository(std::string_view apiUrl);
         std::vector<Package> listPackages() override;
-        Package showPackage(std::string_view packageName) override;
+        std::optional<Package> showPackage(std::string_view packageName) override;
+        std::string getPackageURL(std::string_view packageName, std::string packageVersion) override;
         void download(const Version &packageVersion, const std::filesystem::path &destination) override;
     };
 }

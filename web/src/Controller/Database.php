@@ -66,7 +66,7 @@ class Database {
 			return null;
 		}
 
-		return "packages/" . $res["short_name"] . "_" . $res["identifier"] . ".zip";
+		return "/packages/" . $res["short_name"] . "_" . $res["identifier"] . ".zip";
 	}
 
 	public function insertPackage(string $short, string $long, string $language, string $version) {

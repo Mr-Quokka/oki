@@ -28,7 +28,7 @@ namespace oki {
         extractor.extract(tmp.getFilename());
     }
 
-    Package RemoteRepository::showPackage(std::string_view packageName) {
+    std::optional<Package> RemoteRepository::showPackage(std::string_view packageName) {
         HttpRequest request{apiUrl + "?api=info&package=" + std::string{packageName}};
         json data = json::parse(request.get());
         std::vector<Version> versions;
@@ -40,6 +40,16 @@ namespace oki {
                 versions.emplace_back(item.at("identifier").get<std::string>(), item.at("published_date").get<std::string>(), item.at("download_url").get<std::string>());
             }
         }
-        return {data.at("short_name").get<std::string>(), data.at("description").get<std::string>(), versions};
+        return Package{data.at("short_name").get<std::string>(), data.at("description").get<std::string>(), versions};
     }
+
+    std::string RemoteRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
+        HttpRequest request{apiUrl + "?api=version&name=" + std::string{packageName} + "&version=" + packageVersion};
+        json data = json::parse(request.get());
+        if (data.contains("error")) {
+            throw APIException(data.at("error").get<std::string>());
+        } else
+            return data.get<std::string>();
+    }
+
 }

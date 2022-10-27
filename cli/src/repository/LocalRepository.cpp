@@ -24,8 +24,13 @@ namespace oki {
         std::cerr << "TODO : downloading " << packageVersion.getIdentifier() << "\n";
     }
 
-    Package LocalRepository::showPackage(std::string_view packageName) {
+    std::optional<Package> LocalRepository::showPackage(std::string_view packageName) {
         std::cerr << "TODO : show " << packageName << "\n";
         throw APIException{"Not implemented"};
+    }
+
+    std::string LocalRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
+        std::cerr << "TODO :  " << packageName << "\n";
+        return "";
     }
 }
