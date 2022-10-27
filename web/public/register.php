@@ -2,15 +2,15 @@
 
 ob_start();
 $content = ob_get_clean();
+$title = "Register";
 
 require __DIR__ . '/../src/Controller/Database.php';
 require __DIR__ . '/../view/layout.php';
 
 
 ?>
+<link rel="stylesheet" href="register.css" >
 <script src="https://kit.fontawesome.com/489ac465c6.js" crossorigin="anonymous"></script>
-<i class="fa-solid fa-house"></i>
-<h1><a href="index.php"><</a></h1>
 <form enctype="multipart/form-data" action="" method="post" id="form">
 <h1>Form to publish a package</h1>
 <p>Package nickname  <br> <input type="text" name="short_name" /></p>
