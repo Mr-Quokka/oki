@@ -3,9 +3,9 @@
 #include <cstring>
 #include <iostream>
 
+#include "InstallAction.h"
 #include "ListAction.h"
 #include "ReInstallAction.h"
-#include "InstallAction.h"
 #include "ShowAction.h"
 
 namespace oki {
@@ -21,7 +21,7 @@ namespace oki {
         os << "reinstall: Install all the package of the manifest\n";
     }
 
-    CliAction* parseArguments(int argc, char *argv[]) {
+    CliAction *parseArguments(int argc, char *argv[]) {
         if (argc < 2) {
             std::cerr << "See " << argv[0] << " help for all available actions.\n";
             exit(0);
@@ -30,23 +30,23 @@ namespace oki {
             help(std::cout);
             exit(0);
         } else if (strcmp("list", argv[1]) == 0) {
-            return static_cast<CliAction*>(new ListAction{});
+            return static_cast<CliAction *>(new ListAction{});
         } else if (strcmp("install", argv[1]) == 0) {
             if (argc < 3) {
                 invalidUsage(std::cerr);
                 std::cerr << "Add a package name after install.\n";
                 exit(1);
             }
-            return static_cast<CliAction*>(new InstallAction{argv[2]});
+            return static_cast<CliAction *>(new InstallAction{argv[2]});
         } else if (strcmp("show", argv[1]) == 0) {
             if (argc < 3) {
                 invalidUsage(std::cerr);
                 std::cerr << "Add a package name after show.\n";
                 exit(1);
             }
-            return static_cast<CliAction*>(new ShowAction{argv[2]});
+            return static_cast<CliAction *>(new ShowAction{argv[2]});
         } else if (strcmp("reinstall", argv[1]) == 0) {
-            return static_cast<CliAction*>(new ReInstallAction{});
+            return static_cast<CliAction *>(new ReInstallAction{});
         } else {
             exit(1);
         }

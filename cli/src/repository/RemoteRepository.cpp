@@ -43,13 +43,12 @@ namespace oki {
         return Package(data.at("short_name").get<std::string>(), data.at("description").get<std::string>(), versions);
     }
 
-    std::string RemoteRepository::getPackageURL(std::string_view packageName, std::string packageVersion){
+    std::string RemoteRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
         HttpRequest request{apiUrl + "?api=version&name=" + std::string{packageName} + "&version=" + packageVersion};
         json data = json::parse(request.get());
         if (data.contains("error")) {
             throw APIException(data.at("error").get<std::string>());
-        }
-        else 
+        } else
             return data.get<std::string>();
     }
 

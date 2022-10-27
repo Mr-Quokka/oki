@@ -1,18 +1,15 @@
 #include "ShowAction.h"
-#include "../io/HttpRequest.h"
 #include "../config/config.h"
-
-
+#include "../io/HttpRequest.h"
 
 #include <iostream>
 
 namespace fs = std::filesystem;
 
 namespace oki {
-	ShowAction::ShowAction(const char *packageName) : packageName{packageName} {}
+    ShowAction::ShowAction(const char *packageName) : packageName{packageName} {}
 
-
-	void ShowAction::run(Repository& repository) {
+    void ShowAction::run(Repository &repository) {
         bool color = acceptColor();
         std::optional<Package> p = repository.showPackage(packageName);
         if (p == std::nullopt) {

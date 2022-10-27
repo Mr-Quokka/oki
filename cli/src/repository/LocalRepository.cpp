@@ -28,7 +28,7 @@ namespace oki {
         return {};
     }
 
-    std::string LocalRepository::getPackageURL(std::string_view packageName, std::string packageVersion){
+    std::string LocalRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
         std::cerr << "TODO :  " << packageName << "\n";
         return "";
     }

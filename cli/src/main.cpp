@@ -12,8 +12,7 @@ namespace fs = std::filesystem;
 using namespace oki;
 
 int main(int argc, char *argv[]) {
-    bool color = acceptColor();
-    CliAction* action = parseArguments(argc, argv);
+    CliAction *action = parseArguments(argc, argv);
     RemoteRepository repository{"http://localhost:8000"};
     action->run(repository);
     delete action;

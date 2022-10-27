@@ -9,6 +9,5 @@ namespace oki {
     /**
      * Toutes les actions possibles.
      */
-
-    CliAction* parseArguments(int argc, char *argv[]);
+    CliAction *parseArguments(int argc, char *argv[]);
 }

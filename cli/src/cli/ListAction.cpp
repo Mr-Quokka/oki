@@ -3,13 +3,11 @@
 #include <iostream>
 
 namespace oki {
-	ListAction::ListAction() {}
+    ListAction::ListAction() {}
 
-	void ListAction::run(Repository& repository) {
-		for (const Package &package : repository.listPackages()) {
-	        std::cout << package.getShortName() << ": " << package.getLongName() << "\n";
-	    }
-	}
+    void ListAction::run(Repository &repository) {
+        for (const Package &package : repository.listPackages()) {
+            std::cout << package.getShortName() << ": " << package.getLongName() << "\n";
+        }
+    }
 }
-
-
