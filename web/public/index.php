@@ -62,21 +62,21 @@ if(isset($_GET['api'])){
 
 else{
 	ob_start();
-	echo'
-<br/>
-<center><h2><a href="publish.php">Publier un paquet</a></h2></center>
-<hr/>';
+	echo'<link rel="stylesheet" href="index.css">
+	<h2 style="text-align:center"><a href="publish.php">Publish a package</a></h2></center><hr/>';
 	$package=$db->listPackages();
 	if (empty($package)){
-		echo "ERREUR : Aucun paquet n'est présent";
+		echo "<h2 style='text-align:center'>ERROR : no such packages found in the data base</h2>";
+		http_response_code(418);
 	}
 	else{
 		foreach ($package as $p){
 			echo '<h3><a href="package.php?name='.$p->getShortName().'">';
-			print_r($p->getDescription());
-			echo '</a></h3>';
+			echo '<p class="packageName" >' . $p->getShortName() . '</p></a></h3>';
+			echo '<p class="packageDesc">' . $p->getDescription() . '</p>';
 		}
 	}
 	$content = ob_get_clean();
+	$title = "Home";
 	require __DIR__ . '/../view/layout.php';
 }

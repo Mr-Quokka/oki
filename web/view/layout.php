@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 
-<html lang="fr">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="layout.css" >
-        <title>OKI</title>
+        <title><?php echo $title; ?> - OKI</title>
     </head>
 
     <body> 
         <header>
-        <pre>
-     ██████╗ ██╗  ██╗██╗
-    ██╔═══██╗██║ ██╔╝██║
-    ██║   ██║█████╔╝ ██║
-    ██║   ██║██╔═██╗ ██║
-    ╚██████╔╝██║  ██╗██║
-     ╚═════╝ ╚═╝  ╚═╝╚═╝
-        </pre>
+        <a href="index.php" class="logo"><pre style="text-align:center">
+ ██████╗ ██╗  ██╗██╗
+██╔═══██╗██║ ██╔╝██║
+██║   ██║█████╔╝ ██║
+██║   ██║██╔═██╗ ██║
+╚██████╔╝██║  ██╗██║
+ ╚═════╝ ╚═╝  ╚═╝╚═╝
+</pre></a>
         </header>
 
         <main>

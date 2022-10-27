@@ -5,7 +5,7 @@ function errorPage(int $code){
 	switch ($code) {
 		case '404':
 			$code="404 NOT FOUND";
-			$message="Le paquet demandé n'existe pas";
+			$message="Unknown package";
 			http_response_code(404);
 			break;
 
@@ -13,7 +13,7 @@ function errorPage(int $code){
 			break;
 	}
 	print_r("<html><head><meta charset=\"utf-8\"><head/><title>$code</title>
-		<body><center><h1>$code</h1><hr/><h2>$message<h2/></center></body></html>");
+		<body style='text-align:center'><h1>$code</h1><hr/><h2>$message<h2/></body></html>");
 }
 
 $short_name=$_GET['name'];
@@ -26,26 +26,31 @@ if (! empty($pa)){
 
 	$paVersions=$pa->getVersions();
 
-	echo '<h1><a href="index.php"><</a></h1>';
+	ob_start();
+	echo '<link rel="stylesheet" href="package.css">';
 
-	echo '<center><h2>';
+	echo '<div style="text-align:center"><h2>';
 	print_r($pa->getShortName());
 	echo '</h2><h3>';
 	print_r($pa->getDescription());
-	echo '</h3></center><hr/><br/>';
+	echo '</h3><hr/><br/></div>';
 
 	if(empty($paVersions)){
-		echo "<h2><center>Aucune version du packet n'a été implémentée</center></h2>";
+		echo "<h2 style='text-align:center'>This package do not have any version</h2>";
 	}
 	else{
+		echo "<h3 style='font-weight:bold; display:inline'>Version listing:</h3>";
 		foreach ($paVersions as $p){
-			echo '<center><strong><a href="' . $p->getDownloadUrl() . '">';
+			echo '<div style="text-align:center"><a style="font-weight:bold" href="' . $p->getDownloadUrl() . '">';
 			print_r($p->getIdentifier());
-			echo "</a></strong> : Publié le <strong>";
+			echo '</a>: Published the <strong>';
 			print_r($p->getPublishedDate());
-			echo '</strong></center>';
+			echo '</strong></div>';
 		}
 	}
+	$content = ob_get_clean();
+	$title = "Package (" . ($pa->getShortName() . ")");
+	require __DIR__ . '/../view/layout.php';
 }
 else {
 	errorPage('404');
