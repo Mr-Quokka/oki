@@ -1,3 +1,5 @@
+#pragma once
+
 #include <filesystem>
 
 static std::filesystem::path OKI_MANIFEST_FILE = "oki.toml";

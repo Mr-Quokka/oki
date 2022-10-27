@@ -38,7 +38,7 @@ namespace oki {
         /**
          * Écrit dans un fichier le manifeste.
          */
-        void saveIntoFile(std::filesystem::path fileName);
+        void saveFile(std::filesystem::path fileName);
 
         friend std::ostream &operator<<(std::ostream &, const Manifest &);
     };

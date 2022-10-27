@@ -39,7 +39,7 @@ namespace oki {
         }
     }
 
-    void Manifest::saveIntoFile(fs::path fileName) {
+    void Manifest::saveFile(fs::path fileName) {
         std::ofstream os{fileName};
         os << *this;
     }

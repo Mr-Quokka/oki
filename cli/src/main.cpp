@@ -5,6 +5,7 @@
 #include "config/Manifest.h"
 #include "config/config.h"
 #include "io/HttpRequest.h"
+#include "io/oki.h"
 #include "repository/RemoteRepository.h"
 
 namespace fs = std::filesystem;

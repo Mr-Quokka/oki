@@ -11,7 +11,7 @@ namespace oki {
         std::string_view packageName;
 
     public:
-        void run(Repository &repository) override;
         explicit ShowAction(const char *packageName);
+        void run(Repository &repository) override;
     };
 }

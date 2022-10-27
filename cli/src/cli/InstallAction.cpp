@@ -3,8 +3,6 @@
 #include "../io/HttpRequest.h"
 #include "../io/oki.h"
 
-#include <iostream>
-
 namespace fs = std::filesystem;
 
 namespace oki {
@@ -19,7 +17,7 @@ namespace oki {
         } else {
             Manifest manifest = Manifest::fromFile(OKI_MANIFEST_FILE);
             manifest.addDeclaredPackage(packageName, p->getVersions().front().getIdentifier());
-            manifest.saveIntoFile(OKI_MANIFEST_FILE);
+            manifest.saveFile(OKI_MANIFEST_FILE);
 
             fs::create_directories(OKI_PACKAGES_DIRECTORY);
             repository.download(p->getVersions().front(), OKI_PACKAGES_DIRECTORY);
