@@ -8,6 +8,7 @@ namespace oki {
     private:
         char filename[20];
         int fd;
+
     public:
         /**
          * Créé un nouveau fichier temporaire.

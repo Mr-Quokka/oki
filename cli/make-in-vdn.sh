@@ -16,12 +16,13 @@ currentDate=$(date +'%F %H:%M:%S')
 vdn-ssh root@$VDN_SYSTEM "date -s '$currentDate' &> /dev/null && date -s '-2 hours'"
 
 rsync -av src -e vdn-ssh root@$VDN_SYSTEM:
+vdn-scp configure.sh root@$VDN_SYSTEM:
 vdn-scp Makefile root@$VDN_SYSTEM:
 vdn-ssh root@$VDN_SYSTEM << EOF
-
 route del default gw 192.168.2.1
 route add default gw 10.0.2.2
 export http_proxy=http://193.49.118.36:8080/
+./configure.sh -d
 if ! pkg-config nlohmann_json --exists || ! pkg-config libcurl --exists || ! pkg-config minizip --exists; then
   apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev
 fi

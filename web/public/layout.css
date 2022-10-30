@@ -1,0 +1,40 @@
+body{
+    background-color: #FAFFFF;
+    font-family: Helvetica, sans-serif;
+}
+
+header{
+    background: linear-gradient(gray, white);
+    border-radius: 0px 0px 10px 10px;
+    box-shadow: 1px 1px 5px gray;
+    padding-top: 5px;
+    border-bottom: solid #C00 1px;
+    top: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+}
+
+main{
+    margin-top: 220px;
+    position: relative;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:visited:not(.logo){
+    color: #646464;
+}
+
+a:hover:not(.logo){
+    color: #C00;
+    text-decoration: underline;
+}
+
+.logo{
+    font-size: 20px;
+    line-height: 23.2px;
+    color: black;
+}
