@@ -22,14 +22,15 @@ main{
 
 a{
     text-decoration: none;
-}
-
-a:visited:not(.logo){
-    color: #646464;
+    color: black;
 }
 
 a:hover:not(.logo){
     color: #C00;
+    text-decoration: underline;
+}
+
+a:focus:not(.logo){
     text-decoration: underline;
 }
 

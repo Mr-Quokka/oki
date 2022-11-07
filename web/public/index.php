@@ -1,10 +1,6 @@
 <?php
 require __DIR__ . '/../src/Controller/Database.php';
-
-function errorMess(string $message, int $httpCode){
-	echo json_encode(["error"=>"$message"]);
-	http_response_code($httpCode);
-}
+require __DIR__ . '/../src/Controller/ApiFail.php';
 
 $db = new \Controller\Database();
 
@@ -15,11 +11,11 @@ if(isset($_GET['api'])){
 
 		case 'info':
 			if(empty($_GET['package']))
-				errorMess("must have a package name", 400);
+				apiFail("must have a package name", 400);
 			else{
 				$packageInfo=$db->getPackageInfo($_GET['package']);
 				if(empty($packageInfo))
-					errorMess("this packet does not exists", 404);
+					apiFail("this packet does not exists", 404);
 				else
 					echo json_encode($packageInfo);
 			}
@@ -28,18 +24,18 @@ if(isset($_GET['api'])){
 		case 'list':
 			$packageList=$db->listPackages();
 			if(empty($packageList))
-				errorMess("there is no packages in the database", 404);
+				apiFail("no such packages found in the database", 404);
 			else
 				echo json_encode($db->listPackages());
 			break;
 
 		case 'version':
 			if(empty($_GET['name']))
-				errorMess("must have a package name", 400);
+				apiFail("must have a package name", 400);
 			else{
 
 				if(empty($_GET['version']))
-					errorMess("must have a package version name", 400);
+					apiFail("must have a package version name", 400);
 				else{
 				$packageName=$_GET['name'];
 				$packageVersion=$_GET['version'];
@@ -47,7 +43,7 @@ if(isset($_GET['api'])){
 					$version=$db->getPackageVersion($packageVersion,$packageName);
 
 					if(empty($version))
-						errorMess("this version of the package does not exists", 404);
+						apiFail("this version of the package does not exists", 404);
 					else
 						echo json_encode($version);
 				}
@@ -55,7 +51,7 @@ if(isset($_GET['api'])){
 			break;
 
 		default:
-			errorMess("unknown action", 400);
+			apiFail("unknown action", 400);
 			break;
 	}
 }
@@ -66,13 +62,12 @@ else{
 	<h2 style="text-align:center"><a href="publish.php">Publish a package</a></h2></center><hr/>';
 	$package=$db->listPackages();
 	if (empty($package)){
-		echo "<h2 style='text-align:center'>ERROR : no such packages found in the data base</h2>";
-		http_response_code(418);
+		echo "<h2 style='text-align:center'>ERROR : no such packages found in the database</h2>";
+		http_response_code(404);
 	}
 	else{
 		foreach ($package as $p){
-			echo '<h3><a href="package.php?name='.$p->getShortName().'">';
-			echo '<p class="packageName" >' . $p->getShortName() . '</p></a></h3>';
+			echo '<h3><a class="packageName" href="package.php?name='.$p->getShortName().'">' . $p->getShortName() . '</a></h3>';
 			echo '<p class="packageDesc">' . $p->getDescription() . '</p>';
 		}
 	}
