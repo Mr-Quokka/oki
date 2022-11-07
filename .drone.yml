@@ -14,4 +14,4 @@ steps:
     image: gcc:12
     commands:
       - apt-get update && apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev
-      - cd cli && make
+      - cd cli && ./configure.sh -d && make
