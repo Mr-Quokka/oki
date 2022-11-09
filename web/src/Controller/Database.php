@@ -70,7 +70,7 @@ class Database {
 	}
 
 	public function insertPackage(string $short, string $long, string $language, string $version) {
-		$req = $this->pdo->prepare('INSERT INTO package (short_name, description, langage_id) values (:short, :long, :language);');
+		$req = $this->pdo->prepare('INSERT INTO package (short_name, description, language_id) values (:short, :long, :language);');
 
 		try {
 			$req->execute(['short' => $short, 'long' => $long, 'language' => $language]);

@@ -7,7 +7,7 @@ CREATE TABLE package (
 	id_package SERIAL PRIMARY KEY,
 	short_name VARCHAR(30) NOT NULL UNIQUE,
 	description VARCHAR(50) NOT NULL,
-	langage_id INT NOT NULL REFERENCES langage(id_language)
+	language_id INT NOT NULL REFERENCES language(id_language)
 );
 
 CREATE TABLE version (
