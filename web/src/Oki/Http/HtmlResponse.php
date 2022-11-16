@@ -1,0 +1,36 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Oki\Http;
+
+class HtmlResponse implements HttpResponse
+{
+    private int $status;
+
+    private string $viewPath;
+
+    private array $viewParams;
+
+    public function __construct(int $status, string $viewPath, array $viewParams = [])
+    {
+        $this->status = $status;
+        $this->viewPath = $viewPath;
+        $this->viewParams = $viewParams;
+    }
+
+    public function getStatusCode(): int
+    {
+        return $this->status;
+    }
+
+    public function render(string $viewBasePath): void
+    {
+        http_response_code($this->status);
+        $params = $this->viewParams;
+        ob_start();
+        require $viewBasePath . '/' . $this->viewPath . '.php';
+        $content = ob_get_clean();
+        require $viewBasePath . '/layout.php';
+    }
+}
