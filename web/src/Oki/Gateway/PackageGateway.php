@@ -50,7 +50,7 @@ class PackageGateway
 		return $packet;
 	}
 
-	public function getPackageVersion(string $version, string $name): ?string
+	public function getPackageVersion(string $name, string $version): ?string
 	{
 		$req = $this->pdo->prepare('SELECT v.identifier, p.short_name FROM version v, package p WHERE p.id_package=v.package_id AND :version=v.identifier AND :name=p.short_name');
 		$req->execute(['name' => $name, 'version' => $version]);

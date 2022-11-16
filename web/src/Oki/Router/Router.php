@@ -19,7 +19,12 @@ class Router
 
 	public function __construct(string $url, string $requestMethod)
 	{
-		$this->url = trim($url, '/');
+		$url = trim($url, '/');
+		$getParametersIndex = strpos($url, '?');
+		if ($getParametersIndex !== false) {
+			$url = substr($url, 0, $getParametersIndex);
+		}
+		$this->url = $url;
         $this->method = $requestMethod;
 	}
 
