@@ -11,10 +11,10 @@ namespace oki {
     RemoteRepository::RemoteRepository(std::string_view apiUrl) : apiUrl{apiUrl} {}
 
     std::vector<Package> RemoteRepository::listPackages() {
-        HttpRequest request{apiUrl + "?api=list"};
+        HttpRequest request{apiUrl + "/api/list"};
         json data = json::parse(request.get());
         std::vector<Package> packages;
-        for (const auto &item : data) {
+        for (const auto &item : data.at("packages")) {
             packages.emplace_back(item.at("short_name").get<std::string>(), item.at("description").get<std::string>());
         }
         return packages;
@@ -29,7 +29,7 @@ namespace oki {
     }
 
     std::optional<Package> RemoteRepository::showPackage(std::string_view packageName) {
-        HttpRequest request{apiUrl + "?api=info&package=" + std::string{packageName}};
+        HttpRequest request{apiUrl + "/api/info/" + std::string{packageName}};
         json data = json::parse(request.get());
         std::vector<Version> versions;
         if (data.contains("error")) {
@@ -44,7 +44,7 @@ namespace oki {
     }
 
     std::string RemoteRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
-        HttpRequest request{apiUrl + "?api=version&name=" + std::string{packageName} + "&version=" + packageVersion};
+        HttpRequest request{apiUrl + "/api/version" + std::string{packageName} + "?version=" + packageVersion};
         json data = json::parse(request.get());
         if (data.contains("error")) {
             throw APIException(data.at("error").get<std::string>());

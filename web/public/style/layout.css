@@ -20,12 +20,13 @@ main{
     position: relative;
 }
 
-a{
-    text-decoration: none;
+h2{
+    text-align: center;
 }
 
-a:visited:not(.logo){
-    color: #646464;
+a{
+    text-decoration: none;
+    color: black;
 }
 
 a:hover:not(.logo){
@@ -33,8 +34,36 @@ a:hover:not(.logo){
     text-decoration: underline;
 }
 
+a:focus:not(.logo){
+    text-decoration: underline;
+}
+
 .logo{
     font-size: 20px;
     line-height: 23.2px;
+}
+
+.logo>pre{
+    text-align: center;
+}
+
+.package-name{
     color: black;
+    padding-bottom: 20px;
+}
+
+.package-description{
+    color: gray;
+    margin-top: -10px;
+    padding-bottom: 20px;
+    border-bottom: solid lightgray 1px;
+}
+
+.package-detail-description{
+    color: gray;
+    margin-top: -10px;
+}
+
+.center-content{
+    text-align: center;
 }
