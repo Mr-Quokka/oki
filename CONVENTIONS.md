@@ -30,6 +30,8 @@ Une liste non exhaustive des abréviatives possibles serait :
 - *id* pour *identifier*
 - *pkg* pour *package*
 - *min*/*max* pour *minimum*/*maximum*
+- *db* pour *database*
+- *api* pour *Application Programming Interface*
 
 Convention de style
 -------------------
