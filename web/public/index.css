@@ -1,9 +1,0 @@
-.packageName:not(:hover){
-    color: black;
-}
-
-.packageDesc{
-    color: #646464;
-    padding-bottom: 20px;
-    border-bottom: solid lightgray 1px;
-}

@@ -22,10 +22,7 @@ main{
 
 a{
     text-decoration: none;
-}
-
-a:visited:not(.logo){
-    color: #646464;
+    color: black;
 }
 
 a:hover:not(.logo){
@@ -36,10 +33,19 @@ a:hover:not(.logo){
 .logo{
     font-size: 20px;
     line-height: 23.2px;
-    color: black;
+}
+
+.logo>pre{
+    text-align: center;
 }
 
 .package-name{
-    color: #000000;
+    color: black;
     padding-bottom: 20px;
+}
+
+.package-description{
+    color: #646464;
+    padding-bottom: 20px;
+    border-bottom: solid lightgray 1px;
 }
