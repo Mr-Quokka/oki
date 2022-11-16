@@ -23,7 +23,7 @@ namespace oki {
                 const Version &latest = p->getVersions().front();
                 std::cout << "/" << latest.getIdentifier() << " (" << latest.getPublishedDate() << ")";
             }
-            std::cout << "\n\t" << p->getShortName() << "\n\n";
+            std::cout << "\n\t" << p->getDescription() << "\n\n";
             for (const Version &version : p->getVersions()) {
                 std::cout << "\t" << version.getIdentifier() << " (" << version.getPublishedDate() << ")\n";
             }
