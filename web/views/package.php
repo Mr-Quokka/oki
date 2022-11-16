@@ -1,4 +1,7 @@
-<h2><?= $params['package']->getShortName() ?></h2>
+<div class="center-content">
+    <h2><?= $params['package']->getShortName() ?></h2>
+    <h3 class="package-detail-description"><?= $params['package']->getDescription() ?></h3>
+</div>
 <hr/>
 
 <h3>Versions</h3>

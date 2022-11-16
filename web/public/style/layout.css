@@ -20,6 +20,10 @@ main{
     position: relative;
 }
 
+h2{
+    text-align: center;
+}
+
 a{
     text-decoration: none;
     color: black;
@@ -27,6 +31,10 @@ a{
 
 a:hover:not(.logo){
     color: #C00;
+    text-decoration: underline;
+}
+
+a:focus:not(.logo){
     text-decoration: underline;
 }
 
@@ -45,7 +53,17 @@ a:hover:not(.logo){
 }
 
 .package-description{
-    color: #646464;
+    color: gray;
+    margin-top: -10px;
     padding-bottom: 20px;
     border-bottom: solid lightgray 1px;
+}
+
+.package-detail-description{
+    color: gray;
+    margin-top: -10px;
+}
+
+.center-content{
+    text-align: center;
 }
