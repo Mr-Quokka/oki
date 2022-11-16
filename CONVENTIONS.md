@@ -37,22 +37,26 @@ Convention de style
 -------------------
 
 ```php
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Model;
 
-class Bird {
-
+class Bird
+{
     private int $number;
 
     private string $name;
 
-    public function __construct(int $number, string $name = 'unknown') {
+    public function __construct(int $number, string $name = 'unknown')
+    {
         $this->number = $number;
         $this->name = $name;
     }
-    
-    public function getSpeed(): int {
+
+    public function getSpeed(): int
+    {
         if ($this->number === 55) {
             return 20;
         } else if ($this->name === 'Leonard') {
