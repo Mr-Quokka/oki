@@ -39,12 +39,27 @@ detectTomlPlusPlus() {
     wget 'https://raw.githubusercontent.com/marzer/tomlplusplus/master/toml.hpp' -O third-party/toml.hpp
 }
 
+detectDoctest() {
+    if [ -f /usr/include/doctest/doctest.h ]; then
+        echo 'Using existing doctest/doctest installation.'
+        return
+    fi
+
+    if [ -f third-party/doctest/doctest.hpp ]; then
+	    return
+    fi
+    mkdir -p third-party/doctest
+    exitIfCantDownload 'doctest/doctest'
+    echo 'Downloading doctest/doctest from GitHub.'
+    wget 'https://raw.githubusercontent.com/doctest/doctest/v2.4.9/doctest/doctest.h' -O third-party/doctest/doctest.hpp
+}
+
 detectNlohmannJson
 detectTomlPlusPlus
+detectDoctest
 
 for lib in nlohmann_json libcurl minizip; do
     pkg-config --exists --print-errors "$lib"
 done
 
 echo 'Found all necessary libraries.'
-
