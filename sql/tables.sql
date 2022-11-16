@@ -17,3 +17,14 @@ CREATE TABLE version (
 	published_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	UNIQUE (package_id, identifier)
 );
+
+CREATE TABLE user (
+	id_user SERIAL PRIMARY KEY,
+	login VARCHAR(30) NOT NULL UNIQUE,
+	password VARCHAR(72),
+	perm INT NOT NULL
+);
+
+CREATE TABLE authorization (
+	role VARCHAR(30) PRIMARY KEY
+);
