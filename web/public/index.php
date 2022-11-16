@@ -67,7 +67,7 @@ else{
 	}
 	else{
 		foreach ($package as $p){
-			echo '<h3><a class="packageName" href="package.php?name='.$p->getShortName().'">' . $p->getShortName() . '</a></h3>';
+			echo '<h3><a class="packageName" href="package.php?name=' . $p->getShortName().'">' . $p->getShortName() . '</a></h3>';
 			echo '<p class="packageDesc">' . $p->getDescription() . '</p>';
 		}
 	}
