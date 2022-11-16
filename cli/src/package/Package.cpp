@@ -2,7 +2,7 @@
 
 #include <utility>
 
-namespace oki {
+namespace package {
     Package::Package(std::string_view shortName, std::string_view description, std::vector<Version> versions)
         : shortName{shortName}, description{description}, versions{std::move(versions)} {}
 

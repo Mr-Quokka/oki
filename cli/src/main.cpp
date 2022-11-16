@@ -5,11 +5,9 @@
 
 namespace fs = std::filesystem;
 
-using namespace oki;
-
 int main(int argc, char *argv[]) {
-    CliAction *action = parseArguments(argc, argv);
-    RemoteRepository repository{"http://localhost:8000"};
+    cli::CliAction *action = cli::parseArguments(argc, argv);
+    repository::RemoteRepository repository{"http://localhost:8000"};
     action->run(repository);
     delete action;
     return 0;

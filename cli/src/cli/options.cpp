@@ -8,7 +8,7 @@
 #include "ReInstallAction.h"
 #include "ShowAction.h"
 
-namespace oki {
+namespace cli {
     void invalidUsage(std::ostream &os) {
         os << "Invalid usage. Hint: ";
     }

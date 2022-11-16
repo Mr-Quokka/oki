@@ -5,12 +5,12 @@
 
 namespace fs = std::filesystem;
 
-namespace oki {
+namespace cli {
     ShowAction::ShowAction(const char *packageName) : packageName{packageName} {}
 
-    void ShowAction::run(Repository &repository) {
-        bool color = acceptColor();
-        std::optional<Package> p = repository.showPackage(packageName);
+    void ShowAction::run(repository::Repository &repository) {
+        bool color = config::acceptColor();
+        std::optional<package::Package> p = repository.showPackage(packageName);
         if (p == std::nullopt) {
             std::cerr << "This packet doesn't exist\n";
         } else {
@@ -20,11 +20,11 @@ namespace oki {
                 std::cout << p->getShortName();
             }
             if (!p->getVersions().empty()) {
-                const Version &latest = p->getVersions().front();
+                const package::Version &latest = p->getVersions().front();
                 std::cout << "/" << latest.getIdentifier() << " (" << latest.getPublishedDate() << ")";
             }
             std::cout << "\n\t" << p->getShortName() << "\n\n";
-            for (const Version &version : p->getVersions()) {
+            for (const package::Version &version : p->getVersions()) {
                 std::cout << "\t" << version.getIdentifier() << " (" << version.getPublishedDate() << ")\n";
             }
         }

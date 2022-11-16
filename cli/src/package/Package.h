@@ -4,7 +4,7 @@
 
 #include "Version.h"
 
-namespace oki {
+namespace package {
     /**
      * Un modèle de paquet pour échanger avec l'API.
      */

@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <string>
 
-namespace oki {
+namespace io {
     /**
      * Une requête HTTP, préparée par CURL.
      */

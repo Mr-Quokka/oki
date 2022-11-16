@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-namespace oki {
+namespace io {
     /**
      * Un extracteur d'archives compressées au format ZIP.
      */

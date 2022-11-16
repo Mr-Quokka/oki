@@ -5,7 +5,7 @@
 
 namespace fs = std::filesystem;
 
-namespace oki {
+namespace config {
     fs::path getDefaultLocalRepository() {
         // https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
         const char *xdgData = std::getenv("XDG_DATA_HOME");

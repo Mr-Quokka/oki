@@ -5,7 +5,7 @@
 #include <toml.hpp>
 #include <unordered_map>
 
-namespace oki {
+namespace config {
     /**
      * Métadonnées du paquet courant.
      */

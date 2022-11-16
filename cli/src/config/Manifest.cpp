@@ -6,7 +6,7 @@ namespace fs = std::filesystem;
 
 constexpr static std::string_view DEPENDENCY_SECTION_NAME = "dependencies";
 
-namespace oki {
+namespace config {
     Manifest Manifest::fromFile(fs::path fileName) {
         Manifest manifest;
         manifest.loadFileIfExists(fileName);

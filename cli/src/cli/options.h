@@ -5,7 +5,7 @@
 
 #include "CliAction.h"
 
-namespace oki {
+namespace cli {
     /**
      * Toutes les actions possibles.
      */

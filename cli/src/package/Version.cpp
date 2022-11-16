@@ -1,6 +1,6 @@
 #include "Version.h"
 
-namespace oki {
+namespace package {
     Version::Version(std::string_view identifier, std::string_view publishedDate, std::string_view downloadUrl)
         : identifier{identifier}, publishedDate{publishedDate}, downloadUrl{downloadUrl} {}
 
