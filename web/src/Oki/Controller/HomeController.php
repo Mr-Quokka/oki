@@ -15,4 +15,14 @@ class HomeController
         $packages = $di->getPackageGateway()->listPackages();
         return new HtmlResponse(200, 'index', ['packages' => $packages]);
     }
+
+    public function packageInfo(DI $di, array $params): HttpResponse
+    {
+        $packageName = $params['name'];
+        $package = $di->getPackageGateway()->getPackageInfo($packageName);
+        if ($package === null) {
+            return HtmlResponse::notFound('Unknown package name');
+        }
+        return new HtmlResponse(200, 'package', ['package' => $package]);
+    }
 }

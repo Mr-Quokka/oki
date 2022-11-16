@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style/layout.css">
+    <link rel="stylesheet" href="/style/layout.css">
     <title><?= $title ?? 'Package registry' ?> - OKI</title>
 </head>
 <body>

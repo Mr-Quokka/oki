@@ -19,6 +19,11 @@ class HtmlResponse implements HttpResponse
         $this->viewParams = $viewParams;
     }
 
+    public static function notFound(string $message): HtmlResponse
+    {
+        return new HtmlResponse(404, '404', ['message' => $message]);
+    }
+
     public function getStatusCode(): int
     {
         return $this->status;
