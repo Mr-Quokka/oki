@@ -11,5 +11,6 @@ $api = new \Oki\Controller\ApiController();
 
 $router = new \Oki\Router\Router($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
 $router->get('/^api\/list$/', [$api, 'listPackages']);
+$router->get('/^api\/info\/(?<name>\w+)$/', [$api, 'packageInfo']);
 $router->get('/^$/', [$home, 'index']);
 $router->run(new \Oki\DI\DI())->render(__DIR__ . '/../views');

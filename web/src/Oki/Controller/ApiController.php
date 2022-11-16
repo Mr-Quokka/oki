@@ -15,4 +15,14 @@ class ApiController
         $packages = $di->getPackageGateway()->listPackages();
         return new JsonResponse(200, ['packages' => $packages]);
     }
+
+    public function packageInfo(DI $di, array $params): HttpResponse
+    {
+        $packageName = $params['name'];
+        $package = $di->getPackageGateway()->getPackageInfo($packageName);
+        if ($package === null) {
+            return new JsonResponse(404, ['error' => 'Unknown package name']);
+        }
+        return new JsonResponse(200, $package);
+    }
 }
