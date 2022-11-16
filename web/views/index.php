@@ -5,7 +5,7 @@
 <?php else : ?>
     <?php foreach ($params['packages'] as $pkg) : ?>
         <div>
-            <h3><a href="<?= $pkg->getShortName() ?>" class="package-name"><?= $pkg->getShortName() ?></a></h3>
+            <h3><a href="/package/<?= $pkg->getShortName() ?>" class="package-name"><?= $pkg->getShortName() ?></a></h3>
             <p class="package-description"><?= $pkg->getDescription() ?></p>
         </div>
     <?php endforeach ?>
