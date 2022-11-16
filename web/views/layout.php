@@ -7,7 +7,7 @@
 </head>
 <body>
     <header>
-        <a href="index.php" class="logo">
+        <a href="/" class="logo">
             <pre>
  ██████╗ ██╗  ██╗██╗
 ██╔═══██╗██║ ██╔╝██║
