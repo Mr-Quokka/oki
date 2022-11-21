@@ -29,4 +29,4 @@ fi
 ./configure.sh -d
 make $*
 EOF
-vdn-scp root@$VDN_SYSTEM:oki 
+vdn-scp root@$VDN_SYSTEM:oki .
