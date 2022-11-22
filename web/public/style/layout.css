@@ -20,6 +20,12 @@ main{
     position: relative;
 }
 
+
+h2{
+    text-align: center;
+}
+
+
 a{
     text-decoration: none;
     color: black;
@@ -37,5 +43,29 @@ a:focus:not(.logo){
 .logo{
     font-size: 20px;
     line-height: 23.2px;
+}
+
+.logo>pre{
+    text-align: center;
+}
+
+.package-name{
     color: black;
+    padding-bottom: 20px;
+}
+
+.package-description{
+    color: gray;
+    margin-top: -10px;
+    padding-bottom: 20px;
+    border-bottom: solid lightgray 1px;
+}
+
+.package-detail-description{
+    color: gray;
+    margin-top: -10px;
+}
+
+.center-content{
+    text-align: center;
 }

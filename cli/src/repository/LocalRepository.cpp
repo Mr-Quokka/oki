@@ -1,6 +1,5 @@
 #include "LocalRepository.h"
 
-#include "../io/HttpRequest.h"
 #include <iostream>
 
 namespace fs = std::filesystem;
@@ -21,16 +20,16 @@ namespace oki {
     }
 
     void LocalRepository::download(const Version &packageVersion, const fs::path &destination) {
-        std::cerr << "TODO : downloading " << packageVersion.getIdentifier() << "\n";
+        std::cerr << "TODO : downloading " << packageVersion.getIdentifier() << " at " << destination << "\n";
     }
 
-    std::optional<Package> LocalRepository::showPackage(std::string_view packageName) {
+    Package LocalRepository::getPackageInfo(std::string_view packageName) {
         std::cerr << "TODO : show " << packageName << "\n";
-        throw APIException{"Not implemented"};
+        throw std::logic_error{"Not implemented"};
     }
 
     std::string LocalRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
-        std::cerr << "TODO :  " << packageName << "\n";
-        return "";
+        std::cerr << "TODO : " << packageName << "/" << packageVersion << "\n";
+        throw std::logic_error{"Not implemented"};
     }
 }

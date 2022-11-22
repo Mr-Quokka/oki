@@ -1,43 +1,35 @@
-<?php declare(strict_types=1);
+<?php
 
-namespace Controller;
+declare(strict_types=1);
 
-require __DIR__ . '/../Config/DatabaseConfig.php';
-require __DIR__ . '/../Config/SQLiteConfig.php';
-require __DIR__ . '/../Model/Package.php';
-require __DIR__ . '/../Model/PackageVersion.php';
+namespace Oki\Gateway;
 
-use Config\DatabaseConfig;
-use Config\SQLiteConfig;
-use Model\Package;
-use Model\PackageVersion;
+use Oki\Config\DatabaseConfig;
+use Oki\Model\Package;
+use Oki\Model\PackageVersion;
 use PDO;
 use PDOException;
 
-function getDefaultDatabaseConfig(): DatabaseConfig {
-	return new SQLiteConfig();
-}
-
-class Database {
+class PackageGateway
+{
 
 	private DatabaseConfig $config;
 	private PDO $pdo;
 
-	function __construct(?DatabaseConfig $config = null) {
-		if ($config === null) {
-			$config = getDefaultDatabaseConfig();
-		}
+	public function __construct(PDO $pdo, DatabaseConfig $config)
+	{
 		$this->config = $config;
-		$this->pdo = new PDO($config->getDsn());
-		$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->pdo = $pdo;
 	}
 
-	public function listPackages(): array {
+	public function listPackages(): array
+	{
 		$req = $this->pdo->query('SELECT * FROM package;');
 		return $req->fetchAll(PDO::FETCH_CLASS, Package::class);
 	}
 
-	public function getPackageInfo(string $packageName): ?Package {
+	public function getPackageInfo(string $packageName): ?Package
+	{
 		$reqPacket = $this->pdo->prepare('SELECT * FROM package WHERE short_name = :name;');
 		$reqPacket->execute(['name' => $packageName]);
 		$reqPacket->setFetchMode(PDO::FETCH_CLASS, Package::class);
@@ -58,7 +50,8 @@ class Database {
 		return $packet;
 	}
 
-	public function getPackageVersion(string $version, string $name): ?string {
+	public function getPackageVersion(string $name, string $version): ?string
+	{
 		$req = $this->pdo->prepare('SELECT v.identifier, p.short_name FROM version v, package p WHERE p.id_package=v.package_id AND :version=v.identifier AND :name=p.short_name');
 		$req->execute(['name' => $name, 'version' => $version]);
 		$res = $req->fetch();
@@ -69,7 +62,8 @@ class Database {
 		return "/packages/" . $res["short_name"] . "_" . $res["identifier"] . ".zip";
 	}
 
-	public function insertPackage(string $short, string $long, string $language, string $version) {
+	public function insertPackage(string $short, string $long, string $language, string $version)
+	{
 		$req = $this->pdo->prepare('INSERT INTO package (short_name, description, language_id) values (:short, :long, :language);');
 
 		try {
