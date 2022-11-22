@@ -5,7 +5,7 @@
 #include <toml.hpp>
 #include <unordered_map>
 
-namespace oki {
+namespace config {
     /**
      * Métadonnées du paquet courant.
      */
@@ -16,7 +16,7 @@ namespace oki {
 
     public:
         /**
-         * Créé un manifeste à partir d'un fichier existant potentiellement.
+         * Crée un manifeste à partir d'un fichier existant potentiellement.
          */
         static Manifest fromFile(std::filesystem::path fileName);
 

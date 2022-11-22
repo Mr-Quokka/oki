@@ -3,7 +3,7 @@
 #include <filesystem>
 #include <string>
 
-namespace oki {
+namespace io {
     /**
      * Décrit la réponse du serveur après une requête HTTP.
      */

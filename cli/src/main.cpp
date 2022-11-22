@@ -7,14 +7,12 @@
 
 namespace fs = std::filesystem;
 
-using namespace oki;
-
 int main(int argc, char *argv[]) {
-    CliAction *action = parseArguments(argc, argv);
-    RemoteRepository repository{"http://localhost:8000"};
+    cli::CliAction *action = cli::parseArguments(argc, argv);
+    repository::RemoteRepository repository{"http://localhost:8000"};
     try {
         action->run(repository);
-    } catch (const oki::APIException &e) {
+    } catch (const io::APIException &e) {
         std::cerr << e.what() << "\n";
     }
     delete action;

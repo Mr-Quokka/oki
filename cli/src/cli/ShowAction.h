@@ -2,7 +2,7 @@
 
 #include "CliAction.h"
 
-namespace oki {
+namespace cli {
     /**
      * Affiche les informations d'un paquet d'après son nom.
      */
@@ -12,6 +12,6 @@ namespace oki {
 
     public:
         explicit ShowAction(const char *packageName);
-        void run(Repository &repository) override;
+        void run(repository::Repository &repository) override;
     };
 }

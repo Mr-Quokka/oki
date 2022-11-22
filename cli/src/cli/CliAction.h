@@ -2,10 +2,10 @@
 
 #include "../repository/Repository.h"
 
-namespace oki {
+namespace cli {
     class CliAction {
     public:
-        virtual void run(Repository &repository) = 0;
+        virtual void run(repository::Repository &repository) = 0;
         virtual ~CliAction() = default;
     };
 }

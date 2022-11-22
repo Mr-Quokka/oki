@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-namespace oki {
+namespace package {
     /**
      * Un modèle de version d'un paquet pour communiquer avec l'API.
      */

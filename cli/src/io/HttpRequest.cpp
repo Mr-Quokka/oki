@@ -3,7 +3,7 @@
 #include <cstring>
 #include <curl/curl.h>
 
-namespace oki {
+namespace io {
     static std::size_t writeCallback(char *in, std::size_t size, std::size_t nmemb, std::string *out) {
         std::size_t totalSize = size * nmemb;
         if (totalSize) {

@@ -7,51 +7,51 @@
 
 using json = nlohmann::json;
 
-namespace oki {
-    static HttpRequest createRequest(std::string_view url) {
-        HttpRequest request{url};
+namespace repository {
+    static io::HttpRequest createRequest(std::string_view url) {
+        io::HttpRequest request{url};
         request.addHeader("Accept: application/json");
         request.addHeader("User-Agent: oki/0.1");
         return request;
     }
 
-    static json tryReadRequest(HttpRequest &request) {
-        HttpResponse response = request.get();
+    static json tryReadRequest(io::HttpRequest &request) {
+        io::HttpResponse response = request.get();
         if (!response.getContentType().starts_with("application/json")) {
-            throw APIException{"Invalid content type received (" + response.getContentType() + ") from " + request.getUrl()};
+            throw io::APIException{"Invalid content type received (" + response.getContentType() + ") from " + request.getUrl()};
         }
         json data = json::parse(response.getContent());
         auto it = data.find("error");
         if (response.getStatusCode() >= 400 || it != data.end()) {
-            throw APIException{(it == data.end() ? "Invalid request" : it->get<std::string>()) + ", tried " + request.getUrl()};
+            throw io::APIException{(it == data.end() ? "Invalid request" : it->get<std::string>()) + ", tried " + request.getUrl()};
         }
         return data;
     }
 
     RemoteRepository::RemoteRepository(std::string_view apiUrl) : apiUrl{apiUrl} {}
 
-    std::vector<Package> RemoteRepository::listPackages() {
-        HttpRequest request = createRequest(apiUrl + "/api/list");
+    std::vector<package::Package> RemoteRepository::listPackages() {
+        io::HttpRequest request = createRequest(apiUrl + "/api/list");
         json data = tryReadRequest(request);
-        std::vector<Package> packages;
+        std::vector<package::Package> packages;
         for (const auto &item : data.at("packages")) {
             packages.emplace_back(item.at("short_name").get<std::string>(), item.at("description").get<std::string>());
         }
         return packages;
     }
 
-    void RemoteRepository::download(const Version &packageVersion, const std::filesystem::path &destination) {
-        HttpRequest request = createRequest(apiUrl + packageVersion.getDownloadUrl());
-        TmpFile tmp;
+    void RemoteRepository::download(const package::Version &packageVersion, const std::filesystem::path &destination) {
+        io::HttpRequest request = createRequest(apiUrl + packageVersion.getDownloadUrl());
+        io::TmpFile tmp;
         request.download(tmp.getFilename());
-        Extractor extractor{destination};
+        io::Extractor extractor{destination};
         extractor.extract(tmp.getFilename());
     }
 
-    Package RemoteRepository::getPackageInfo(std::string_view packageName) {
-        HttpRequest request = createRequest(apiUrl + "/api/info/" + std::string{packageName});
+    package::Package RemoteRepository::getPackageInfo(std::string_view packageName) {
+        io::HttpRequest request = createRequest(apiUrl + "/api/info/" + std::string{packageName});
         json data = tryReadRequest(request);
-        std::vector<Version> versions;
+        std::vector<package::Version> versions;
         auto it = data.find("versions");
         if (it != data.end()) {
             for (const auto &item : *it) {
@@ -62,7 +62,7 @@ namespace oki {
     }
 
     std::string RemoteRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
-        HttpRequest request = createRequest(apiUrl + "/api/version" + std::string{packageName} + "?version=" + packageVersion);
+        io::HttpRequest request = createRequest(apiUrl + "/api/version" + std::string{packageName} + "?version=" + packageVersion);
         json data = tryReadRequest(request);
         return data.get<std::string>();
     }

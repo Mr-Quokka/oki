@@ -2,12 +2,12 @@
 
 #include "CliAction.h"
 
-namespace oki {
+namespace cli {
     /**
      * Liste tous les paquets disponibles.
      */
     class ListAction : public CliAction {
     public:
-        void run(Repository &repository) override;
+        void run(repository::Repository &repository) override;
     };
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace oki {
+namespace io {
     /**
      * Un fichier temporaire utilisant le principe de RAII.
      */

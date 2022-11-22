@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-namespace oki {
+namespace config {
     /**
      * Détermine le chemin par défaut vers le répertoire local de l'utilisateur.
      *

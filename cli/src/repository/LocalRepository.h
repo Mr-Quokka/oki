@@ -2,7 +2,7 @@
 
 #include "Repository.h"
 
-namespace oki {
+namespace repository {
     class LocalRepository : public Repository {
     private:
         std::filesystem::path root;
@@ -10,9 +10,9 @@ namespace oki {
     public:
         explicit LocalRepository(std::filesystem::path root);
         void createIfNotExists();
-        std::vector<Package> listPackages() override;
-        Package getPackageInfo(std::string_view packageName) override;
+        std::vector<package::Package> listPackages() override;
+        package::Package getPackageInfo(std::string_view packageName) override;
         std::string getPackageURL(std::string_view packageName, std::string packageVersion) override;
-        void download(const Version &packageVersion, const std::filesystem::path &destination) override;
+        void download(const package::Version &packageVersion, const std::filesystem::path &destination) override;
     };
 }
