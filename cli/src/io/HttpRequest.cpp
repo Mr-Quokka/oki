@@ -74,7 +74,7 @@ namespace io {
         if (res != CURLE_OK) {
             throw RequestException{static_cast<int>(res)};
         }
-        int httpStatus = 0;
+        long httpStatus = 0;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpStatus);
         return HttpResponse{httpStatus, std::move(contentType), std::move(buffer)};
     }
@@ -103,10 +103,10 @@ namespace io {
         curl_easy_cleanup(curl);
     }
 
-    HttpResponse::HttpResponse(int statusCode, std::string contentType, std::string content)
+    HttpResponse::HttpResponse(long statusCode, std::string contentType, std::string content)
         : statusCode{statusCode}, contentType{std::move(contentType)}, content{std::move(content)} {}
 
-    int HttpResponse::getStatusCode() const {
+    long HttpResponse::getStatusCode() const {
         return statusCode;
     }
 

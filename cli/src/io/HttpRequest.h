@@ -9,19 +9,19 @@ namespace io {
      */
     class HttpResponse {
     private:
-        int statusCode;
+        long statusCode;
         std::string contentType;
         std::string content;
 
     public:
-        HttpResponse(int statusCode, std::string contentType, std::string content);
+        HttpResponse(long statusCode, std::string contentType, std::string content);
 
         /**
          * Récupère le code de statut HTTP.
          *
          * @return Le statut de la réponse.
          */
-        int getStatusCode() const;
+        long getStatusCode() const;
 
         /**
          * Récupère le type MIME retourné par le serveur.
