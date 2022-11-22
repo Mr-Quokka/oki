@@ -3,6 +3,13 @@
 set -eu
 
 VDN_SYSTEM=bigboss
+FILES=oki
+
+for i; do
+  if [ $i == "coverage.html" -o $i == "oki-test" ]; then
+    FILES="$FILES $i"
+  fi
+done
 
 vdn-set-network-dir ~vdn/vdn/networks/demo
 if ! vdn-alive $VDN_SYSTEM; then
@@ -29,4 +36,7 @@ fi
 ./configure.sh -d
 make $*
 EOF
-vdn-scp root@$VDN_SYSTEM:oki .
+
+for i in $FILES; do
+  vdn-scp root@$VDN_SYSTEM:$i . 2> /dev/null
+done

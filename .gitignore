@@ -9,9 +9,11 @@
 # Compilation
 build
 doc
+coverage.html
 
 # Executables
 oki
+oki-test
 
 # Dependencies
 third-party
