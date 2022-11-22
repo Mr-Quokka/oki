@@ -6,16 +6,6 @@ namespace semver {
     Version::Version(Value major, Value minor, Value patch)
         : major{major}, minor{minor}, patch{patch} {}
 
-    /*std::strong_ordering Version::operator<=>(const Version &that) const {
-        if (auto cmp = major <=> that.major; cmp != nullptr) {
-            return cmp;
-        }
-        if (auto cmp = minor <=> that.minor; cmp != nullptr) {
-            return cmp;
-        }
-        return patch <=> that.patch;
-    }*/
-
     Version Version::parse(std::string_view s) {
         const char *ptr = s.data();
         const char *begin = s.end();
@@ -40,7 +30,9 @@ namespace semver {
         if (isError()) {
             throw InvalidVersionException{s, ptr - begin};
         }
-
+        if (result.ptr != end) {
+            throw InvalidVersionException{s, result.ptr - begin};
+        }
         return ret;
     }
 
