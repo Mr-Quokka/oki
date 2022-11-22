@@ -20,7 +20,7 @@ if ! vdn-alive $VDN_SYSTEM; then
 fi
 
 currentDate=$(date +'%F %H:%M:%S')
-vdn-ssh root@$VDN_SYSTEM "date -s '$currentDate' &> /dev/null && date -s '-2 hours'"
+vdn-ssh root@$VDN_SYSTEM "date -u -s '$currentDate' &> /dev/null"
 
 rsync -av src -e vdn-ssh root@$VDN_SYSTEM:
 rsync -av test -e vdn-ssh root@$VDN_SYSTEM:

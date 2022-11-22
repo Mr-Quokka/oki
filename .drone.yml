@@ -14,7 +14,7 @@ steps:
   - name: build-cli
     image: hub.codefirst.iut.uca.fr/clement.freville2/oki-build-image:latest
     commands:
-      - cd cli && ./configure.sh && make
+      - cd cli && make
 
   - name: test-cli
     image: hub.codefirst.iut.uca.fr/clement.freville2/oki-build-image:latest

@@ -70,7 +70,8 @@ doc: doc/html/index.html
 format:
 	find src/ test/ \( -name '*.cpp' -o -name '*.h' \) -exec clang-format -i {} \;
 
-coverage.html: $(TARGET_EXE)-test
+# Couverture des tests
+coverage.html: $(TARGET_EXE)-test build/test/test/main.o
 	./$(TARGET_EXE)-test && gcovr -r src -d build --html coverage.html
 
 .PHONY: all clean doc format
