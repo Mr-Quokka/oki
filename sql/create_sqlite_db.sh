@@ -7,6 +7,7 @@ sed 's/SERIAL PRIMARY KEY/INTEGER PRIMARY KEY AUTOINCREMENT/g' tables.sql | sqli
 sqlite3 ../web/oki_packages.db << EOF
 INSERT INTO language VALUES (1, 'C');
 INSERT INTO package VALUES (3, 'linked-list2', 'My second linked list package', 1);
+INSERT INTO dependency VALUES (1,1,"<8.2.1");
 EOF
 
 ../fill-repository.sh

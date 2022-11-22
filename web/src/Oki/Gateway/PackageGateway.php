@@ -7,6 +7,7 @@ namespace Oki\Gateway;
 use Oki\Config\DatabaseConfig;
 use Oki\Model\Package;
 use Oki\Model\PackageVersion;
+use Oki\Model\Dependency;
 use PDO;
 use PDOException;
 
@@ -44,7 +45,14 @@ class PackageGateway
 
 		foreach ($versions as $version) {
 			$version->setPackage($packet);
+
+			$reqDependency = $this->pdo->prepare('SELECT * FROM dependency WHERE constrainer_id = :id;');
+			$reqDependency->execute(['id' => $version->getIdVersion()]);
+			$dependencies = $reqDependency->fetchAll(PDO::FETCH_CLASS, Dependency::class);
+
+			$version->setDependencies($dependencies);
 		}
+		
 
 		$packet->setVersions($versions);
 		return $packet;
