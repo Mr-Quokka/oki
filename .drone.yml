@@ -8,10 +8,18 @@ trigger:
   branch:
     - main
     - feature/ci
+    - cli/*
 
 steps:
   - name: build-cli
-    image: gcc:12
+    image: hub.codefirst.iut.uca.fr/clement.freville2/oki-build-image:latest
     commands:
-      - apt-get update && apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev
-      - cd cli && ./configure.sh -d && make
+      - cd cli && make
+
+  - name: test-cli
+    image: hub.codefirst.iut.uca.fr/clement.freville2/oki-build-image:latest
+    commands:
+      - cd cli && make oki-test
+      - ./oki-test
+    depends_on:
+      - build-cli
