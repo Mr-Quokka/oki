@@ -21,8 +21,8 @@ namespace config {
         return packages;
     }
 
-    void Manifest::addDeclaredPackage(std::string_view packageName, std::string_view version) {
-        addDependencySectionIfNotExists().insert(packageName, version);
+    bool Manifest::addDeclaredPackage(std::string_view packageName, std::string_view version) {
+        return addDependencySectionIfNotExists().insert_or_assign(packageName, version).second;
     }
 
     toml::v3::table &Manifest::addDependencySectionIfNotExists() {

@@ -27,8 +27,10 @@ namespace config {
 
         /**
          * Ajoute un paquet à la liste des dépendances directes. S'il existe déjà, alors il n'est pas rajouté.
+         *
+         * @return Vrai si la dépendance n'était pas déjà référencée, faux sinon.
          */
-        void addDeclaredPackage(std::string_view packageName, std::string_view version);
+        bool addDeclaredPackage(std::string_view packageName, std::string_view version);
 
         /**
          * Créé un manifeste à partir d'un fichier existant potentiellement.
