@@ -17,12 +17,12 @@ namespace cli {
             std::cout << p.getShortName();
         }
         if (!p.getVersions().empty()) {
-            const package::Version &latest = p.getVersions().front();
-            std::cout << "/" << latest.getIdentifier() << " (" << latest.getPublishedDate() << ")";
+            const package::PackageVersion &latest = p.getVersions().front();
+            std::cout << "/" << latest << " (" << latest.getPublishedDate() << ")";
         }
         std::cout << "\n\t" << p.getDescription() << "\n\n";
-        for (const package::Version &version : p.getVersions()) {
-            std::cout << "\t" << version.getIdentifier() << " (" << version.getPublishedDate() << ")\n";
+        for (const package::PackageVersion &version : p.getVersions()) {
+            std::cout << "\t" << version << " (" << version.getPublishedDate() << ")\n";
         }
     }
 }

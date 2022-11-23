@@ -15,9 +15,9 @@ namespace cli {
             throw io::APIException{"The packet doesn't have any version"};
         } else {
             config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
-            package::Version latest = p.getVersions().front();
-            if (manifest.addDeclaredPackage(packageName, latest.getIdentifier())) {
-                std::cout << "Adding " << packageName << " v" << latest.getIdentifier() << " to dependencies.\n";
+            package::PackageVersion latest = p.getVersions().front();
+            if (manifest.addDeclaredPackage(packageName, latest)) {
+                std::cout << "Adding " << packageName << " v" << latest << " to dependencies.\n";
             }
             manifest.saveFile(OKI_MANIFEST_FILE);
 

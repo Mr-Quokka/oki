@@ -19,8 +19,8 @@ namespace repository {
         return packages;
     }
 
-    void LocalRepository::download(const package::Version &packageVersion, const fs::path &destination) {
-        std::cerr << "TODO : downloading " << packageVersion.getIdentifier() << " at " << destination << "\n";
+    void LocalRepository::download(const package::PackageVersion &packageVersion, const fs::path &destination) {
+        std::cerr << "TODO : downloading " << packageVersion << " at " << destination << "\n";
     }
 
     package::Package LocalRepository::getPackageInfo(std::string_view packageName) {

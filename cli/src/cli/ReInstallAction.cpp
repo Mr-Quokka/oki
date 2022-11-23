@@ -13,7 +13,7 @@ namespace cli {
         fs::create_directories(OKI_PACKAGES_DIRECTORY);
         for (const std::pair<std::string_view, std::string> package : manifest.listDeclaredPackages()) {
             std::cout << package.first << " -> " << package.second << "\n";
-            repository.download(package::Version{package.second, "", repository.getPackageURL(package.first, package.second)}, OKI_PACKAGES_DIRECTORY);
+            repository.download(package::PackageVersion{semver::Version{}, "", repository.getPackageURL(package.first, package.second)}, OKI_PACKAGES_DIRECTORY);
         }
     }
 }

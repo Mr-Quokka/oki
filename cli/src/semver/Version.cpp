@@ -6,6 +6,20 @@ namespace semver {
     Version::Version(Value major, Value minor, Value patch)
         : major{major}, minor{minor}, patch{patch} {}
 
+    std::string Version::str() const {
+        return operator std::string();
+    }
+
+    Version::operator std::string() const {
+        std::string buffer;
+        buffer.append(std::to_string(major));
+        buffer.append(".");
+        buffer.append(std::to_string(minor));
+        buffer.append(".");
+        buffer.append(std::to_string(patch));
+        return buffer;
+    }
+
     Version Version::parse(std::string_view s) {
         const char *ptr = s.data();
         const char *begin = s.end();
@@ -34,6 +48,10 @@ namespace semver {
             throw InvalidVersionException{s, result.ptr - begin};
         }
         return ret;
+    }
+
+    std::ostream &operator<<(std::ostream &os, const Version &version) {
+        return os << version.major << "." << version.minor << "." << version.patch;
     }
 
     InvalidVersionException::InvalidVersionException(std::string_view string, std::ptrdiff_t offset)

@@ -40,7 +40,7 @@ namespace repository {
         return packages;
     }
 
-    void RemoteRepository::download(const package::Version &packageVersion, const std::filesystem::path &destination) {
+    void RemoteRepository::download(const package::PackageVersion &packageVersion, const std::filesystem::path &destination) {
         io::HttpRequest request = createRequest(apiUrl + packageVersion.getDownloadUrl());
         io::TmpFile tmp;
         request.download(tmp.getFilename());
@@ -51,18 +51,21 @@ namespace repository {
     package::Package RemoteRepository::getPackageInfo(std::string_view packageName) {
         io::HttpRequest request = createRequest(apiUrl + "/api/info/" + std::string{packageName});
         json data = tryReadRequest(request);
-        std::vector<package::Version> versions;
+        std::vector<package::PackageVersion> versions;
         auto it = data.find("versions");
         if (it != data.end()) {
             for (const auto &item : *it) {
-                versions.emplace_back(item.at("identifier").get<std::string>(), item.at("published_date").get<std::string>(), item.at("download_url").get<std::string>());
+                versions.emplace_back(
+                    semver::Version::parse(item.at("identifier").get<std::string>()),
+                    item.at("published_date").get<std::string>(),
+                    item.at("download_url").get<std::string>());
             }
         }
         return {data.at("short_name").get<std::string>(), data.at("description").get<std::string>(), versions};
     }
 
     std::string RemoteRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
-        io::HttpRequest request = createRequest(apiUrl + "/api/version" + std::string{packageName} + "?version=" + packageVersion);
+        io::HttpRequest request = createRequest(apiUrl + "/api/version/" + std::string{packageName} + "?version=" + packageVersion);
         json data = tryReadRequest(request);
         return data.get<std::string>();
     }

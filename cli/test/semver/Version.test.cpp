@@ -1,4 +1,5 @@
 #include <doctest/doctest.h>
+#include <sstream>
 
 #include "semver/Version.h"
 
@@ -23,4 +24,12 @@ TEST_CASE("comparing versions") {
     CHECK((Version(1, 0, 4) <=> Version(1, 0, 3)) == std::strong_ordering::greater);
     CHECK((Version(0, 4, 2) <=> Version(0, 5, 0)) == std::strong_ordering::less);
     CHECK((Version(1, 10, 2) <=> Version(2, 4, 1)) == std::strong_ordering::less);
+}
+
+TEST_CASE("converting versions to string") {
+    CHECK(Version(2, 0, 0).str() == "2.0.0");
+    CHECK(Version(0, 1, 9).str() == "0.1.9");
+    std::stringstream out;
+    out << Version(3, 7, 1);
+    CHECK(out.str() == "3.7.1");
 }

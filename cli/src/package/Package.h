@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Version.h"
+#include "PackageVersion.h"
 
 namespace package {
     /**
@@ -12,12 +12,12 @@ namespace package {
     private:
         std::string shortName;
         std::string description;
-        std::vector<Version> versions;
+        std::vector<PackageVersion> versions;
 
     public:
-        Package(std::string_view shortName, std::string_view description, std::vector<Version> versions = {});
+        Package(std::string_view shortName, std::string_view description, std::vector<PackageVersion> versions = {});
         const std::string &getShortName() const;
         const std::string &getDescription() const;
-        const std::vector<Version> &getVersions() const;
+        const std::vector<PackageVersion> &getVersions() const;
     };
 }

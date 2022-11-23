@@ -28,7 +28,7 @@ namespace repository {
          */
         virtual package::Package getPackageInfo(std::string_view packageName) = 0;
         virtual std::string getPackageURL(std::string_view packageName, std::string packageVersion) = 0;
-        virtual void download(const package::Version &packageVersion, const std::filesystem::path &destination) = 0;
+        virtual void download(const package::PackageVersion &packageVersion, const std::filesystem::path &destination) = 0;
         virtual ~Repository() = default;
     };
 }

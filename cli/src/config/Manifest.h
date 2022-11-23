@@ -1,5 +1,6 @@
 #pragma once
 
+#include "semver/Version.h"
 #include <filesystem>
 #include <string>
 #include <toml.hpp>
@@ -31,6 +32,13 @@ namespace config {
          * @return Vrai si la dépendance n'était pas déjà référencée, faux sinon.
          */
         bool addDeclaredPackage(std::string_view packageName, std::string_view version);
+
+        /**
+         * Ajoute un paquet à la liste des dépendances directes. S'il existe déjà, alors il n'est pas rajouté.
+         *
+         * @return Vrai si la dépendance n'était pas déjà référencée, faux sinon.
+         */
+        bool addDeclaredPackage(std::string_view packageName, semver::Version &version);
 
         /**
          * Créé un manifeste à partir d'un fichier existant potentiellement.

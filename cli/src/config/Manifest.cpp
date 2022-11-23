@@ -25,6 +25,10 @@ namespace config {
         return addDependencySectionIfNotExists().insert_or_assign(packageName, version).second;
     }
 
+    bool Manifest::addDeclaredPackage(std::string_view packageName, semver::Version &version) {
+        return addDeclaredPackage(packageName, version.str());
+    }
+
     toml::v3::table &Manifest::addDependencySectionIfNotExists() {
         auto it = table.find(DEPENDENCY_SECTION_NAME);
         if (it == table.end()) {
