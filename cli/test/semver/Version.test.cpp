@@ -1,6 +1,7 @@
 #include <doctest/doctest.h>
 #include <sstream>
 
+#include "semver/ParseException.h"
 #include "semver/Version.h"
 
 using namespace semver;
@@ -12,12 +13,21 @@ TEST_CASE("parsing valid versions") {
 }
 
 TEST_CASE("parsing invalid versions") {
-    CHECK_THROWS_AS(Version::parse("a.b.c"), InvalidVersionException);
-    CHECK_THROWS_AS(Version::parse("5.2"), InvalidVersionException);
-    CHECK_THROWS_AS(Version::parse("0.-1.6"), InvalidVersionException);
-    CHECK_THROWS_AS(Version::parse("1.3.a5"), InvalidVersionException);
-    CHECK_THROWS_AS(Version::parse("2 9 3"), InvalidVersionException);
-    CHECK_THROWS_AS(Version::parse("4.2.3beta"), InvalidVersionException);
+    CHECK_THROWS_AS(Version::parse("a.b.c"), ParseException);
+    CHECK_THROWS_AS(Version::parse("5.2"), ParseException);
+    CHECK_THROWS_AS(Version::parse("0.-1.6"), ParseException);
+    CHECK_THROWS_AS(Version::parse("1.3.a5"), ParseException);
+    CHECK_THROWS_AS(Version::parse("2 9 3"), ParseException);
+    CHECK_THROWS_AS(Version::parse("4.2.3beta"), ParseException);
+}
+
+TEST_CASE("parsing valid offset") {
+    try {
+        Version::parse("372.21026.1824test");
+        FAIL("no exception was thrown");
+    } catch (const ParseException &exception) {
+        CHECK_EQ(exception.getOffset(), 14);
+    }
 }
 
 TEST_CASE("comparing versions") {
@@ -32,4 +42,8 @@ TEST_CASE("converting versions to string") {
     std::stringstream out;
     out << Version(3, 7, 1);
     CHECK(out.str() == "3.7.1");
+}
+
+TEST_CASE("getting max version") {
+    CHECK_THROWS_AS(Version::maxVersion().nextAfter(), std::range_error);
 }
