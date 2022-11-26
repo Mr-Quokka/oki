@@ -9,5 +9,5 @@ namespace cli {
     /**
      * Toutes les actions possibles.
      */
-    CliAction *parseArguments(int argc, char *argv[]);
+    std::unique_ptr<CliAction> parseArguments(int argc, char *argv[]);
 }
