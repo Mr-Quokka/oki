@@ -6,7 +6,7 @@
 namespace io {
     TmpFile::TmpFile() : filename{"/tmp/oki-XXXXXX"}, fd{mkstemp(this->filename)} {}
 
-    const char *TmpFile::getFilename() {
+    const char *TmpFile::getFilename() const {
         return filename;
     }
 
