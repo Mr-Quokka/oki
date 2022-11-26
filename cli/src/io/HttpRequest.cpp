@@ -62,6 +62,12 @@ namespace io {
         headers = curl_slist_append(static_cast<struct curl_slist *>(headers), header);
     }
 
+    MimePart HttpRequest::addMime() {
+        curl_mime *form = curl_mime_init(curl);
+        curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
+        return MimePart{form};
+    }
+
     HttpResponse HttpRequest::get() {
         std::string buffer;
         std::string contentType;
@@ -116,6 +122,32 @@ namespace io {
 
     const std::string &HttpResponse::getContent() const {
         return content;
+    }
+
+    MimePart::MimePart(void *form) : form{form} {}
+
+    void MimePart::addDataPart(const std::string &name, std::string_view data) {
+        addDataPart(name.c_str(), data);
+    }
+
+    void MimePart::addDataPart(const char *name, std::string_view data) {
+        curl_mimepart *field = curl_mime_addpart(static_cast<curl_mime *>(form));
+        curl_mime_name(field, name);
+        curl_mime_data(field, data.data(), data.length());
+    }
+
+    void MimePart::addFilePart(const std::string &name, const std::filesystem::path &data) {
+        addFilePart(name.c_str(), data);
+    }
+
+    void MimePart::addFilePart(const char *name, const std::filesystem::path &data) {
+        curl_mimepart *field = curl_mime_addpart(static_cast<curl_mime *>(form));
+        curl_mime_name(field, name);
+        curl_mime_filedata(field, data.c_str());
+    }
+
+    MimePart::~MimePart() {
+        curl_mime_free(static_cast<curl_mime *>(form));
     }
 
     RequestException::RequestException(int code) : code{code} {}
