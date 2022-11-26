@@ -12,6 +12,11 @@ paths:
       summary: List all available packages
       parameters:
         - in: query
+          name: search
+          schema:
+            type: string
+          required: false
+        - in: query
           name: limit
           schema:
             type: integer
@@ -59,7 +64,7 @@ paths:
           description: Invalid package name
   /api/version/{package}/{version}:
     get:
-      summary: Get a download url
+      summary: Get version metadata
       parameters:
         - name: package
           in: path
@@ -75,14 +80,36 @@ paths:
             type: string
       responses:
         200:
-          description: The download url
+          description: Version metadata
           content:
             application/json:
               schema:
-                type: string
-                example: packages/l/linked-list_1.3.zip
+                $ref: '#/components/schemas/PackageVersion'
         400:
           description: Invalid package name or version
+  /api/publish:
+    post:
+      summary: Publish a new version of a package
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                manifest:
+                  $ref: '#/components/schemas/PackageManifest'
+                  description: The package manifest for this version
+                package:
+                  type: string
+                  format: binary
+                  description: The version content with an application/zip Content-Type
+      responses:
+        201:
+          description: The version has been created
+        400:
+          description: Invalid manifest or version content
+        409:
+          description: The version already exists
 
 components:
   schemas:
@@ -92,9 +119,17 @@ components:
         short_name:
           type: string
           example: linked-list
+          maxLength: 64
+          pattern: '^[a-z0-9_-]+$'
         description:
           type: string
           example: Implementation of an int linked list data structure in C
+        dependencies:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            malloc: ^1.0.0
     PackageDetails:
       allOf:
         - $ref: '#/components/schemas/Package'
@@ -104,6 +139,14 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/PackageVersion'
+    PackageManifest:
+      allOf:
+        - $ref: '#/components/schemas/Package'
+        - type: object
+          properties:
+            version:
+              type: string
+              example: 1.2.3
     PackageVersion:
       type: object
       properties:
