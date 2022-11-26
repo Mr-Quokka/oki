@@ -1,14 +1,21 @@
 #include "Archive.h"
 
 #include <minizip/unzip.h>
+#include <minizip/zip.h>
 #include <sys/stat.h>
 
+#include <fstream>
+#include <iostream>
 #include <utility>
+#include <vector>
 
 #define BUFFER_SIZE 256
 #define DIRECTORY_PERMISSIONS 755
 
 // Basé sur https://github.com/madler/zlib/blob/master/contrib/minizip/miniunz.c
+// et https://github.com/madler/zlib/blob/master/contrib/minizip/minizip.c
+
+namespace fs = std::filesystem;
 
 namespace io {
     Extractor::Extractor(std::filesystem::path destination) : destination{std::move(destination)} {}
@@ -72,5 +79,44 @@ namespace io {
             }
         }
         unzClose(zipFile);
+    }
+
+    Compressor::Compressor(fs::path destination)
+        : destination{std::move(destination)} {}
+
+    void Compressor::compress(const std::filesystem::path &workingDirectory) {
+        unzFile zipFile = zipOpen(destination.c_str(), APPEND_STATUS_CREATE);
+        if (zipFile == nullptr) {
+            return;
+        }
+        std::vector<char> buffer;
+        zip_fileinfo fileInfo;
+        struct stat s;
+        struct tm *filedate;
+        for (const auto &dirEntry : fs::recursive_directory_iterator{workingDirectory}) {
+            std::ifstream file{dirEntry.path(), std::ios::binary};
+            if (!dirEntry.is_regular_file() || !file.is_open()) {
+                continue;
+            }
+            if (stat(dirEntry.path().c_str(), &s) == -1 || (filedate = localtime(&s.st_mtim.tv_sec)) == nullptr) {
+                continue;
+            }
+            fileInfo.tmz_date.tm_sec = static_cast<uInt>(filedate->tm_sec);
+            fileInfo.tmz_date.tm_min = static_cast<uInt>(filedate->tm_min);
+            fileInfo.tmz_date.tm_hour = static_cast<uInt>(filedate->tm_hour);
+            fileInfo.tmz_date.tm_mday = static_cast<uInt>(filedate->tm_mday);
+            fileInfo.tmz_date.tm_mon = static_cast<uInt>(filedate->tm_mon);
+            fileInfo.tmz_date.tm_year = static_cast<uInt>(filedate->tm_year);
+
+            buffer.reserve(static_cast<std::size_t>(s.st_size));
+            if (file.read(buffer.data(), s.st_size)) {
+                fs::path relative = fs::relative(dirEntry.path(), workingDirectory);
+                if (zipOpenNewFileInZip(zipFile, relative.c_str(), &fileInfo, nullptr, 0, nullptr, 0, nullptr, Z_DEFLATED, Z_DEFAULT_COMPRESSION) == ZIP_OK) {
+                    zipWriteInFileInZip(zipFile, buffer.data(), static_cast<uInt>(s.st_size));
+                    zipCloseFileInZip(zipFile);
+                }
+            }
+        }
+        zipClose(zipFile, nullptr);
     }
 }
