@@ -1,0 +1,173 @@
+openapi: 3.0.3
+info:
+  title: OKI
+  description: Open pacKage Installer
+  version: 1.0.0
+servers:
+  - url: 'https://oki-pkg.dev'
+    description: Staging instance
+paths:
+  /api/list:
+    get:
+      summary: List all available packages
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 1
+            minimum: 0
+            maximum: 100
+          description: The maximum amount of items to return
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            example: 0
+            minimum: 0
+          description: Where to start searching
+      responses:
+        200:
+          description: All available packages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pagination:
+                    $ref: '#/components/schemas/PaginatedResult'
+                  result:
+                    $ref: '#/components/schemas/Package'
+  /api/info/{package}:
+    get:
+      summary: Get package details and all its versions
+      parameters:
+        - name: package
+          in: path
+          description: Short name of an existing package
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Package details and all its versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackageDetails'
+        400:
+          description: Invalid package name
+  /api/version/{package}/{version}:
+    get:
+      summary: Get version metadata
+      parameters:
+        - name: package
+          in: path
+          description: Short name of an existing package
+          required: true
+          schema:
+            type: string
+        - name: version
+          in: path
+          description: Existing version
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Version metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackageVersion'
+        400:
+          description: Invalid package name or version
+  /api/publish:
+    post:
+      summary: Publish a new version of a package
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                manifest:
+                  $ref: '#/components/schemas/PackageManifest'
+                  description: The package manifest for this version
+                package:
+                  type: string
+                  format: binary
+                  description: The version content with an application/zip Content-Type
+      responses:
+        201:
+          description: The version has been created
+        400:
+          description: Invalid manifest or version content
+        409:
+          description: The version already exists
+
+components:
+  schemas:
+    Package:
+      type: object
+      properties:
+        short_name:
+          type: string
+          example: linked-list
+          maxLength: 64
+          pattern: '^[a-z0-9_-]+$'
+        description:
+          type: string
+          example: Implementation of an int linked list data structure in C
+        dependencies:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            malloc: ^1.0.0
+    PackageDetails:
+      allOf:
+        - $ref: '#/components/schemas/Package'
+        - type: object
+          properties:
+            versions:
+              type: array
+              items:
+                $ref: '#/components/schemas/PackageVersion'
+    PackageManifest:
+      allOf:
+        - $ref: '#/components/schemas/Package'
+        - type: object
+          properties:
+            version:
+              type: string
+              example: 1.2.3
+    PackageVersion:
+      type: object
+      properties:
+        identifier:
+          type: string
+          example: '1.3'
+        published_date:
+          type: string
+          format: date-time
+          example: 2022-10-20T15:32:49.52Z
+        download_url:
+          type: string
+          example: /packages/l/linked-list_1.3.zip
+    PaginatedResult:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: The number of elements found
+          example: 10
+        total:
+          type: integer
+          description: The number of total elements
+          example: 162
