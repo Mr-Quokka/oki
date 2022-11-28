@@ -33,21 +33,28 @@ class PackageGateway
 		$reqPacket = $this->pdo->prepare('SELECT * FROM package WHERE short_name = :name;');
 		$reqPacket->execute(['name' => $packageName]);
 		$reqPacket->setFetchMode(PDO::FETCH_CLASS, Package::class);
-		$packet = $reqPacket->fetch();
-		if ($packet === false) {
+		$package = $reqPacket->fetch();
+		if ($package === false) {
 			return null;
 		}
 
 		$reqVersion = $this->pdo->prepare('SELECT * FROM version WHERE package_id = :id ORDER BY published_date DESC;');
-		$reqVersion->execute(['id' => $packet->getId()]);
-		$versions = $reqVersion->fetchAll(PDO::FETCH_CLASS, PackageVersion::class);
-
-		foreach ($versions as $version) {
-			$version->setPackage($packet);
+		$reqVersion->execute(['id' => $package->getId()]);
+		$reqVersion->setFetchMode(PDO::FETCH_CLASS, PackageVersion::class);
+		$versions = [];
+		while ($version = $reqVersion->fetch()) {
+            $version->setPackage($package);
+			$versions[$version->getIdVersion()] = $version;
 		}
+		$package->setVersions(array_values($versions));
 
-		$packet->setVersions($versions);
-		return $packet;
+		$reqDependency = $this->pdo->prepare('SELECT d.constrainer_id, p.short_name, d.constraint_value FROM version v INNER JOIN dependency d ON d.constrainer_id = v.id_version INNER JOIN package p ON p.id_package = d.package_reference_id WHERE v.package_id = :package;');
+        $reqDependency->setFetchMode(PDO::FETCH_ASSOC);
+        $reqDependency->execute(['package' => $package->getId()]);
+		while ($dep = $reqDependency->fetch()) {
+			$versions[intval($dep['constrainer_id'])]->addDependency($dep['short_name'], $dep['constraint_value']);
+		}
+		return $package;
 	}
 
 	public function getPackageVersion(string $name, string $version): ?string

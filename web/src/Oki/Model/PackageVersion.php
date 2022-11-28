@@ -16,6 +16,11 @@ class PackageVersion implements JsonSerializable
 
 	private string $published_date;
 
+	/**
+	 * @var array<string, string>
+	 */
+	private array $dependencies = [];
+
 	public function getIdVersion(): int
 	{
 		return $this->id_version;
@@ -43,9 +48,18 @@ class PackageVersion implements JsonSerializable
 
 	public function getDownloadUrl(): string
 	{
-		return ("/packages/" . $this->package->getShortName() . "_" . $this->identifier . ".zip");
+		return '/packages/' . $this->package->getShortName() . '_' . $this->identifier . '.zip';
 	}
 
+	public function getDependencies(): array
+	{
+		return $this->dependencies;
+	}
+
+	public function addDependency(string $dependency, string $constraint)
+	{
+		$this->dependencies[$dependency] = $constraint;
+	}
 
 	public function jsonSerialize()
 	{
@@ -54,6 +68,7 @@ class PackageVersion implements JsonSerializable
 		$dict["identifier"] = $this->identifier;
 		$dict["published_date"] = $this->published_date;
 		$dict["download_url"] = $this->getDownloadUrl();
+		$dict['dependencies'] = $this->dependencies;
 		return $dict;
 	}
 }

@@ -17,3 +17,10 @@ CREATE TABLE version (
 	published_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	UNIQUE (package_id, identifier)
 );
+
+CREATE TABLE dependency (
+	package_reference_id SERIAL REFERENCES package(id_package),
+	constrainer_id INT NOT NULL REFERENCES version(id_version),
+	constraint_value VARCHAR(10) NOT NULL,
+	PRIMARY KEY(package_reference_id,constrainer_id)
+);

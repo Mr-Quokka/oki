@@ -19,7 +19,7 @@ class Package implements JsonSerializable
 	 */
 	private array $versions = [];
 
-	public function setVersions($versions)
+	public function setVersions(array $versions)
 	{
 		$this->versions = $versions;
 	}
