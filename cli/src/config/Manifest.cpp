@@ -1,6 +1,7 @@
 #include "Manifest.h"
 
 #include <toml.hpp>
+#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -41,12 +42,19 @@ namespace config {
     }
 
     bool Manifest::loadFileIfExists(fs::path fileName) {
-        if (fs::exists(fileName)) {
-            table = toml::parse_file(fileName.c_str());
-            return true;
-        } else {
-            return false;
+        fs::path pwd = std::filesystem::current_path();
+        fs::path parentPath = pwd;
+        fs::path searchedFile = parentPath / fileName;
+        while(parentPath != parentPath.parent_path()){
+            if (fs::exists(searchedFile)) {
+                table = toml::parse_file(searchedFile.c_str());
+                return true;
+            } else {
+                parentPath = parentPath.parent_path();
+                searchedFile = parentPath / fileName;
+            }
         }
+        return false;
     }
 
     void Manifest::saveFile(fs::path fileName) {
