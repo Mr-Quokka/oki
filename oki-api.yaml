@@ -124,12 +124,6 @@ components:
         description:
           type: string
           example: Implementation of an int linked list data structure in C
-        dependencies:
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            malloc: ^1.0.0
     PackageDetails:
       allOf:
         - $ref: '#/components/schemas/Package'
@@ -147,6 +141,12 @@ components:
             version:
               type: string
               example: 1.2.3
+            dependencies:
+              type: object
+              additionalProperties:
+                type: string
+              example:
+                malloc: ^1.0.0
     PackageVersion:
       type: object
       properties:
@@ -160,6 +160,12 @@ components:
         download_url:
           type: string
           example: /packages/l/linked-list_1.3.zip
+        dependencies:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            malloc: ^1.0.0
     PaginatedResult:
       type: object
       properties:
