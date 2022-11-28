@@ -6,6 +6,8 @@ namespace Oki\DI;
 
 use Oki\Config\DatabaseConfig;
 use Oki\Gateway\PackageGateway;
+use Oki\Gateway\UserGateway;
+use Oki\Security\Security;
 use PDO;
 
 final class DI
@@ -16,9 +18,9 @@ final class DI
 
     private ?PackageGateway $packageGateway = null;
 
-    /*private ?UserGateway $userGateway = null;
+    private ?UserGateway $userGateway = null;
 
-    private ?Security $security = null;*/
+    private ?Security $security = null;
 
     public function __construct()
     {
@@ -33,7 +35,7 @@ final class DI
         return $this->packageGateway;
     }
 
-    /*public function getUserGateway(): UserGateway
+    public function getUserGateway(): UserGateway
     {
         if ($this->userGateway === null) {
             $this->userGateway = new UserGateway($this->getPDO());
@@ -47,7 +49,7 @@ final class DI
             $this->security = new Security($this->getUserGateway(), $_SESSION);
         }
         return $this->security;
-    }*/
+    }
 
     private function getPDO(): PDO
     {

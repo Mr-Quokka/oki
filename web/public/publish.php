@@ -18,11 +18,6 @@
 $title = "Publish";
 $content = ob_get_clean();
 
-require __DIR__ . '/../src/Controller/Database.php';
-require __DIR__ . '/../view/layout.php';
-
-$db = new \Controller\Database();
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if (empty($_POST['short_name']) || empty($_POST['description']) || empty($_POST['language']) || empty($_POST['version'])) {
         http_response_code(400);
