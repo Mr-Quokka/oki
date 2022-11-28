@@ -46,6 +46,7 @@ final class DI
     public function getSecurity(): Security
     {
         if ($this->security === null) {
+            session_start();
             $this->security = new Security($this->getUserGateway(), $_SESSION);
         }
         return $this->security;
