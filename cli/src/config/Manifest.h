@@ -43,7 +43,7 @@ namespace config {
         /**
          * Créé un manifeste à partir d'un fichier existant potentiellement.
          */
-        void loadFileIfExists(std::filesystem::path fileName);
+        bool loadFileIfExists(std::filesystem::path fileName);
 
         /**
          * Écrit dans un fichier le manifeste.
@@ -53,4 +53,16 @@ namespace config {
         friend std::ostream &operator<<(std::ostream &, const Manifest &);
     };
     std::ostream &operator<<(std::ostream &os, const Manifest &manifest);
+
+    /**
+     * Une erreur retournée par le fichier Manifest.
+     */
+    class ManifestException : public std::exception {
+    private:
+        std::string msg;
+
+    public:
+        explicit ManifestException(std::string_view msg);
+        const char *what() const noexcept override;
+    };
 }

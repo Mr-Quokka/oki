@@ -2,6 +2,7 @@
 #include <string>
 
 #include "cli/options.h"
+#include "config/Manifest.h"
 #include "io/HttpRequest.h"
 #include "repository/RemoteRepository.h"
 
@@ -13,6 +14,8 @@ int main(int argc, char *argv[]) {
     try {
         action->run(repository);
     } catch (const io::APIException &e) {
+        std::cerr << e.what() << "\n";
+    } catch (const config::ManifestException &e) {
         std::cerr << e.what() << "\n";
     }
     delete action;

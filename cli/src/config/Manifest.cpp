@@ -9,8 +9,11 @@ constexpr static std::string_view DEPENDENCY_SECTION_NAME = "dependencies";
 namespace config {
     Manifest Manifest::fromFile(fs::path fileName) {
         Manifest manifest;
-        manifest.loadFileIfExists(fileName);
-        return manifest;
+        if (manifest.loadFileIfExists(fileName) == true) {
+            return manifest;
+        } else {
+            throw ManifestException("This isn't an project using oki");
+        }
     }
 
     std::unordered_map<std::string_view, std::string> Manifest::listDeclaredPackages() const {
@@ -37,9 +40,12 @@ namespace config {
         return *table[DEPENDENCY_SECTION_NAME].as_table();
     }
 
-    void Manifest::loadFileIfExists(fs::path fileName) {
+    bool Manifest::loadFileIfExists(fs::path fileName) {
         if (fs::exists(fileName)) {
             table = toml::parse_file(fileName.c_str());
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -51,5 +57,11 @@ namespace config {
     std::ostream &operator<<(std::ostream &os, const Manifest &manifest) {
         os << manifest.table;
         return os;
+    }
+
+    ManifestException::ManifestException(std::string_view msg) : msg{msg} {}
+
+    const char *ManifestException::what() const noexcept {
+        return this->msg.c_str();
     }
 }
