@@ -13,10 +13,10 @@ namespace config {
         return manifest;
     }
 
-    std::unordered_map<std::string_view, std::string> Manifest::listDeclaredPackages() const {
-        std::unordered_map<std::string_view, std::string> packages;
-        for (const auto &dependency : *table[DEPENDENCY_SECTION_NAME].as_table()) {
-            packages.emplace(dependency.first, dependency.second.as_string()->get());
+    std::unordered_map<std::string, semver::Range> Manifest::listDeclaredPackages() const {
+        std::unordered_map<std::string, semver::Range> packages;
+        for (const auto &[dependency, constraint] : *table[DEPENDENCY_SECTION_NAME].as_table()) {
+            packages.emplace(dependency, semver::Range::parse(constraint.as_string()->get()));
         }
         return packages;
     }

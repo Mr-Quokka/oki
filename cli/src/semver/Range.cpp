@@ -39,7 +39,7 @@ namespace semver {
         if (s == "*") {
             return {Version{}, Version::maxVersion()};
         }
-        const char* ptr = s.data();
+        const char *ptr = s.data();
         const auto stop = ptr + s.size();
         if (*ptr == '=') {
             ++ptr;

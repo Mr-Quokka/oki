@@ -1,10 +1,11 @@
 #pragma once
 
-#include "semver/Version.h"
 #include <filesystem>
 #include <string>
 #include <toml.hpp>
 #include <unordered_map>
+
+#include "semver/Range.h"
 
 namespace config {
     /**
@@ -24,7 +25,7 @@ namespace config {
         /**
          * Liste les dépendances directes indiquées dans ce manifeste.
          */
-        std::unordered_map<std::string_view, std::string> listDeclaredPackages() const;
+        std::unordered_map<std::string, semver::Range> listDeclaredPackages() const;
 
         /**
          * Ajoute un paquet à la liste des dépendances directes. S'il existe déjà, alors il n'est pas rajouté.

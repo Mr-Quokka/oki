@@ -22,8 +22,8 @@ TARGET_EXE := oki
 
 # Répertoires des fichiers compilés et de sources
 BUILD_DIR := build/$(BUILD)
-SRC_DIR := src src/cli src/config src/io src/package src/repository src/semver
-TEST_DIR := test test/semver
+SRC_DIR := src src/cli src/config src/io src/package src/repository src/semver src/solver
+TEST_DIR := test test/semver test/solver
 
 # Répertoires où rechercher les fichiers header
 CPPFLAGS=-isystemthird-party -Isrc

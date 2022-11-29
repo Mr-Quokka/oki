@@ -1,4 +1,5 @@
 #include <doctest/doctest.h>
+#include <vector>
 
 #include "semver/Range.h"
 
@@ -28,4 +29,16 @@ TEST_CASE("intersection") {
     CHECK(a.intersection(b) == Range(Version(2, 2, 2), Version(4, 4, 4)));
     CHECK(a.intersection(c) == c);
     CHECK(a.intersection(d).isEmpty());
+}
+
+TEST_CASE("findSatisfying") {
+    Range range(Version(1, 1, 1), Version(2, 2, 2));
+    std::vector<Version> versions{
+        Version(4, 2, 0),
+        Version(3, 0, 0),
+        Version(2, 5, 0),
+        Version(2, 2, 0),
+        Version(2, 1, 0),
+        Version(2, 0, 0)};
+    CHECK(*range.findSatisfying(versions.cbegin(), versions.cend()) == Version(2, 2, 0));
 }
