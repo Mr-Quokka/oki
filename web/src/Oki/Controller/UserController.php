@@ -14,7 +14,7 @@ class UserController {
 
     private int $defaultPermission = 1;
 
-    public function insertUser(String $login, String $password, String $password_confirmation, DI $di): void
+    public function insertUser(string $login, string $password, string $password_confirmation, DI $di): void
     {
         $verifier = new UserVerifier();
         $user = new User();

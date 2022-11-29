@@ -6,7 +6,7 @@ namespace Oki\Verifier;
 
 class UserVerifier{
 
-    public function checking(String $login, String $password, String $password_confirmation): bool
+    public function checking(string $login, string $password, string $password_confirmation): bool
     {
         if($password != $password_confirmation){
             echo '<p style="color: red">Passwords are not same</p>';
