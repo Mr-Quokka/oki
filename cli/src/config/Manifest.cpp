@@ -1,5 +1,6 @@
 #include "Manifest.h"
 
+#include "../semver/ParseException.h"
 #include <toml.hpp>
 
 namespace fs = std::filesystem;
@@ -13,10 +14,16 @@ namespace config {
         return manifest;
     }
 
-    std::unordered_map<std::string_view, std::string> Manifest::listDeclaredPackages() const {
-        std::unordered_map<std::string_view, std::string> packages;
-        for (const auto &dependency : *table[DEPENDENCY_SECTION_NAME].as_table()) {
-            packages.emplace(dependency.first, dependency.second.as_string()->get());
+    std::unordered_map<std::string, semver::Range> Manifest::listDeclaredPackages() const {
+        std::unordered_map<std::string, semver::Range> packages;
+        for (const auto &[dependency, constraint] : *table[DEPENDENCY_SECTION_NAME].as_table()) {
+            std::string constraintValue = constraint.as_string()->get();
+            try {
+                packages.emplace(dependency, semver::Range::parse(constraintValue));
+            } catch (semver::ParseException &ex) {
+                ex.addContext("Failed to parse the version requirement `" + constraintValue + "` for dependency `" + std::string{dependency} + "`");
+                throw ex;
+            }
         }
         return packages;
     }
