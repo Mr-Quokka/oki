@@ -12,12 +12,14 @@ Ces paquets sont présents dans une collection de dépôts à la fois distants e
 
 La configuration de ces dépôts fait partie de `config`, le téléchargement et le désarchivage des paquets dans `io`.
 
+La lecture et la représentation des versions et des contraintes a lieu dans le `semver`. La résolution des dépendances a lieu quant à elle dans `solver`.
+
 Pour terminer, la gestion des commandes de l'utilisateur a lieu dans `cli`.
 
 Compilation
 -----------
 
-Le projet nécessite C++ 17 et sa compilation est décrite à l'aide d'un [*Makefile*](Makefile). Il n'est néanmoins pas exclu de passer à C++ 20 lorsqu'il sera question de la gestion des dates de publication des paquets.
+Le projet nécessite C++ 20 et sa compilation est décrite à l'aide d'un [*Makefile*](Makefile).
 
 Certaines dépendances header-only peuvent être téléchargées à l'aide du script `configurate.sh`, avec l'argument `-d`.
 
@@ -129,3 +131,5 @@ Toute requête HTTP peut tout à fait mal se passer, `HttpRequest` est donc susc
 
 L'installateur décrit la procédure d'installation d'un paquet. La plupart du temps, elle dépend d'un type précis (comme `RemoteRepository`).
 Il existe des stratégies différentes d'installation comme la copie des paquets dans le projet de l'utilisateur ou le lien avec le cache local via le système de fichiers.
+
+Les versions acceptées par un paquet sont décrites par des contraintes de version. Ces contraintes s'inspirent de la spécification de [gestion sémantique de version](https://semver.org/lang/fr/). Deux versions mineures différentes (par exemple `4.2.0` et `4.5.0`) sont généralement compatibles, tandis que deux versions majeures différentes (comme `1.3.7` et `2.0.0`) peuvent ne pas l'être.
