@@ -37,6 +37,6 @@ class UserGateway
     public function insert(User $user)
     {
         $prep = $this->pdo->prepare("INSERT INTO user (login, password, perm) Values(:login, :password, :perm)");
-        $prep->execute(['login' => $user->getLogin(), 'password' => $user->getPassword(), 'perm' => $user->getPerm()]);
+        $prep->execute(['login' => $user->getLogin(), 'password' => $user->getPassword(), 'perm' => $user->getPermissions()]);
     }
 }

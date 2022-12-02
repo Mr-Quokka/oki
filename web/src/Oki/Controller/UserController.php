@@ -47,30 +47,14 @@ class UserController
 
     public function register(DI $di): HttpResponse
     {
-
-        $errors = [];
-
+        $fail = false;
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            print_r($_POST);
-
-            if (empty($_POST['login']) || empty($_POST['password']) || empty($_POST['password_confirmation'])) {
-                $html_code = 400;
-                $errors[] = 'Fields are empty';
-            } else {
-                $login = $_POST['login'];
-                $password = $_POST['password'];
-                $password_confirmation = $_POST['password_confirmation'];
-
-                if ($this->insertUser($login, $password, $password_confirmation, $di) != 200) {
-                    $html_code = 400;
-                    $errors[] = 'Failed to register';
-                }
+            $user = $di->getSecurity()->register(User::fromRawPassword($_POST['login'], $_POST['password']));
+            if ($user !== null) {
+                //HttpResponse::redirect($di->getRouter()->url(''));
             }
-            if ($html_code == 200 || $html_code == 400) {
-                return new HtmlResponse($html_code, 'register', ['register' => $errors]);
-            }
+            $fail = $user === null;
         }
-        return new HtmlResponse(200, 'register');
+        return new HtmlResponse(200, 'register', ['fail' => $fail]);
     }
 }
