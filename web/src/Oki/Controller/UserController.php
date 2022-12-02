@@ -4,37 +4,49 @@ declare(strict_types=1);
 
 namespace Oki\Controller;
 
-use Oki\Verifier\UserVerifier;
 use Oki\Model\User;
 use Oki\DI\DI;
 use Oki\Http\HtmlResponse;
 use Oki\Http\HttpResponse;
+use Oki\Validation\UserValidation;
 
-class UserController {
+const DEFAULT_PERMISSIONS = 1;
 
-    private int $defaultPermission = 1;
-
+class UserController
+{
     public function insertUser(string $login, string $password, string $password_confirmation, DI $di): void
     {
-        $verifier = new UserVerifier();
         $user = new User();
 
         $secure = $di->getSecurity();
 
-        if($verifier->checking($login, $password, $password_confirmation) != false){
+        if (UserValidation::isValidAuth($login, $password, $password_confirmation) != false) {
 
             $user->setLogin($login);
             $user->setPassword($password);
             $user->setPerm($this->defaultPermission);
-    
+
             $secure->register($user);
-        }
-        else {
-            return ;
+        } else {
+            return;
         }
     }
 
-    public function register(DI $di): HttpResponse{
+    public function login(DI $di): HttpResponse
+    {
+        $fail = false;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $success = $di->getSecurity()->initLogin($_POST['login'], $_POST['password']);
+            if ($success) {
+                //HttpResponse::redirect($di->getRouter()->url(''));
+            }
+            $fail = !$success;
+        }
+        return new HtmlResponse(200, 'login', ['fail' => $fail]);
+    }
+
+    public function register(DI $di): HttpResponse
+    {
 
         $errors = [];
 
@@ -50,13 +62,13 @@ class UserController {
                 $password = $_POST['password'];
                 $password_confirmation = $_POST['password_confirmation'];
 
-                if($this->insertUser($login, $password, $password_confirmation, $di) != 200){ 
+                if ($this->insertUser($login, $password, $password_confirmation, $di) != 200) {
                     $html_code = 400;
                     $errors[] = 'Failed to register';
                 }
             }
-            if($html_code == 200 || $html_code == 400){
-                return new HtmlResponse($html_code, 'register',['register' => $errors]);
+            if ($html_code == 200 || $html_code == 400) {
+                return new HtmlResponse($html_code, 'register', ['register' => $errors]);
             }
         }
         return new HtmlResponse(200, 'register');

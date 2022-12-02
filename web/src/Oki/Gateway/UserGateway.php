@@ -7,9 +7,8 @@ namespace Oki\Gateway;
 use PDO;
 use Oki\Model\User;
 
-
-class UserGateway {
-
+class UserGateway
+{
     private PDO $pdo;
 
     public function __construct(PDO $pdo)
@@ -17,24 +16,27 @@ class UserGateway {
         $this->pdo = $pdo;
     }
 
-    public function getByLogin(string $login): ?User 
+    public function getById(int $id): ?User
     {
-        $prep = $this->pdo->prepare("SELECT * FROM user WHERE login = :login");
-        $prep->execute(['login' => $login]);
-        $prep->setFetchMode(PDO::FETCH_CLASS, User::class);
-
-        $user = $prep->fetch();
-
-        if($user === false) {
-            return null;
-        } else {
-            return $user;
-        }
+        $req = $this->pdo->prepare('SELECT * FROM user WHERE id_user = :id');
+        $req->execute(['id' => $id]);
+        $req->setFetchMode(PDO::FETCH_CLASS, User::class);
+        $user = $req->fetch();
+        return $user === false ? null : $user;
     }
 
-    public function insert(User $user) 
+    public function getByLogin(string $login): ?User
     {
-        $prep = $this->pdo->prepare("INSERT INTO user (login,password,perm) Values(:login,:password,:perm)");
-        $prep->execute(['login' => $user->getLogin(), 'password' => $user->getPassword(),'perm' => $user->getPerm()]);
+        $req = $this->pdo->prepare('SELECT * FROM user WHERE login = :login;');
+        $req->execute(['login' => $login]);
+        $req->setFetchMode(PDO::FETCH_CLASS, User::class);
+        $user = $req->fetch();
+        return $user === false ? null : $user;
+    }
+
+    public function insert(User $user)
+    {
+        $prep = $this->pdo->prepare("INSERT INTO user (login, password, perm) Values(:login, :password, :perm)");
+        $prep->execute(['login' => $user->getLogin(), 'password' => $user->getPassword(), 'perm' => $user->getPerm()]);
     }
 }

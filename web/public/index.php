@@ -16,6 +16,6 @@ $router->get('/^api\/info\/(?<name>[\w-]+)$/', [$api, 'packageInfo']);
 $router->get('/^api\/version\/(?<package>[\w-]+)$/', [$api, 'versionInfo']);
 $router->get('/^$/', [$home, 'index']);
 $router->get('/^package\/(?<name>[\w-]+)$/', [$home, 'packageInfo']);
-$router->get('/^register$/', [$user, 'register']);
-$router->post('/^register$/', [$user, 'register']);
+$router->match('/^login$/', [$user, 'login']);
+$router->match('/^register$/', [$user, 'register']);
 $router->run(new \Oki\DI\DI())->render(__DIR__ . '/../views');

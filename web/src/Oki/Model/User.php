@@ -9,7 +9,7 @@ class User
     private int $id;
     private string $login;
     private string $password;
-    private int $perm;
+    private int $permissions;
 
     public function setId(int $id) 
     {
@@ -46,11 +46,8 @@ class User
         $this->perm = $perm;
     }
 
-    public function getPerm(): int 
+    public function getPermissions(): int
     {
-        return $this->perm;
+        return $this->permissions;
     }
 }
-
-
-?>

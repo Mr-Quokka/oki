@@ -4,40 +4,64 @@ declare(strict_types=1);
 
 namespace Oki\Security;
 
+use AssertionError;
 use Oki\Gateway\UserGateway;
 use Oki\Model\User;
-use Oki\DI\DI;
 
-class Security {
+const USER = 'USER';
 
+class Security
+{
     private UserGateway $userGateway;
-    private $_SESSION;
+    private array $session;
+    private ?User $user = null;
 
-    public function __construct(UserGateway $userGateway, $session)
+    public function __construct(UserGateway $userGateway, array &$session)
     {
         $this->userGateway = $userGateway;
-        $this->$_SESSION = $session;
-    }
-    
-    public function register(User $user): void
-    {
-        $this->userGateway->insert($user);
+        $this->session = &$session;
     }
 
-    public function initLogin(string $login, string $password): void
+    public function register(User $user): ?User
     {
-        //Création de la $_SESSION
+        if (!$this->userGateway->insert($user)) {
+            return null;
+        }
+        $this->session[USER] = $user->getId();
+        $this->user = $user;
+        return $user;
+    }
+
+    public function initLogin(string $login, string $rawPassword): bool
+    {
+        $user = $this->userGateway->getByLogin($login);
+        if ($user === null || !password_verify($rawPassword, $user->getPassword())) {
+            return false;
+        }
+        $this->session[USER] = $user->getId();
+        $this->user = $user;
+        return true;
     }
 
     public function checkPerms(int $level): void
     {
-        //Vérification des permissions de l'utilisateur dans $_SESSION
+        $user = $this->getCurrentUser();
+        if ($user === null || $user->getPermissions() < $level) {
+            throw new AssertionError();
+        }
     }
 
     public function logout()
     {
-        //Destruction de la $_SESSION
+        $this->user = null;
+        unset($this->session[USER]);
+    }
+
+    public function getCurrentUser(): ?User
+    {
+        if (!empty($this->session[USER]) && $this->user === null) {
+            $this->user = $this->userGateway->getById($this->session[USER]);
+        }
+        return $this->user;
     }
 }
-
-?>
