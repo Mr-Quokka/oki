@@ -1,4 +1,11 @@
-<h2 style="text-align: center"><a href="publish.php">Publish a package</a></h2>
+<h2>
+    <?php if ($security->getCurrentUser() == null): ?>
+        <a href="<?= $router->url('login') ?>">Login</a>
+    <?php else: ?>
+        Logged as <?= $security->getCurrentUser()->getLogin() ?> -
+        <a href="<?= $router->url('logout') ?>">Logout</a>
+    <?php endif; ?>
+</h2>
 <hr />
 <?php if (empty($params['packages'])) : ?>
     <p style="text-align: center">ERROR : there is no package</p>

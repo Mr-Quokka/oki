@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Oki\Http;
 
+use Oki\DI\DI;
+
 class HtmlResponse implements HttpResponse
 {
     private int $status;
@@ -29,8 +31,10 @@ class HtmlResponse implements HttpResponse
         return $this->status;
     }
 
-    public function render(string $viewBasePath): void
+    public function render(DI $di, string $viewBasePath): void
     {
+        $router = $di->getRouter();
+        $security = $di->getSecurity();
         http_response_code($this->status);
         $params = $this->viewParams;
         ob_start();

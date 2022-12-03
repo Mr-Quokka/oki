@@ -14,4 +14,7 @@ $router->get('/^$/', [$home, 'index']);
 $router->get('/^package\/(?<name>[\w-]+)$/', [$home, 'packageInfo']);
 $router->match('/^login$/', [$user, 'login']);
 $router->match('/^register$/', [$user, 'register']);
-$router->run(new \Oki\DI\DI())->render(__DIR__ . '/../views');
+
+$di = new \Oki\DI\DI();
+$di->setRouter($router);
+$router->run($di)->render($di, __DIR__ . '/../views');

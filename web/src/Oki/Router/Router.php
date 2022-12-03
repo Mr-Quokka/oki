@@ -44,6 +44,11 @@ class Router
             ->post($path, $callable);
     }
 
+    public function url(string $url): string
+    {
+        return '/' . $url;
+    }
+
     private function addRoute(string $method, string $path, $callable): self
     {
         $route = new Route($path, $callable);
