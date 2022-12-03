@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Oki\Gateway;
 
+use Oki\Config\DatabaseConfig;
 use PDO;
 use Oki\Model\User;
 
 class UserGateway
 {
+    private DatabaseConfig $config;
     private PDO $pdo;
 
-    public function __construct(PDO $pdo)
+    public function __construct(PDO $pdo, DatabaseConfig $config)
     {
+        $this->config = $config;
         $this->pdo = $pdo;
     }
 
@@ -34,9 +37,18 @@ class UserGateway
         return $user === false ? null : $user;
     }
 
-    public function insert(User $user)
+    public function insert(User $user): bool
     {
         $req = $this->pdo->prepare("INSERT INTO registered_user (login, password, permissions) Values(:login, :password, :permissions)");
-        $req->execute(['login' => $user->getLogin(), 'password' => $user->getPassword(), 'permissions' => $user->getPermissions()]);
+        try {
+            $req->execute(['login' => $user->getLogin(), 'password' => $user->getPassword(), 'permissions' => $user->getPermissions()]);
+        } catch (\PDOException $ex) {
+            if ($this->config->isUniqueConstraintViolation($ex)) {
+                return false;
+            }
+            throw $ex;
+        }
+        $user->setId(intval($this->pdo->lastInsertId()));
+        return true;
     }
 }

@@ -38,7 +38,7 @@ final class DI
     public function getUserGateway(): UserGateway
     {
         if ($this->userGateway === null) {
-            $this->userGateway = new UserGateway($this->getPDO());
+            $this->userGateway = new UserGateway($this->getPDO(), $this->dbConfig);
         }
         return $this->userGateway;
     }
