@@ -18,13 +18,10 @@ CREATE TABLE version (
 	UNIQUE (package_id, identifier)
 );
 
-CREATE TABLE user (
+CREATE TABLE registered_user (
 	id_user SERIAL PRIMARY KEY,
-	login VARCHAR(30) NOT NULL UNIQUE,
-	password VARCHAR(72),
-	perm INT NOT NULL
-);
-
-CREATE TABLE authorization (
-	role VARCHAR(30) PRIMARY KEY
+	login VARCHAR(30) NOT NULL,
+	password VARCHAR(72) NOT NULL,
+    permissions INT NOT NULL,
+	UNIQUE (login)
 );
