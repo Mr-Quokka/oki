@@ -6,8 +6,13 @@ namespace Oki\Validation;
 
 final class UserValidation
 {
-    public static function isValidAuth(string $login, string $password, string $passwordConfirmation): bool
+    public static function isValidLogin(array $post): bool
     {
-        return $password === $passwordConfirmation;
+        return !(empty($post['login']) || empty($post['password']));
+    }
+
+    public static function isValidUser(array $post): bool
+    {
+        return !(empty($post['login']) || empty($post['password']) || empty($post['password_confirmation']) || $post['password'] != $post['password_confirmation']);
     }
 }
