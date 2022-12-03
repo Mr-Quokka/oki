@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Oki\Http;
 
+use Oki\DI\DI;
+
 class JsonResponse implements HttpResponse
 {
     private int $status;
@@ -35,7 +37,7 @@ class JsonResponse implements HttpResponse
         return $this->status;
     }
 
-    public function render(string $viewBasePath): void
+    public function render(DI $di, string $viewBasePath): void
     {
         http_response_code($this->status);
         header('Content-type: application/json');

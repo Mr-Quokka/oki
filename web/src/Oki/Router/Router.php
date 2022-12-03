@@ -33,6 +33,22 @@ class Router
         return $this->addRoute('GET', $path, $callable);
     }
 
+    public function post(string $path, callable $callable): self
+    {
+        return $this->addRoute('POST', $path, $callable);
+    }
+
+    public function match(string $path, callable $callable): self
+    {
+        return $this->get($path, $callable)
+            ->post($path, $callable);
+    }
+
+    public function url(string $url): string
+    {
+        return '/' . $url;
+    }
+
     private function addRoute(string $method, string $path, $callable): self
     {
         $route = new Route($path, $callable);

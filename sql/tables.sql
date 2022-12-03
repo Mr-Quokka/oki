@@ -18,9 +18,18 @@ CREATE TABLE version (
 	UNIQUE (package_id, identifier)
 );
 
-CREATE TABLE dependency (
-	package_reference_id SERIAL REFERENCES package(id_package),
-	constrainer_id INT NOT NULL REFERENCES version(id_version),
-	constraint_value VARCHAR(10) NOT NULL,
-	PRIMARY KEY(package_reference_id,constrainer_id)
+CREATE TABLE dependency
+(
+    package_reference_id INT REFERENCES package(id_package),
+    constrainer_id INT NOT NULL REFERENCES version(id_version),
+    constraint_value VARCHAR(10) NOT NULL,
+    PRIMARY KEY (package_reference_id,constrainer_id)
+);
+
+CREATE TABLE registered_user (
+	id_user SERIAL PRIMARY KEY,
+	login VARCHAR(30) NOT NULL,
+	password VARCHAR(72) NOT NULL,
+    permissions INT NOT NULL,
+	UNIQUE (login)
 );

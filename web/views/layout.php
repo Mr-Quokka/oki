@@ -7,7 +7,7 @@
 </head>
 <body>
     <header>
-        <a href="/" class="logo">
+        <a href="<?= $router->url('') ?>" class="logo">
             <pre>
  ██████╗ ██╗  ██╗██╗
 ██╔═══██╗██║ ██╔╝██║
