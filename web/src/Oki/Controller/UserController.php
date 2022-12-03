@@ -38,4 +38,10 @@ class UserController
         }
         return new HtmlResponse(200, 'register', ['fail' => $fail]);
     }
+
+    public function logout(DI $di): HttpResponse
+    {
+        $di->getSecurity()->logout();
+        return new RedirectResponse($di->getRouter()->url(''));
+    }
 }

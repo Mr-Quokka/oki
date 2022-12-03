@@ -14,6 +14,7 @@ $router->get('/^$/', [$home, 'index']);
 $router->get('/^package\/(?<name>[\w-]+)$/', [$home, 'packageInfo']);
 $router->match('/^login$/', [$user, 'login']);
 $router->match('/^register$/', [$user, 'register']);
+$router->match('/^logout/', [$user, 'logout']);
 
 $di = new \Oki\DI\DI();
 $di->setRouter($router);
