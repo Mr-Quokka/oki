@@ -15,11 +15,11 @@ CREATE TABLE version (
 	package_id INT NOT NULL REFERENCES package(id_package),
 	identifier VARCHAR(10) NOT NULL,
 	published_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	checksum VARCHAR(65) DEFAULT 'TODO',
 	UNIQUE (package_id, identifier)
 );
 
-CREATE TABLE dependency
-(
+CREATE TABLE dependency (
     package_reference_id INT REFERENCES package(id_package),
     constrainer_id INT NOT NULL REFERENCES version(id_version),
     constraint_value VARCHAR(10) NOT NULL,
