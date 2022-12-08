@@ -15,6 +15,11 @@ class JsonResponse implements HttpResponse
         $this->body = $body;
     }
 
+    public static function success(int $status, string $message): JsonResponse
+    {
+        return new JsonResponse($status, ['success' => $message]);
+    }
+
     public static function error(int $status, string $message): JsonResponse
     {
         return new JsonResponse($status, ['error' => $message]);
@@ -26,6 +31,11 @@ class JsonResponse implements HttpResponse
     }
 
     public static function notFound(string $message): JsonResponse
+    {
+        return self::error(404, $message);
+    }
+
+    public static function conflict(string $message): JsonResponse
     {
         return self::error(404, $message);
     }

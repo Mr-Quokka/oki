@@ -7,6 +7,7 @@ namespace Oki\Controller;
 use Oki\DI\DI;
 use Oki\Http\HttpResponse;
 use Oki\Http\JsonResponse;
+use Oki\Validator\PublicationValidator;
 
 class ApiController
 {
@@ -40,50 +41,33 @@ class ApiController
         return new JsonResponse(200, $package);
     }
 
-    public function publish(DI $di, array $params): HttpResponse
+    public function publish(DI $di): HttpResponse
     {
-        $manifest = json_decode($_POST['manifest'],true);
-        $packageName = $manifest['name'];
-        $packageDescription = $manifest['description'];
-        $packageVersion = $manifest['version'];
-        $packageDependencies = $manifest['dependencies'];
-
-        /*if(empty($packageName)){
-            return JsonResponse::badRequest('A name parameter is required');
+        $errors = [];
+        $manifest = PublicationValidator::validateJson($_POST, $errors);
+        if (!empty($errors)) {
+            return JsonResponse::badRequest($errors[0]);
         }
-        if (empty($packageDescription)){
-            return JsonResponse::badRequest('A description parameter is required');
+        if (!PublicationValidator::validateVersionContent($_FILES, $errors)) {
+            return JsonResponse::badRequest($errors[0]);
         }
-        if (empty($packageVersion)){
-            return JsonResponse::badRequest('A version parameter is required');
+        $packageId = $di->getPackageGateway()->getPackageId($manifest->getName());
+        if ($packageId === null) {
+            return JsonResponse::notFound('Unknown package name');
         }
+        $manifest->setPackageId($packageId);
 
-        if (!preg_match('^[a-zA-Z0-9_-]+$', $params['name'])){
-            return JsonResponse::badRequest('Unmatched name format');
-        }
-        if (!preg_match('^[a-zA-Z0-9 _-]+$', $params['description'])){
-            return JsonResponse::badRequest('Unmatched description format');
-        }*/ # aller voir publish.php
-        # $_POST -> ['manifest'] -> (validation +) $var = json_decode()
-        # tab[3][1]('name' - packageReference, 'version' - packageVersion, 'dependencies' - [^<>])
-
-        $packageInfo = $di->getPackageGateway()->getPackageInfo($packageName);
-
-        if($packageInfo===null){
-            return JsonResponse::notFound("Unknown package name");
-        }
-
-        $packageId = $packageInfo->getId();
-        switch($di->getPackageGateway()->insertVersion($packageId, $packageDescription, $packageVersion)){
-            
+        switch ($di->getPackageGateway()->insertVersion($manifest)) {
             case 200:
-                return new JsonResponse(201, "Version successfully published");
-
+                move_uploaded_file(
+                    $_FILES['package']['tmp_name'],
+                    __DIR__ . '/../../../public/packages/' . $manifest->getName() . '_' . $manifest->getVersion() . '.zip'
+                );
+                return JsonResponse::success(201, 'The version has been successfully published');
             case 409:
-                return new JsonResponse(409, "Conflict with another version");
-        
+                return JsonResponse::conflict('This version already exists');
             default:
-                return new JsonResponse(500, "Version not published");
+                return new JsonResponse(500, 'Version not published');
         }
     }
 }
