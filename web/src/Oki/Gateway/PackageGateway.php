@@ -62,22 +62,19 @@ class PackageGateway
 		return "/packages/" . $res["short_name"] . "_" . $res["identifier"] . ".zip";
 	}
 
-	public function insertPackage(string $short, string $long, string $language, string $version)
+	public function insertVersion(int $package_id, string $description, string $version): int
 	{
-		$req = $this->pdo->prepare('INSERT INTO package (short_name, description, language_id) values (:short, :long, :language);');
-
-		try {
-			$req->execute(['short' => $short, 'long' => $long, 'language' => $language]);
-		} catch (PDOException $ex) {
-			if ($this->config->isUniqueConstraintViolation($ex)) {
-				return 'A package with this short name already exists';
+		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier) values (:package_id, :version);');
+		try{
+			if($req->execute(['package_id' => $package_id, 'version' => $version])){
+				return 200;
 			}
-			throw $ex;
+			return 500;
+		} catch(PDOException $e){
+			if($this->config->isUniqueConstraintViolation($e)){
+				return 409;
+			}
+			throw $e;
 		}
-		$package_id = $this->pdo->lastInsertId();
-
-		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier, published_date) values (:package_id, :version, CURRENT_TIMESTAMP);');
-		$req->execute(['package_id' => $package_id, 'version' => $version]);
-		return true;
 	}
 }

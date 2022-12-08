@@ -39,4 +39,51 @@ class ApiController
         }
         return new JsonResponse(200, $package);
     }
+
+    public function publish(DI $di, array $params): HttpResponse
+    {
+        $manifest = json_decode($_POST['manifest'],true);
+        $packageName = $manifest['name'];
+        $packageDescription = $manifest['description'];
+        $packageVersion = $manifest['version'];
+        $packageDependencies = $manifest['dependencies'];
+
+        /*if(empty($packageName)){
+            return JsonResponse::badRequest('A name parameter is required');
+        }
+        if (empty($packageDescription)){
+            return JsonResponse::badRequest('A description parameter is required');
+        }
+        if (empty($packageVersion)){
+            return JsonResponse::badRequest('A version parameter is required');
+        }
+
+        if (!preg_match('^[a-zA-Z0-9_-]+$', $params['name'])){
+            return JsonResponse::badRequest('Unmatched name format');
+        }
+        if (!preg_match('^[a-zA-Z0-9 _-]+$', $params['description'])){
+            return JsonResponse::badRequest('Unmatched description format');
+        }*/ # aller voir publish.php
+        # $_POST -> ['manifest'] -> (validation +) $var = json_decode()
+        # tab[3][1]('name' - packageReference, 'version' - packageVersion, 'dependencies' - [^<>])
+
+        $packageInfo = $di->getPackageGateway()->getPackageInfo($packageName);
+
+        if($packageInfo===null){
+            return JsonResponse::notFound("Unknown package name");
+        }
+
+        $packageId = $packageInfo->getId();
+        switch($di->getPackageGateway()->insertVersion($packageId, $packageDescription, $packageVersion)){
+            
+            case 200:
+                return new JsonResponse(201, "Version successfully published");
+
+            case 409:
+                return new JsonResponse(409, "Conflict with another version");
+        
+            default:
+                return new JsonResponse(500, "Version not published");
+        }
+    }
 }
