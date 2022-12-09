@@ -14,7 +14,8 @@ namespace cli {
         fs::create_directories(OKI_PACKAGES_DIRECTORY);
         solver::Resolved resolved = solver::resolve(manifest.listDeclaredPackages(), repository);
         for (auto const &[dependency, version] : resolved) {
-            repository.download(version, OKI_PACKAGES_DIRECTORY);
+            fs::create_directories(OKI_PACKAGES_DIRECTORY/dependency);
+            repository.download(version, OKI_PACKAGES_DIRECTORY/dependency);
         }
     }
 }

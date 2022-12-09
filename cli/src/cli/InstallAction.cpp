@@ -21,8 +21,8 @@ namespace cli {
             }
             manifest.saveFile(OKI_MANIFEST_FILE);
 
-            fs::create_directories(OKI_PACKAGES_DIRECTORY);
-            repository.download(latest, OKI_PACKAGES_DIRECTORY);
+            fs::create_directories(OKI_PACKAGES_DIRECTORY/packageName);
+            repository.download(latest, OKI_PACKAGES_DIRECTORY/packageName);
         }
     }
 }
