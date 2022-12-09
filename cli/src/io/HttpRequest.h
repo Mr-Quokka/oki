@@ -48,6 +48,7 @@ namespace io {
     class MimePart {
     private:
         void *form;
+
     public:
         explicit MimePart(void *form);
         MimePart(const MimePart &part) = delete;

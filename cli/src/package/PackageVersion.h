@@ -3,7 +3,8 @@
 #include <string>
 #include <vector>
 
-#include "semver/Version.h"
+#include "../package/Summary.h"
+#include "../semver/Version.h"
 
 namespace package {
     /**
@@ -13,10 +14,13 @@ namespace package {
     private:
         std::string publishedDate;
         std::string downloadUrl;
+        Summaries dependencies;
 
     public:
-        PackageVersion(semver::Version version, std::string_view publishedDate, std::string_view downloadUrl);
+        PackageVersion(semver::Version version, std::string_view publishedDate, std::string_view downloadUrl, Summaries dependencies = {});
         const std::string &getPublishedDate() const;
         const std::string &getDownloadUrl() const;
+        const package::Summaries &getDependencies() const;
+        void addDependency(const std::string &name, const semver::Range &range);
     };
 }
