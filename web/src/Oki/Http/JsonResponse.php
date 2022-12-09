@@ -37,7 +37,7 @@ class JsonResponse implements HttpResponse
 
     public static function conflict(string $message): JsonResponse
     {
-        return self::error(404, $message);
+        return self::error(409, $message);
     }
 
     public function getStatusCode(): int
