@@ -1,14 +1,13 @@
 #include "Manifest.h"
 
 #include <toml.hpp>
-#include <iostream>
 
 namespace fs = std::filesystem;
 
 constexpr static std::string_view DEPENDENCY_SECTION_NAME = "dependencies";
 
 namespace config {
-    Manifest Manifest::fromFile(fs::path fileName) {
+    Manifest Manifest::fromFile(const fs::path &fileName) {
         Manifest manifest;
         if (manifest.loadFileIfExists(fileName) == true) {
             return manifest;
@@ -41,23 +40,23 @@ namespace config {
         return *table[DEPENDENCY_SECTION_NAME].as_table();
     }
 
-    bool Manifest::loadFileIfExists(fs::path fileName) {
-        fs::path pwd = std::filesystem::current_path();
-        fs::path parentPath = pwd;
-        fs::path searchedFile = parentPath / fileName;
-        while(parentPath != parentPath.parent_path()){
+    bool Manifest::loadFileIfExists(const fs::path &fileName) {
+        fs::path searchedFile = fs::absolute(fileName);
+        fs::path parentPath = searchedFile;
+        parentPath.remove_filename();
+        while (parentPath != parentPath.parent_path()) {
             if (fs::exists(searchedFile)) {
                 table = toml::parse_file(searchedFile.c_str());
                 return true;
             } else {
                 parentPath = parentPath.parent_path();
-                searchedFile = parentPath / fileName;
+                searchedFile = parentPath / fileName.filename();
             }
         }
         return false;
     }
 
-    void Manifest::saveFile(fs::path fileName) {
+    void Manifest::saveFile(const fs::path &fileName) {
         std::ofstream os{fileName};
         os << *this;
     }

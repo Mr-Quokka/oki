@@ -19,7 +19,7 @@ namespace config {
         /**
          * Crée un manifeste à partir d'un fichier existant potentiellement.
          */
-        static Manifest fromFile(std::filesystem::path fileName);
+        static Manifest fromFile(const std::filesystem::path &fileName);
 
         /**
          * Liste les dépendances directes indiquées dans ce manifeste.
@@ -43,12 +43,12 @@ namespace config {
         /**
          * Créé un manifeste à partir d'un fichier existant potentiellement.
          */
-        bool loadFileIfExists(std::filesystem::path fileName);
+        bool loadFileIfExists(const std::filesystem::path &fileName);
 
         /**
          * Écrit dans un fichier le manifeste.
          */
-        void saveFile(std::filesystem::path fileName);
+        void saveFile(const std::filesystem::path &fileName);
 
         friend std::ostream &operator<<(std::ostream &, const Manifest &);
     };
