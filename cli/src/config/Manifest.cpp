@@ -9,10 +9,13 @@ constexpr static std::string_view PACKAGE_SECTION_NAME = "package";
 constexpr static std::string_view DEPENDENCY_SECTION_NAME = "dependencies";
 
 namespace config {
-    Manifest Manifest::fromFile(fs::path fileName) {
+    Manifest Manifest::fromFile(const fs::path &fileName) {
         Manifest manifest;
-        manifest.loadFileIfExists(fileName);
-        return manifest;
+        if (manifest.loadFileIfExists(fileName) == true) {
+            return manifest;
+        } else {
+            throw ManifestException("This isn't an project using oki");
+        }
     }
 
     std::unordered_map<std::string, semver::Range> Manifest::listDeclaredPackages() const {
@@ -45,13 +48,23 @@ namespace config {
         return *table[DEPENDENCY_SECTION_NAME].as_table();
     }
 
-    void Manifest::loadFileIfExists(fs::path fileName) {
-        if (fs::exists(fileName)) {
-            table = toml::parse_file(fileName.c_str());
+    bool Manifest::loadFileIfExists(const fs::path &fileName) {
+        fs::path searchedFile = fs::absolute(fileName);
+        fs::path parentPath = searchedFile;
+        parentPath.remove_filename();
+        while (parentPath != parentPath.parent_path()) {
+            if (fs::exists(searchedFile)) {
+                table = toml::parse_file(searchedFile.c_str());
+                return true;
+            } else {
+                parentPath = parentPath.parent_path();
+                searchedFile = parentPath / fileName.filename();
+            }
         }
+        return false;
     }
 
-    void Manifest::saveFile(fs::path fileName) {
+    void Manifest::saveFile(const fs::path &fileName) {
         std::ofstream os{fileName};
         os << *this;
     }
@@ -78,5 +91,11 @@ namespace config {
     std::ostream &operator<<(std::ostream &os, const Manifest &manifest) {
         os << manifest.table;
         return os;
+    }
+
+    ManifestException::ManifestException(std::string_view msg) : msg{msg} {}
+
+    const char *ManifestException::what() const noexcept {
+        return this->msg.c_str();
     }
 }

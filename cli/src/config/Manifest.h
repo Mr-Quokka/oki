@@ -20,7 +20,7 @@ namespace config {
         /**
          * Crée un manifeste à partir d'un fichier existant potentiellement.
          */
-        static Manifest fromFile(std::filesystem::path fileName);
+        static Manifest fromFile(const std::filesystem::path &fileName);
 
         /**
          * Liste les dépendances directes indiquées dans ce manifeste.
@@ -44,12 +44,12 @@ namespace config {
         /**
          * Créé un manifeste à partir d'un fichier existant potentiellement.
          */
-        void loadFileIfExists(std::filesystem::path fileName);
+        bool loadFileIfExists(const std::filesystem::path &fileName);
 
         /**
          * Écrit dans un fichier le manifeste.
          */
-        void saveFile(std::filesystem::path fileName);
+        void saveFile(const std::filesystem::path &fileName);
 
         /**
          * Sérialise les données du manifeste au format JSON.
@@ -61,4 +61,16 @@ namespace config {
         friend std::ostream &operator<<(std::ostream &, const Manifest &);
     };
     std::ostream &operator<<(std::ostream &os, const Manifest &manifest);
+
+    /**
+     * Une erreur retournée par le fichier Manifest.
+     */
+    class ManifestException : public std::exception {
+    private:
+        std::string msg;
+
+    public:
+        explicit ManifestException(std::string_view msg);
+        const char *what() const noexcept override;
+    };
 }
