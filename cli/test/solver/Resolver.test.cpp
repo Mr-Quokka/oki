@@ -25,6 +25,9 @@ public:
     }
     void download(const package::PackageVersion &packageVersion, const std::filesystem::path &destination) override {
     }
+
+    void publish(config::Manifest &manifest, const std::filesystem::path &source) override {
+    }
 };
 
 TEST_CASE("no indirect dependency - optimal solution") {
