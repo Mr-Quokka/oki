@@ -59,6 +59,11 @@ namespace repository {
                     semver::Version::parse(item.at("identifier").get<std::string>()),
                     item.at("published_date").get<std::string>(),
                     item.at("download_url").get<std::string>());
+                for (auto itDep = item["dependencies"].cbegin(); itDep != item["dependencies"].cend(); ++itDep) {
+                    std::string keyString = itDep.key();
+                    std::string valueString = itDep.value().get<std::string>();
+                    versions.back().addDependency(keyString, semver::Range::parse(valueString));
+                }
             }
         }
         return {data.at("short_name").get<std::string>(), data.at("description").get<std::string>(), versions};
@@ -69,5 +74,4 @@ namespace repository {
         json data = tryReadRequest(request);
         return data.get<std::string>();
     }
-
 }
