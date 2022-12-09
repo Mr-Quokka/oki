@@ -19,7 +19,7 @@ namespace io {
          * Récupère le chemin absolu vers le fichier temporaire.
          * @return
          */
-        const char *getFilename();
+        const char *getFilename() const;
 
         /**
          * Supprime le fichier temporaire.

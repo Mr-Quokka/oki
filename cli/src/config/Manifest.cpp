@@ -5,6 +5,7 @@
 
 namespace fs = std::filesystem;
 
+constexpr static std::string_view PACKAGE_SECTION_NAME = "package";
 constexpr static std::string_view DEPENDENCY_SECTION_NAME = "dependencies";
 
 namespace config {
@@ -53,6 +54,25 @@ namespace config {
     void Manifest::saveFile(fs::path fileName) {
         std::ofstream os{fileName};
         os << *this;
+    }
+
+    std::string Manifest::asFilteredJson() const {
+        std::stringstream stream;
+        toml::table filtered;
+        const toml::node *package = table.get(PACKAGE_SECTION_NAME);
+        if (package != nullptr) {
+            package->visit([&](const toml::table &t) {
+                filtered.insert(t.cbegin(), t.cend());
+            });
+        }
+        const toml::node *dependencies = table.get(DEPENDENCY_SECTION_NAME);
+        if (dependencies != nullptr) {
+            dependencies->visit([&](const toml::table &t) {
+                filtered.insert(DEPENDENCY_SECTION_NAME, t);
+            });
+        }
+        stream << toml::json_formatter{filtered};
+        return stream.str();
     }
 
     std::ostream &operator<<(std::ostream &os, const Manifest &manifest) {

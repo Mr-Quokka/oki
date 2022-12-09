@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 
 #include "cli/options.h"
 #include "io/HttpRequest.h"
@@ -9,7 +8,7 @@
 namespace fs = std::filesystem;
 
 int main(int argc, char *argv[]) {
-    cli::CliAction *action = cli::parseArguments(argc, argv);
+    std::unique_ptr<cli::CliAction> action = cli::parseArguments(argc, argv);
     repository::RemoteRepository repository{"http://localhost:8000"};
     try {
         action->run(repository);
@@ -18,6 +17,5 @@ int main(int argc, char *argv[]) {
     } catch (const io::APIException &e) {
         std::cerr << e.what() << "\n";
     }
-    delete action;
     return 0;
 }

@@ -5,6 +5,7 @@
 
 #include "InstallAction.h"
 #include "ListAction.h"
+#include "PublishAction.h"
 #include "ReInstallAction.h"
 #include "ShowAction.h"
 
@@ -19,9 +20,10 @@ namespace cli {
         os << "show: Show the informations of the package\n";
         os << "install: Install a new package\n";
         os << "reinstall: Install all the package of the manifest\n";
+        os << "publish: Publish a new version of the current package\n";
     }
 
-    CliAction *parseArguments(int argc, char *argv[]) {
+    std::unique_ptr<CliAction> parseArguments(int argc, char *argv[]) {
         if (argc < 2) {
             std::cerr << "See " << argv[0] << " help for all available actions.\n";
             exit(0);
@@ -30,23 +32,25 @@ namespace cli {
             help(std::cout);
             exit(0);
         } else if (strcmp("list", argv[1]) == 0) {
-            return static_cast<CliAction *>(new ListAction{});
+            return std::make_unique<ListAction>();
         } else if (strcmp("install", argv[1]) == 0) {
             if (argc < 3) {
                 invalidUsage(std::cerr);
                 std::cerr << "Add a package name after install.\n";
                 exit(1);
             }
-            return static_cast<CliAction *>(new InstallAction{argv[2]});
+            return std::make_unique<InstallAction>(argv[2]);
         } else if (strcmp("show", argv[1]) == 0) {
             if (argc < 3) {
                 invalidUsage(std::cerr);
                 std::cerr << "Add a package name after show.\n";
                 exit(1);
             }
-            return static_cast<CliAction *>(new ShowAction{argv[2]});
+            return std::make_unique<ShowAction>(argv[2]);
         } else if (strcmp("reinstall", argv[1]) == 0) {
-            return static_cast<CliAction *>(new ReInstallAction{});
+            return std::make_unique<ReInstallAction>();
+        } else if (strcmp("publish", argv[1]) == 0) {
+            return std::make_unique<PublishAction>();
         } else {
             exit(1);
         }

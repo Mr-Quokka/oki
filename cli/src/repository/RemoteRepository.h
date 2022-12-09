@@ -13,5 +13,6 @@ namespace repository {
         package::Package getPackageInfo(std::string_view packageName) override;
         std::string getPackageURL(std::string_view packageName, std::string packageVersion) override;
         void download(const package::PackageVersion &packageVersion, const std::filesystem::path &destination) override;
+        void publish(config::Manifest &manifest, const std::filesystem::path &source) override;
     };
 }

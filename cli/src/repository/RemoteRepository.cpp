@@ -70,4 +70,11 @@ namespace repository {
         return data.get<std::string>();
     }
 
+    void RemoteRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
+        io::HttpRequest request = createRequest(apiUrl + "/api/publish");
+        io::MimePart mime = request.addMime();
+        mime.addDataPart("manifest", manifest.asFilteredJson());
+        mime.addFilePart("package", source);
+        json data = tryReadRequest(request);
+    }
 }

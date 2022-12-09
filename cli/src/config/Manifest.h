@@ -51,6 +51,13 @@ namespace config {
          */
         void saveFile(std::filesystem::path fileName);
 
+        /**
+         * Sérialise les données du manifeste au format JSON.
+         *
+         * @return Les données publiques de version au format JSON.
+         */
+        std::string asFilteredJson() const;
+
         friend std::ostream &operator<<(std::ostream &, const Manifest &);
     };
     std::ostream &operator<<(std::ostream &os, const Manifest &manifest);

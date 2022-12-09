@@ -41,6 +41,53 @@ namespace io {
     };
 
     /**
+     * Un contenu de requête HTTP, au type de contenu multipart/form-data.
+     *
+     * Cela permet notamment d'envoyer des données de formulaire ou des fichiers dans des requêtes POST.
+     */
+    class MimePart {
+    private:
+        void *form;
+    public:
+        explicit MimePart(void *form);
+        MimePart(const MimePart &part) = delete;
+
+        /**
+         * Ajoute une nouvelle donnée depuis des données en mémoire.
+         *
+         * @param name La clé identifiant les données.
+         * @param data Les données à transmettre.
+         */
+        void addDataPart(const std::string &name, std::string_view data);
+
+        /**
+         * Ajoute une nouvelle donnée depuis des données en mémoire.
+         *
+         * @param name La clé identifiant les données.
+         * @param data Les données à transmettre.
+         */
+        void addDataPart(const char *name, std::string_view data);
+
+        /**
+         * Ajoute une nouvelle donnée à partir du contenu d'un fichier.
+         *
+         * @param name La clé identifiant les données.
+         * @param data Le chemin vers le fichier pour lequel inclure le contenu.
+         */
+        void addFilePart(const std::string &name, const std::filesystem::path &data);
+
+        /**
+         * Ajoute une nouvelle donnée à partir du contenu d'un fichier.
+         *
+         * @param name La clé identifiant les données.
+         * @param data Le chemin vers le fichier pour lequel inclure le contenu.
+         */
+        void addFilePart(const char *name, const std::filesystem::path &data);
+
+        ~MimePart();
+    };
+
+    /**
      * Une requête HTTP, préparée par CURL.
      */
     class HttpRequest {
@@ -84,6 +131,8 @@ namespace io {
          * @param header Le contenu de l'en-tête (terminé par le caractère null '\0').
          */
         void addHeader(const char *header);
+
+        MimePart addMime();
 
         /**
          * Exécute la requête avec une méthode GET et capture le résultat dans une chaîne de caractères.
