@@ -21,6 +21,6 @@ namespace package {
         const std::string &getPublishedDate() const;
         const std::string &getDownloadUrl() const;
         const package::Summaries &getDependencies() const;
-        void addDependency(std::string name, semver::Range range);
+        void addDependency(const std::string &name, const semver::Range &range);
     };
 }

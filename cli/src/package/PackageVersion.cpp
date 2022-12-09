@@ -18,7 +18,7 @@ namespace package {
         return this->dependencies;
     }
 
-    void PackageVersion::addDependency(std::string name, semver::Range range) {
+    void PackageVersion::addDependency(const std::string &name, const semver::Range &range) {
         this->dependencies.insert({name, range});
     }
 
