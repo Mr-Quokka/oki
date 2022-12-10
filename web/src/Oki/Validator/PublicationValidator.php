@@ -55,7 +55,14 @@ final class PublicationValidator
             if (isset($json['dependencies']) && !self::validateDependencies($json['dependencies'])) {
                 $errors[] = 'Invalid dependencies';
             }
-            return new PackageManifest($json['name'], $json['description'] ?? '', $json['version'], $json['dependencies'] ?? []);
+            if (empty($errors)) {
+                return new PackageManifest(
+                    $json['name'],
+                    $json['description'] ?? '',
+                    $json['version'],
+                    $json['dependencies'] ?? []
+                );
+            }
         } catch (\JsonException $ex) {
             $errors[] = $ex->getMessage();
         }
