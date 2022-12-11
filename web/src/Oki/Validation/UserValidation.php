@@ -13,6 +13,6 @@ final class UserValidation
 
     public static function isValidUser(array $post): bool
     {
-        return !(empty($post['login']) || empty($post['password']) || empty($post['password_confirmation']) || $post['password'] != $post['password_confirmation']);
+        return !(empty($post['login']) || empty($post['password']) || empty($post['password-confirmation']) || $post['password'] !== $post['password-confirmation']);
     }
 }
