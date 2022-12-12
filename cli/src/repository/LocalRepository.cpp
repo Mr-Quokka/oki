@@ -19,7 +19,7 @@ namespace repository {
         return packages;
     }
 
-    void LocalRepository::download(const package::PackageVersion &packageVersion, const fs::path &destination) {
+    void LocalRepository::download(const package::DownloadableVersion &packageVersion, const fs::path &destination) {
         std::cerr << "TODO : downloading " << packageVersion << " at " << destination << "\n";
     }
 

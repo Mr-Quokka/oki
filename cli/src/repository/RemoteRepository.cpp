@@ -40,7 +40,7 @@ namespace repository {
         return packages;
     }
 
-    void RemoteRepository::download(const package::PackageVersion &packageVersion, const std::filesystem::path &destination) {
+    void RemoteRepository::download(const package::DownloadableVersion &packageVersion, const std::filesystem::path &destination) {
         io::HttpRequest request = createRequest(apiUrl + packageVersion.getDownloadUrl());
         io::TmpFile tmp;
         request.download(tmp.getFilename());
