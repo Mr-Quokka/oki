@@ -10,9 +10,10 @@
 
 namespace config {
     class ManifestLock {
-    private:
+    public:
         using Packages = std::unordered_map<std::string, package::VersionLock>;
 
+    private:
         Packages locks;
 
     public:
@@ -20,6 +21,12 @@ namespace config {
         explicit ManifestLock(const solver::Resolved &resolved);
 
         const Packages &getLocks() const;
+
+        Packages::const_iterator find(const std::string &packageName) const;
+
+        Packages::const_iterator cbegin() const;
+
+        Packages::const_iterator cend() const;
 
         static ManifestLock fromFile(const std::filesystem::path &fileName);
 

@@ -23,6 +23,18 @@ namespace config {
         return locks;
     }
 
+    ManifestLock::Packages::const_iterator ManifestLock::find(const std::string &packageName) const {
+        return locks.find(packageName);
+    }
+
+    ManifestLock::Packages::const_iterator ManifestLock::cbegin() const {
+        return locks.cbegin();
+    }
+
+    ManifestLock::Packages::const_iterator ManifestLock::cend() const {
+        return locks.cend();
+    }
+
     ManifestLock ManifestLock::fromFile(const fs::path &fileName) {
         toml::table toml = toml::parse_file(fileName.string());
         std::unordered_map<std::string, package::VersionLock> locks;

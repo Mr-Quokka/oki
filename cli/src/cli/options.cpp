@@ -9,6 +9,7 @@
 #include "PublishAction.h"
 #include "ReInstallAction.h"
 #include "ShowAction.h"
+#include "TreeAction.h"
 
 namespace cli {
     void invalidUsage(std::ostream &os) {
@@ -63,6 +64,8 @@ namespace cli {
             } else {
                 return std::make_unique<MakefileAction>();
             }
+        } else if (strcmp("tree", argv[1]) == 0) {
+            return std::make_unique<TreeAction>();
         } else {
             exit(1);
         }
