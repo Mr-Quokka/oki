@@ -5,6 +5,7 @@
 
 #include "InstallAction.h"
 #include "ListAction.h"
+#include "MakefileAction.h"
 #include "PublishAction.h"
 #include "ReInstallAction.h"
 #include "ShowAction.h"
@@ -21,6 +22,7 @@ namespace cli {
         os << "install: Install a new package\n";
         os << "reinstall: Install all the package of the manifest\n";
         os << "publish: Publish a new version of the current package\n";
+        os << "makefile: Create a makefile\n";
     }
 
     std::unique_ptr<CliAction> parseArguments(int argc, char *argv[]) {
@@ -51,6 +53,16 @@ namespace cli {
             return std::make_unique<ReInstallAction>();
         } else if (strcmp("publish", argv[1]) == 0) {
             return std::make_unique<PublishAction>();
+        } else if (strcmp("makefile", argv[1]) == 0) {
+            if (argc > 3) {
+                invalidUsage(std::cerr);
+                std::cerr << "Too many arguments\n";
+                exit(1);
+            } else if (argc == 3) {
+                return std::make_unique<MakefileAction>(argv[2]);
+            } else {
+                return std::make_unique<MakefileAction>();
+            }
         } else {
             exit(1);
         }
