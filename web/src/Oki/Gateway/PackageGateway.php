@@ -26,7 +26,14 @@ class PackageGateway
 	public function listPackages(): array
 	{
 		$req = $this->pdo->query('SELECT * FROM package;');
-		return $req->fetchAll(PDO::FETCH_CLASS, Package::class);
+		$packages = $req->fetchAll(PDO::FETCH_CLASS, Package::class);
+		foreach ($packages as $package) {
+			$req = $this->pdo->query('SELECT * FROM version WHERE :id = package_id ORDER BY id_version DESC LIMIT 1;');
+			$req->execute(['id' => $package->getId()]);
+			$version = $req->fetchAll(PDO::FETCH_CLASS, PackageVersion::class);
+			$package->setVersions($version);
+		}
+		return $packages;
 	}
 
 	public function getPackageInfo(string $packageName): ?Package

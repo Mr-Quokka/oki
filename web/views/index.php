@@ -11,9 +11,16 @@
     <p style="text-align: center">ERROR : there is no package</p>
 <?php else : ?>
     <?php foreach ($params['packages'] as $pkg) : ?>
-        <div>
-            <h3><a href="/package/<?= $pkg->getShortName() ?>" class="package-name"><?= $pkg->getShortName() ?></a></h3>
-            <p class="package-description"><?= $pkg->getDescription() ?></p>
-        </div>
+            <div>
+                <h3>
+                    <a href="/package/<?= $pkg->getShortName() ?>" class="package-name">
+                        <?= $pkg->getShortName() ?>
+                        <?php if(!empty($pkg->getVersions())): ?>
+                            <?= " v" . $pkg->getVersions()[0]->getIdentifier() ?>
+                        <?php endif ?>
+                    </a>
+                </h3>
+                <p class="package-description"><?= $pkg->getDescription() ?></p>
+            </div>
     <?php endforeach ?>
 <?php endif ?>
