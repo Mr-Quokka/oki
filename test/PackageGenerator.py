@@ -9,12 +9,12 @@ def createRepertory(i):
 
 def createSourcesFiles(i):
     for j in range(3):
-        file = open(f"testPackages/package_{i}/src/file_{j}.c","a")
-        file.write("Je suis un fichier C")
+        with open(f"testPackages/package_{i}/src/file_{j}.c","a") as file:
+            file.write("Je suis un fichier C")
 
 def createTestsFiles(i):
-    file = open(f"testPackages/package_{i}/test/test.c","a")
-    file.write("Je suis un fichier C de test")
+    with open(f"testPackages/package_{i}/test/test.c","a") as file:
+        file.write("Je suis un fichier C de test")
 
 def createTomlFile(i):
     name = 'package_'+ str(i)
@@ -27,17 +27,17 @@ def createTomlFile(i):
         dependency = random.randint(0,4)
     
 
-    file = open(f"testPackages/package_{i}/oki.toml","a")
-    file.write(
-        "[pacakage]\n" +
-        "name = " + '"' + name + '"\n' + 
-        "version = " + '"' + version + '"\n' + 
-        "description = " + '"' + description + '"\n' + 
-        "license = " + '"' + license + '"\n\n' +
+    with open(f"testPackages/package_{i}/oki.toml","a") as file:
+        file.write(
+            "[pacakage]\n" +
+            "name = " + '"' + name + '"\n' + 
+            "version = " + '"' + version + '"\n' + 
+            "description = " + '"' + description + '"\n' +
+            "license = " + '"' + license + '"\n\n' +
 
-        "[dependencies]\n" +
-        "package_" + str(dependency) + " = " + '"' + version + '"'
-        )
+            "[dependencies]\n" +
+            "package_" + str(dependency) + " = " + '"' + version + '"'
+            )
 
 for i in range(1,6):
     createRepertory(i)
