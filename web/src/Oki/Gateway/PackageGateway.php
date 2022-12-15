@@ -83,6 +83,7 @@ class PackageGateway
 		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier) values (:package_id, :version);');
 		try {
 			if ($req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion()])) {
+				$this->insertDependencies($manifest);
 				return 200;
 			}
 			return 500;
@@ -91,6 +92,20 @@ class PackageGateway
 				return 409;
 			}
 			throw $e;
+		}
+	}
+
+	private function insertDependencies(PackageManifest $manifest)
+	{
+		$constrainer_id = $this->pdo->lastInsertId();
+
+
+		foreach ($manifest->getDependencies() as $package => $range) {
+
+			$package_reference_id = $this->getPackageId($package);
+			
+			$req = $this->pdo->prepare('INSERT INTO dependency values (:package_reference_id, :constrainer_id, :constraint_value);');
+			$req->execute(['package_reference_id' => $package_reference_id, 'constrainer_id' => $constrainer_id, 'constraint_value' => $range]);
 		}
 	}
 }
