@@ -84,6 +84,9 @@ class PackageGateway
 		try {
 			if ($req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion()])) {
 				$this->insertDependencies($manifest);
+				
+				$req = $this->pdo->prepare('UPDATE package SET description = :description WHERE id_package = :package_id;');
+				$req->execute(['description' => $manifest->getDescription(), 'package_id' => $manifest->getPackageId()]);
 				return 200;
 			}
 			return 500;
