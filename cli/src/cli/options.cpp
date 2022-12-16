@@ -24,6 +24,7 @@ namespace cli {
         os << "reinstall: Install all the package of the manifest\n";
         os << "publish: Publish a new version of the current package\n";
         os << "makefile: Create a makefile\n";
+        os << "tree: Display a tree visualization of the dependency graph\n";
     }
 
     std::unique_ptr<CliAction> parseArguments(int argc, char *argv[]) {
