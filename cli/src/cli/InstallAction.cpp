@@ -1,5 +1,6 @@
 #include "InstallAction.h"
 #include "../config/Manifest.h"
+#include "../config/ManifestLock.h"
 #include "../io/HttpRequest.h"
 #include "../io/oki.h"
 #include <iostream>
@@ -21,8 +22,13 @@ namespace cli {
             }
             manifest.saveFile(OKI_MANIFEST_FILE);
 
-            fs::create_directories(OKI_PACKAGES_DIRECTORY);
-            repository.download(latest, OKI_PACKAGES_DIRECTORY);
+            solver::Resolved resolved = solver::resolve(manifest.listDeclaredPackages(), repository);
+            config::ManifestLock lock{resolved};
+            for (const auto &[package, version] : resolved) {
+                fs::create_directories(OKI_PACKAGES_DIRECTORY / package);
+                repository.download(version, OKI_PACKAGES_DIRECTORY / package);
+            }
+            lock.saveFile(OKI_LOCK_FILE);
         }
     }
 }
