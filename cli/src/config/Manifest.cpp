@@ -19,8 +19,12 @@ namespace config {
     }
 
     std::unordered_map<std::string, semver::Range> Manifest::listDeclaredPackages() const {
+        auto dependenciesTable = table.get_as<toml::table>(DEPENDENCY_SECTION_NAME);
         std::unordered_map<std::string, semver::Range> packages;
-        for (const auto &[dependency, constraint] : *table[DEPENDENCY_SECTION_NAME].as_table()) {
+        if (dependenciesTable == nullptr) {
+            return packages;
+        }
+        for (const auto &[dependency, constraint] : *dependenciesTable) {
             std::string constraintValue = constraint.as_string()->get();
             try {
                 packages.emplace(dependency, semver::Range::parse(constraintValue));
