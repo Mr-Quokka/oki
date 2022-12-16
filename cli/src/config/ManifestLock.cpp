@@ -15,7 +15,15 @@ namespace config {
 
     ManifestLock::ManifestLock(const solver::Resolved &resolved) {
         for (const auto &[package, version] : resolved) {
-            locks.insert({package, {version, version.getDownloadUrl()}});
+            std::vector<std::string> dependencies;
+            std::transform(
+                version.getDependencies().cbegin(),
+                version.getDependencies().cend(),
+                std::back_inserter(dependencies),
+                [](const auto &dep) {
+                    return dep.first;
+                });
+            locks.insert({package, {version, version.getDownloadUrl(), std::move(dependencies)}});
         }
     }
 
