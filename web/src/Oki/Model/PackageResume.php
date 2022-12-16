@@ -54,5 +54,3 @@ class PackageResume implements JsonSerializable
 		return $dict;
 	}
 }
-
-?>
