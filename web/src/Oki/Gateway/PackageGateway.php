@@ -7,6 +7,7 @@ namespace Oki\Gateway;
 use Oki\Config\DatabaseConfig;
 use Oki\Model\Package;
 use Oki\Model\PackageManifest;
+use Oki\Model\PackageResume;
 use Oki\Model\PackageVersion;
 use PDO;
 use PDOException;
@@ -25,14 +26,9 @@ class PackageGateway
 
 	public function listPackages(): array
 	{
-		$req = $this->pdo->query('SELECT * FROM package;');
-		$packages = $req->fetchAll(PDO::FETCH_CLASS, Package::class);
-		foreach ($packages as $package) {
-			$req = $this->pdo->query('SELECT * FROM version WHERE :id = package_id ORDER BY id_version DESC LIMIT 1;');
-			$req->execute(['id' => $package->getId()]);
-			$version = $req->fetchAll(PDO::FETCH_CLASS, PackageVersion::class);
-			$package->setVersions($version);
-		}
+		$req = $this->pdo->query('SELECT package.*, version.identifier AS latest_version FROM package LEFT JOIN version ON package.id_package = version.package_id;');
+		$packages = $req->fetchAll(PDO::FETCH_CLASS, PackageResume::class);
+
 		return $packages;
 	}
 

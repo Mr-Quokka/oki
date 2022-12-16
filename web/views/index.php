@@ -15,8 +15,8 @@
                 <h3>
                     <a href="/package/<?= $pkg->getShortName() ?>" class="package-name">
                         <?= $pkg->getShortName() ?>
-                        <?php if(!empty($pkg->getVersions())): ?>
-                            <?= " v" . $pkg->getVersions()[0]->getIdentifier() ?>
+                        <?php if($pkg->getLatestVersion() !== null): ?>
+                            <?= " v" . $pkg->getLatestVersion() ?>
                         <?php endif ?>
                     </a>
                 </h3>
