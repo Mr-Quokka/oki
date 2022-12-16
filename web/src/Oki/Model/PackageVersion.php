@@ -8,67 +8,67 @@ use JsonSerializable;
 
 class PackageVersion implements JsonSerializable
 {
-	private int $id_version;
+    private int $id_version;
 
-	private Package $package;
+    private Package $package;
 
-	private string $identifier;
+    private string $identifier;
 
-	private string $published_date;
+    private string $published_date;
 
-	/**
-	 * @var array<string, string>
-	 */
-	private array $dependencies = [];
+    /**
+     * @var array<string, string>
+     */
+    private array $dependencies = [];
 
-	public function getIdVersion(): int
-	{
-		return $this->id_version;
-	}
+    public function getIdVersion(): int
+    {
+        return $this->id_version;
+    }
 
-	public function getPackage(): Package
-	{
-		return $this->package;
-	}
+    public function getPackage(): Package
+    {
+        return $this->package;
+    }
 
-	public function setPackage(Package $pck)
-	{
-		$this->package = $pck;
-	}
+    public function setPackage(Package $pck)
+    {
+        $this->package = $pck;
+    }
 
-	public function getIdentifier(): string
-	{
-		return $this->identifier;
-	}
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
 
-	public function getPublishedDate(): string
-	{
-		return $this->published_date;
-	}
+    public function getPublishedDate(): string
+    {
+        return $this->published_date;
+    }
 
-	public function getDownloadUrl(): string
-	{
-		return '/packages/' . $this->package->getShortName() . '_' . $this->identifier . '.zip';
-	}
+    public function getDownloadUrl(): string
+    {
+        return '/packages/' . $this->package->getShortName() . '_' . $this->identifier . '.zip';
+    }
 
-	public function getDependencies(): array
-	{
-		return $this->dependencies;
-	}
+    public function getDependencies(): array
+    {
+        return $this->dependencies;
+    }
 
-	public function addDependency(string $dependency, string $constraint)
-	{
-		$this->dependencies[$dependency] = $constraint;
-	}
+    public function addDependency(string $dependency, string $constraint)
+    {
+        $this->dependencies[$dependency] = $constraint;
+    }
 
-	public function jsonSerialize()
-	{
-		$dict = [];
-		$dict["id_version"] = $this->id_version;
-		$dict["identifier"] = $this->identifier;
-		$dict["published_date"] = $this->published_date;
-		$dict["download_url"] = $this->getDownloadUrl();
-		$dict['dependencies'] = $this->dependencies;
-		return $dict;
-	}
+    public function jsonSerialize()
+    {
+        $dict = [];
+        $dict["id_version"] = $this->id_version;
+        $dict["identifier"] = $this->identifier;
+        $dict["published_date"] = $this->published_date;
+        $dict["download_url"] = $this->getDownloadUrl();
+        $dict['dependencies'] = $this->dependencies;
+        return $dict;
+    }
 }
