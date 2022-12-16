@@ -11,7 +11,8 @@ namespace cli {
     MakefileAction::MakefileAction(const char *fileName) : fileName{fileName} {}
 
     void MakefileAction::run(repository::Repository &repository) {
-        config::ManifestLock manifestLock = config::ManifestLock::fromFile(OKI_LOCK_FILE);
+        config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
+        config::ManifestLock manifestLock = config::ManifestLock::readOrResolve(OKI_MANIFEST_FILE, OKI_LOCK_FILE, repository);
 
         // Cree un fichier makefile
         std::cout << "Creation du fichier makefile : " << fileName << "\n";
