@@ -4,16 +4,8 @@ declare(strict_types=1);
 
 namespace Oki\Model;
 
-use JsonSerializable;
-
-class Package implements JsonSerializable
+class Package extends AbstractPackage
 {
-	private int $id_package;
-
-	private string $short_name;
-
-	private string $description;
-
 	/**
 	 * @var PackageVersion[]
 	 */
@@ -22,21 +14,6 @@ class Package implements JsonSerializable
 	public function setVersions(array $versions)
 	{
 		$this->versions = $versions;
-	}
-
-	public function getId()
-	{
-		return $this->id_package;
-	}
-
-	public function getShortName(): string
-	{
-		return $this->short_name;
-	}
-
-	public function getDescription(): string
-	{
-		return $this->description;
 	}
 
 	public function getVersions(): array
