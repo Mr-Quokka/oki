@@ -4,7 +4,7 @@
 
 namespace io {
     /**
-     * Quelque chose de téléchargable par HTTP ou un autre moyen.
+     * Quelque chose de téléchargeable par HTTP ou un autre moyen.
      */
     class Downloadable {
     private:

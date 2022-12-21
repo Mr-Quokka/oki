@@ -29,8 +29,8 @@ INSTALL_BIN_DIR := $(DESTDIR)/$(bindir)
 
 # Répertoires des fichiers compilés et de sources
 BUILD_DIR := build/$(BUILD)
-SRC_DIR := src src/cli src/config src/io src/package src/repository src/semver src/solver src/tree
-TEST_DIR := test test/semver test/solver test/tree
+SRC_DIR := src src/cli src/config src/io src/op src/package src/repository src/semver src/solver src/tree
+TEST_DIR := test test/config test/op test/semver test/solver test/tree
 
 # Répertoires où rechercher les fichiers header
 CPPFLAGS=-isystemthird-party -Isrc

@@ -43,6 +43,18 @@ namespace config {
         return locks.cend();
     }
 
+    bool ManifestLock::contains(const std::string &packageName) const {
+        return locks.contains(packageName);
+    }
+
+    bool ManifestLock::containsExact(const std::string &packageName, const package::DownloadableVersion &version) const {
+        auto existing = locks.find(packageName);
+        if (existing == locks.cend()) {
+            return false;
+        }
+        return existing->second == version;
+    }
+
     ManifestLock ManifestLock::fromFile(const fs::path &fileName) {
         toml::table toml = toml::parse_file(fileName.string());
         std::unordered_map<std::string, package::VersionLock> locks;
@@ -68,6 +80,13 @@ namespace config {
                     properties->get("source")->as_string()->get(), deps}));
         }
         return ManifestLock{locks};
+    }
+
+    ManifestLock ManifestLock::fromFileOrEmpty(const fs::path &fileName) {
+        if (fs::exists(fileName)) {
+            return fromFile(fileName);
+        }
+        return ManifestLock{};
     }
 
     ManifestLock ManifestLock::readOrResolve(const fs::path &manifestFileName, const fs::path &lockFileName, repository::Repository &repository) {

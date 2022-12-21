@@ -17,10 +17,14 @@ namespace config {
         Packages locks;
 
     public:
+        ManifestLock() = default;
         explicit ManifestLock(Packages resolved);
         explicit ManifestLock(const solver::Resolved &resolved);
 
         const Packages &getLocks() const;
+
+        bool contains(const std::string &packageName) const;
+        bool containsExact(const std::string &packageName, const package::DownloadableVersion &version) const;
 
         Packages::const_iterator find(const std::string &packageName) const;
 
@@ -29,6 +33,7 @@ namespace config {
         Packages::const_iterator cend() const;
 
         static ManifestLock fromFile(const std::filesystem::path &fileName);
+        static ManifestLock fromFileOrEmpty(const std::filesystem::path &fileName);
 
         static ManifestLock readOrResolve(const std::filesystem::path &manifestFileName, const std::filesystem::path &lockFileName, repository::Repository &repository);
 

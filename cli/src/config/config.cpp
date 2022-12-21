@@ -1,6 +1,5 @@
 #include "config.h"
 
-#include <cstdlib>
 #include <unistd.h>
 
 namespace fs = std::filesystem;
@@ -16,6 +15,6 @@ namespace config {
     }
 
     bool acceptColor() {
-        return isatty(fileno(stdout));
+        return isatty(STDOUT_FILENO);
     }
 }

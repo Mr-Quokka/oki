@@ -5,6 +5,7 @@
 #include <toml.hpp>
 #include <unordered_map>
 
+#include "package/Summary.h"
 #include "semver/Range.h"
 
 namespace config {
@@ -13,8 +14,8 @@ namespace config {
      */
     class Manifest {
     private:
-        toml::v3::table table{};
-        toml::v3::table &addDependencySectionIfNotExists();
+        toml::table table{};
+        toml::table &addDependencySectionIfNotExists();
 
     public:
         /**
@@ -25,7 +26,12 @@ namespace config {
         /**
          * Liste les dépendances directes indiquées dans ce manifeste.
          */
-        std::unordered_map<std::string, semver::Range> listDeclaredPackages() const;
+        package::Summaries listDeclaredPackages() const;
+
+        /**
+         * Liste les noms des dépendances directes indiquées dans ce manifeste.
+         */
+        std::vector<std::string_view> listDeclaredPackagesNames() const;
 
         /**
          * Ajoute un paquet à la liste des dépendances directes. S'il existe déjà, alors il n'est pas rajouté.

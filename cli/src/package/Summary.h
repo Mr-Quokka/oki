@@ -14,13 +14,4 @@ namespace package {
      * Les dépendances directes, c'est-à-dire celles qui sont déclarées dans le paquet source.
      */
     using Summaries = std::unordered_map<std::string, Requirement>;
-
-    class SummariesHolder {
-    private:
-        Summaries dependencies;
-
-    public:
-        SummariesHolder(Summaries &&dependencies);
-        const package::Summaries &getDependencies() const;
-    };
 }
