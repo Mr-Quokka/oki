@@ -19,6 +19,13 @@ LDLIBS := -lcurl -lminizip # Bibliothèques utilisées pour l'édition des liens
 
 # Nom de l'exécutable final
 TARGET_EXE := oki
+TARGET_VERSION := 0.1.0
+
+# Répertoire d'installation
+prefix := /usr/local
+exec_prefix := $(prefix)
+bindir := $(exec_prefix)/bin
+INSTALL_BIN_DIR := $(DESTDIR)/$(bindir)
 
 # Répertoires des fichiers compilés et de sources
 BUILD_DIR := build/$(BUILD)
@@ -73,6 +80,19 @@ format:
 # Couverture des tests
 coverage.html: $(TARGET_EXE)-test build/test/test/main.o
 	./$(TARGET_EXE)-test && gcovr -r src -d build --html coverage.html
+
+# Installe l'exécutable final
+install: $(TARGET_EXE)
+	install -d $(INSTALL_BIN_DIR)
+	install -m 755 $(TARGET_EXE) $(INSTALL_BIN_DIR)
+
+# Supprime l'exécutable installé
+uninstall:
+	rm -f $(INSTALL_BIN_DIR)/$(TARGET_EXE)
+
+# Réalise une archive des fichiers sources
+dist:
+	tar -czvf $(TARGET_EXE)-$(TARGET_VERSION).tar.gz --transform='s,^,$(TARGET_EXE)-$(TARGET_VERSION)/,' src Makefile configure.sh
 
 .PHONY: all clean doc format
 

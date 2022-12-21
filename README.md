@@ -31,6 +31,16 @@ On Debian: `apt install clang-format gcovr`
 Quick setup
 -----------
 
+```bash
+cd cli
+./configure.sh -d
+make BUILD=release
+sudo make install BUILD=release
+```
+
+Development
+-----------
+
 ### Create a sample database and run the server
 ```bash
 cd sql && ./create_sqlite_db.sh && cd ..
