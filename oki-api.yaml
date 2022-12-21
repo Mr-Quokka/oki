@@ -116,7 +116,7 @@ components:
     Package:
       type: object
       properties:
-        short_name:
+        name:
           type: string
           example: linked-list
           maxLength: 64

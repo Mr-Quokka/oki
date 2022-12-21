@@ -1,5 +1,5 @@
 <div class="center-content">
-    <h2><?= $params['package']->getShortName() ?></h2>
+    <h2><?= $params['package']->getName() ?></h2>
     <h3 class="package-detail-description"><?= $params['package']->getDescription() ?></h3>
 </div>
 <hr/>

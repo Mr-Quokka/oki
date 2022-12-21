@@ -25,7 +25,7 @@ class Package extends AbstractPackage
     {
         $dict = [
             'id_package' => $this->id_package,
-            'short_name' => $this->short_name,
+            'name' => $this->name,
             'description' => $this->description
         ];
         if (!empty($this->versions)) {

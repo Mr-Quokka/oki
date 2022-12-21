@@ -12,9 +12,9 @@ namespace cli {
         bool color = config::acceptColor();
         package::Package p = repository.getPackageInfo(packageName);
         if (color) {
-            std::cout << "\x1B[32m" << p.getShortName() << "\x1B[0m";
+            std::cout << "\x1B[32m" << p.getName() << "\x1B[0m";
         } else {
-            std::cout << p.getShortName();
+            std::cout << p.getName();
         }
         if (!p.getVersions().empty()) {
             const package::PackageVersion &latest = p.getVersions().front();

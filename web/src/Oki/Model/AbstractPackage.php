@@ -10,18 +10,18 @@ abstract class AbstractPackage implements JsonSerializable
 {
     protected int $id_package;
 
-    protected string $short_name;
+    protected string $name;
 
     protected string $description;
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id_package;
     }
 
-    public function getShortName(): string
+    public function getName(): string
     {
-        return $this->short_name;
+        return $this->name;
     }
 
     public function getDescription(): string

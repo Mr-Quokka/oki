@@ -3,11 +3,11 @@
 #include <utility>
 
 namespace package {
-    Package::Package(std::string_view shortName, std::string_view description, std::vector<PackageVersion> versions)
-        : shortName{shortName}, description{description}, versions{std::move(versions)} {}
+    Package::Package(std::string_view name, std::string_view description, std::vector<PackageVersion> versions)
+        : name{name}, description{description}, versions{std::move(versions)} {}
 
-    const std::string &Package::getShortName() const {
-        return shortName;
+    const std::string &Package::getName() const {
+        return name;
     }
 
     const std::string &Package::getDescription() const {

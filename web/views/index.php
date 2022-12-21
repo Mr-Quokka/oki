@@ -13,8 +13,8 @@
     <?php foreach ($params['packages'] as $pkg) : ?>
             <div>
                 <h3>
-                    <a href="/package/<?= $pkg->getShortName() ?>" class="package-name">
-                        <?= $pkg->getShortName() ?>
+                    <a href="/package/<?= $pkg->getName() ?>" class="package-name">
+                        <?= $pkg->getName() ?>
                         <?php if($pkg->getLatestVersion() !== null): ?>
                             <?= " v" . $pkg->getLatestVersion() ?>
                         <?php endif ?>

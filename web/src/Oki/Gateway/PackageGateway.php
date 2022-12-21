@@ -32,7 +32,7 @@ class PackageGateway
 
 	public function getPackageInfo(string $packageName): ?Package
 	{
-		$reqPacket = $this->pdo->prepare('SELECT * FROM package WHERE short_name = :name;');
+		$reqPacket = $this->pdo->prepare('SELECT * FROM package WHERE name = :name;');
 		$reqPacket->execute(['name' => $packageName]);
 		$reqPacket->setFetchMode(PDO::FETCH_CLASS, Package::class);
 		$package = $reqPacket->fetch();
@@ -50,18 +50,18 @@ class PackageGateway
 		}
 		$package->setVersions(array_values($versions));
 
-		$reqDependency = $this->pdo->prepare('SELECT d.constrainer_id, p.short_name, d.constraint_value FROM version v INNER JOIN dependency d ON d.constrainer_id = v.id_version INNER JOIN package p ON p.id_package = d.package_reference_id WHERE v.package_id = :package;');
+		$reqDependency = $this->pdo->prepare('SELECT d.constrainer_id, p.name, d.constraint_value FROM version v INNER JOIN dependency d ON d.constrainer_id = v.id_version INNER JOIN package p ON p.id_package = d.package_reference_id WHERE v.package_id = :package;');
         $reqDependency->setFetchMode(PDO::FETCH_ASSOC);
         $reqDependency->execute(['package' => $package->getId()]);
 		while ($dep = $reqDependency->fetch()) {
-			$versions[intval($dep['constrainer_id'])]->addDependency($dep['short_name'], $dep['constraint_value']);
+			$versions[intval($dep['constrainer_id'])]->addDependency($dep['name'], $dep['constraint_value']);
 		}
 		return $package;
 	}
 
 	public function getPackageId(string $packageName): ?int
 	{
-		$req = $this->pdo->prepare('SELECT id_package FROM package WHERE short_name = :name;');
+		$req = $this->pdo->prepare('SELECT id_package FROM package WHERE name = :name;');
 		$req->execute(['name' => $packageName]);
 		$res = $req->fetch();
 		return $res === false ? null : intval($res['id_package']);
@@ -69,14 +69,14 @@ class PackageGateway
 
 	public function getPackageVersion(string $name, string $version): ?string
 	{
-		$req = $this->pdo->prepare('SELECT v.identifier, p.short_name FROM version v, package p WHERE p.id_package=v.package_id AND :version=v.identifier AND :name=p.short_name');
+		$req = $this->pdo->prepare('SELECT v.identifier, p.name FROM version v, package p WHERE p.id_package=v.package_id AND :version=v.identifier AND :name=p.name');
 		$req->execute(['name' => $name, 'version' => $version]);
 		$res = $req->fetch();
 		if (!$res) {
 			return null;
 		}
 
-		return "/packages/" . $res["short_name"] . "_" . $res["identifier"] . ".zip";
+		return "/packages/" . $res["name"] . "_" . $res["identifier"] . ".zip";
 	}
 
 	public function insertVersion(PackageManifest $manifest): int

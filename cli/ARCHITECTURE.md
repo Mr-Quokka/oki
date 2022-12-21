@@ -78,7 +78,7 @@ classDiagram
     class Package {
         -shortName: string
         -description: string
-        +getShortName() string
+        +getName() string
         +getDescription() string
         +getVersions() string
     }

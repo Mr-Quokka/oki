@@ -48,7 +48,7 @@ class PackageVersion implements JsonSerializable
 
     public function getDownloadUrl(): string
     {
-        return '/packages/' . $this->package->getShortName() . '_' . $this->identifier . '.zip';
+        return '/packages/' . $this->package->getName() . '_' . $this->identifier . '.zip';
     }
 
     public function getDependencies(): array
