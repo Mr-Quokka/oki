@@ -26,7 +26,10 @@ class PackageGateway
 
 	public function listPackages(): array
 	{
-		$req = $this->pdo->query('SELECT package.*, version.identifier AS latest_version FROM package LEFT JOIN version ON package.id_package = version.package_id;');
+        $req = $this->pdo->query('SELECT p.*, v1.identifier latest_version FROM package p
+            LEFT JOIN version v1 ON p.id_package = v1.package_id
+            LEFT JOIN version v2 ON v1.package_id = v2.package_id AND v2.published_date > v1.published_date
+            WHERE v2.published_date IS NULL;');
 		return $req->fetchAll(PDO::FETCH_CLASS, PackageResume::class);
 	}
 
