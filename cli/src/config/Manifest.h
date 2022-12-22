@@ -31,7 +31,7 @@ namespace config {
         /**
          * Liste les noms des dépendances directes indiquées dans ce manifeste.
          */
-        std::vector<std::string_view> listDeclaredPackagesNames() const;
+        std::vector<std::string> listDeclaredPackagesNames() const;
 
         /**
          * Ajoute un paquet à la liste des dépendances directes. S'il existe déjà, alors il n'est pas rajouté.

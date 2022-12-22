@@ -4,7 +4,7 @@
 
 namespace op {
     template <DownloadableVersionConcept T>
-    int fetch(const std::unordered_map<std::string, T> &resolved, std::ostream &out, const std::vector<std::string_view> &logWhenSeen, const std::filesystem::path &workingDirectory) {
+    int fetch(const std::unordered_map<std::string, T> &resolved, std::ostream &out, const std::vector<std::string> &logWhenSeen, const std::filesystem::path &workingDirectory) {
         io::Installer installer{config::InstallationRegistry::loadFileIfExists(workingDirectory / OKI_INTERNAL_REGISTRY_FILE), workingDirectory / OKI_PACKAGES_DIRECTORY};
 
         unsigned int installed = 0;
@@ -53,10 +53,10 @@ namespace op {
     template int fetch<package::VersionLock>(
         const std::unordered_map<std::string, package::VersionLock> &,
         std::ostream &,
-        const std::vector<std::string_view> &, const std::filesystem::path &workingDirectory);
+        const std::vector<std::string> &, const std::filesystem::path &workingDirectory);
     template int fetch<package::PackageVersion>(
         const std::unordered_map<std::string, package::PackageVersion> &,
         std::ostream &,
-        const std::vector<std::string_view> &,
+        const std::vector<std::string> &,
         const std::filesystem::path &workingDirectory);
 }

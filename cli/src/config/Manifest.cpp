@@ -36,9 +36,9 @@ namespace config {
         return packages;
     }
 
-    std::vector<std::string_view> Manifest::listDeclaredPackagesNames() const {
+    std::vector<std::string> Manifest::listDeclaredPackagesNames() const {
         const auto *dependenciesTable = table.get_as<toml::table>(DEPENDENCY_SECTION_NAME);
-        std::vector<std::string_view> packages;
+        std::vector<std::string> packages;
         if (dependenciesTable == nullptr) {
             return packages;
         }
@@ -47,7 +47,7 @@ namespace config {
             dependenciesTable->cend(),
             std::back_inserter(packages),
             [](const auto &pair) {
-                return pair.first;
+                return std::string{pair.first};
             });
         return packages;
     }
