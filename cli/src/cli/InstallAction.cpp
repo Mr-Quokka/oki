@@ -22,7 +22,7 @@ namespace cli {
 
             solver::Resolved resolved = solver::resolve(manifest.listDeclaredPackages(), repository);
             config::ManifestLock lock{resolved};
-            op::fetch(resolved, std::cout, {std::string{packageName}});
+            op::fetch(resolved, std::cout, {{std::string{packageName}}, true});
             lock.saveFile(OKI_LOCK_FILE);
         }
     }

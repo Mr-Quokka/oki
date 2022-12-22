@@ -5,8 +5,16 @@
 namespace fs = std::filesystem;
 
 namespace config {
+    InstallationRegistry::Installed::iterator InstallationRegistry::begin() {
+        return alreadyInstalled.begin();
+    }
+
     InstallationRegistry::Installed::const_iterator InstallationRegistry::cbegin() const {
         return alreadyInstalled.cbegin();
+    }
+
+    InstallationRegistry::Installed::iterator InstallationRegistry::end() {
+        return alreadyInstalled.end();
     }
 
     InstallationRegistry::Installed::const_iterator InstallationRegistry::cend() const {
@@ -31,6 +39,10 @@ namespace config {
 
     bool InstallationRegistry::erase(const std::string &packageName) {
         return alreadyInstalled.erase(packageName) != 0;
+    }
+
+    InstallationRegistry::Installed::iterator InstallationRegistry::erase(Installed::iterator it) {
+        return alreadyInstalled.erase(it);
     }
 
     InstallationRegistry InstallationRegistry::loadFileIfExists(const fs::path &path) {

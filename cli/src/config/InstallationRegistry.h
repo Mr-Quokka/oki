@@ -23,10 +23,24 @@ namespace config {
          *
          * @return Le début du registre.
          */
+        Installed::iterator begin();
+
+        /**
+         * Obtiens un itérateur constant au début du registre.
+         *
+         * @return Le début du registre.
+         */
         Installed::const_iterator cbegin() const;
 
         /**
          * Obtiens un itérateur à la fin du registre.
+         *
+         * @return La fin du registre.
+         */
+        Installed::iterator end();
+
+        /**
+         * Obtiens un itérateur constant à la fin du registre.
          *
          * @return La fin du registre.
          */
@@ -68,6 +82,14 @@ namespace config {
          * @return true si le paquet était référencé et qu'il ne l'est plus, false sinon.
          */
         bool erase(const std::string &packageName);
+
+        /**
+         * Supprime la référence à un paquet installé.
+         *
+         * @param it Un itérateur vers le paquet à marquer comme supprimé.
+         * @return Un nouvel itérateur.
+         */
+        Installed::iterator erase(Installed::iterator it);
 
         /**
          * Charge un registre depuis un fichier s'il existe.

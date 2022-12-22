@@ -60,6 +60,10 @@ namespace config {
         return addDeclaredPackage(packageName, version.str());
     }
 
+    bool Manifest::removeDeclaredPackage(std::string_view packageName) {
+        return addDependencySectionIfNotExists().erase(packageName) != 0;
+    }
+
     toml::table &Manifest::addDependencySectionIfNotExists() {
         auto it = table.find(DEPENDENCY_SECTION_NAME);
         if (it == table.end()) {

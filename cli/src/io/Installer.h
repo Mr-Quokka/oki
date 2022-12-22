@@ -3,6 +3,7 @@
 #include "../config/InstallationRegistry.h"
 #include "../config/ManifestLock.h"
 #include <algorithm>
+#include <functional>
 
 namespace io {
     /**
@@ -83,6 +84,13 @@ namespace io {
          * @return true si une désinstallation a eu lieu, false sinon.
          */
         bool uninstall(const std::string &packageName);
+
+        /**
+         * Désinstalle tous les paquets qui ne sont pas accessibles.
+         *
+         * @param isReachable Détermine si un paquet est référencé quelque part.
+         */
+        void uninstallUnreachable(std::function<bool(const std::string &)> &&isReachable);
 
         template <std::forward_iterator Iter, std::sentinel_for<Iter> Stop>
         std::unordered_map<InstallationResult, unsigned int> installAll(Iter begin, Stop end) {

@@ -16,7 +16,7 @@ TEST_CASE("fetch empty") {
     io::TmpDir tmp;
     std::ofstream nullStream;
     nullStream.setstate(std::ios_base::badbit);
-    fetch(std::unordered_map<std::string, package::VersionLock>{}, nullStream, {}, tmp.getDirname());
+    fetch(std::unordered_map<std::string, package::VersionLock>{}, nullStream, {{}, true}, tmp.getDirname());
 }
 
 TEST_CASE("fetch one dependency") {
@@ -31,7 +31,7 @@ TEST_CASE("fetch one dependency") {
     std::stringstream out;
     CHECK_EQ(fetch(std::unordered_map<std::string, package::VersionLock>{
                        {"foo", package::VersionLock{Version{5, 2, 3}, url}}},
-                   out, {}, tmpDir.getDirname()),
+                   out, {{}, true}, tmpDir.getDirname()),
              0);
     CHECK_EQ(out.str(), "Installed 1 package\n");
 }

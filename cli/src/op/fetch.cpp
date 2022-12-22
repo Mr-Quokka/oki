@@ -4,7 +4,7 @@
 
 namespace op {
     template <DownloadableVersionConcept T>
-    int fetch(const std::unordered_map<std::string, T> &resolved, std::ostream &out, const std::vector<std::string> &logWhenSeen, const std::filesystem::path &workingDirectory) {
+    int fetch(const std::unordered_map<std::string, T> &resolved, std::ostream &out, const LogOptions &options, const std::filesystem::path &workingDirectory) {
         io::Installer installer{config::InstallationRegistry::loadFileIfExists(workingDirectory / OKI_INTERNAL_REGISTRY_FILE), workingDirectory / OKI_PACKAGES_DIRECTORY};
 
         unsigned int installed = 0;
@@ -20,7 +20,7 @@ namespace op {
             } else {
                 ++updated;
             }
-            if (std::find(logWhenSeen.cbegin(), logWhenSeen.cend(), package) != logWhenSeen.cend()) {
+            if (std::find(options.logWhenSeen.cbegin(), options.logWhenSeen.cend(), package) != options.logWhenSeen.cend()) {
                 if (result == io::InstallationResult::Updated) {
                     out << " - " << package << " " << version << "\n";
                 }
@@ -42,7 +42,7 @@ namespace op {
             }
             out << "\n";
         }
-        if (installed == 0 && updated == 0) {
+        if (installed == 0 && updated == 0 && options.logWhenUpToDate) {
             out << "Already up-to-date\n";
         }
 
@@ -53,10 +53,11 @@ namespace op {
     template int fetch<package::VersionLock>(
         const std::unordered_map<std::string, package::VersionLock> &,
         std::ostream &,
-        const std::vector<std::string> &, const std::filesystem::path &workingDirectory);
+        const LogOptions &,
+        const std::filesystem::path &workingDirectory);
     template int fetch<package::PackageVersion>(
         const std::unordered_map<std::string, package::PackageVersion> &,
         std::ostream &,
-        const std::vector<std::string> &,
+        const LogOptions &,
         const std::filesystem::path &workingDirectory);
 }

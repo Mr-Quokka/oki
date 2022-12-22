@@ -41,6 +41,13 @@ namespace config {
         bool addDeclaredPackage(std::string_view packageName, std::string_view version);
 
         /**
+         * Retire un paquet de la liste des dépendances directes.
+         *
+         * @return Vrai si la dépendance était déjà référencée, faux sinon.
+         */
+        bool removeDeclaredPackage(std::string_view packageName);
+
+        /**
          * Ajoute un paquet à la liste des dépendances directes. S'il existe déjà, alors il n'est pas rajouté.
          *
          * @return Vrai si la dépendance n'était pas déjà référencée, faux sinon.
