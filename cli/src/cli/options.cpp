@@ -8,6 +8,7 @@
 #include "ListAction.h"
 #include "MakefileAction.h"
 #include "PublishAction.h"
+#include "RemoveAction.h"
 #include "ShowAction.h"
 #include "TreeAction.h"
 
@@ -21,6 +22,7 @@ namespace cli {
         os << "list: List available packages\n";
         os << "show: Show the informations of the package\n";
         os << "install: Install a new package\n";
+        os << "remove: Remove the package\n";
         os << "fetch: Fetch dependencies\n";
         os << "publish: Publish a new version of the current package\n";
         os << "makefile: Create a makefile\n";
@@ -44,6 +46,13 @@ namespace cli {
                 exit(1);
             }
             return std::make_unique<InstallAction>(argv[2]);
+        } else if (strcmp("remove", argv[1]) == 0) {
+            if (argc < 3) {
+                invalidUsage(std::cerr);
+                std::cerr << "Add a package name after remove.\n";
+                exit(1);
+            }
+            return std::make_unique<RemoveAction>(argv[2]);
         } else if (strcmp("show", argv[1]) == 0) {
             if (argc < 3) {
                 invalidUsage(std::cerr);
