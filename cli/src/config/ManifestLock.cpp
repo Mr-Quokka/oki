@@ -1,6 +1,6 @@
 #include "ManifestLock.h"
 
-#include <iostream>
+#include <fstream>
 #include <toml.hpp>
 #include <utility>
 
@@ -90,7 +90,11 @@ namespace config {
     }
 
     ManifestLock ManifestLock::readOrResolve(const fs::path &manifestFileName, const fs::path &lockFileName, repository::Repository &repository) {
-        if (fs::exists(lockFileName)) {
+        std::error_code lockError;
+        // file_time_type::min() est retourné en cas d'erreur sur la variante sans exception.
+        // La valeur peut être utilisée telle quelle, puisque dans tous les cas elle est inférieure
+        // ou égale à celle du fichier manifeste : une reconstruction du graphe est nécessaire.
+        if (fs::last_write_time(manifestFileName) < fs::last_write_time(lockFileName, lockError)) {
             return fromFile(lockFileName);
         }
         Manifest manifest = Manifest::fromFile(manifestFileName);
