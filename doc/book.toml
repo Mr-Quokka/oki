@@ -1,0 +1,5 @@
+[book]
+title = "Oki documentation"
+
+[output.html]
+site-url = "/documentation/oki/book/oki/"

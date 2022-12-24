@@ -9,6 +9,20 @@
 Open pacKage Installer
 ======================
 
+Documentation
+-------------
+
+### Usage
+
+- [Documentation](https://codefirst.iut.uca.fr/documentation/oki/book/oki/)
+- [Repository API](https://codefirst.iut.uca.fr/swagger?url=/git/oki/oki/raw/branch/main/oki-api.yaml)
+
+### Conception (written in French)
+
+- [CLI architecture](cli/ARCHITECTURE.md)
+- [Repository architecture](web/ARCHITECTURE.md)
+- [Conventions](CONVENTIONS.md)
+
 Prerequisites
 -------------
 

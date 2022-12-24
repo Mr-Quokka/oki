@@ -8,8 +8,9 @@
 
 # Compilation
 build
-doc
+cli/doc
 coverage.html
+book
 
 # Executables
 oki
@@ -22,3 +23,4 @@ packages
 
 # Config
 *.toml
+!book.toml
