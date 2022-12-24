@@ -44,18 +44,6 @@ namespace io {
         return false;
     }
 
-    void Installer::uninstallUnreachable(std::function<bool(const std::string &)> &&isReachable) {
-        auto it = registry.begin();
-        while (it != registry.end()) {
-            if (!isReachable(it->first)) {
-                fs::remove_all(getDependencyPath(it->first));
-                it = registry.erase(it);
-            } else {
-                ++it;
-            }
-        }
-    }
-
     fs::path Installer::getDependencyPath(std::string_view dependencyName) {
         return workingDirectory / dependencyName;
     }

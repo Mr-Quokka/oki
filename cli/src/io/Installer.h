@@ -3,7 +3,6 @@
 #include "../config/InstallationRegistry.h"
 #include "../config/ManifestLock.h"
 #include <algorithm>
-#include <functional>
 
 namespace io {
     /**
@@ -89,8 +88,26 @@ namespace io {
          * Désinstalle tous les paquets qui ne sont pas accessibles.
          *
          * @param isReachable Détermine si un paquet est référencé quelque part.
+         * @return Le nombre de paquets désinstallés.
          */
-        void uninstallUnreachable(std::function<bool(const std::string &)> &&isReachable);
+        template <typename F>
+        requires std::invocable<F, const std::string &, const package::DownloadableVersion &> &&
+            std::convertible_to < std::invoke_result_t<F, const std::string &, const package::DownloadableVersion &>,
+        bool >
+            unsigned int uninstallUnreachable(F &&isReachable) {
+            unsigned int removed = 0;
+            auto it = registry.begin();
+            while (it != registry.end()) {
+                if (!isReachable(it->first, it->second)) {
+                    std::filesystem::remove_all(getDependencyPath(it->first));
+                    it = registry.erase(it);
+                    ++removed;
+                } else {
+                    ++it;
+                }
+            }
+            return removed;
+        }
 
         template <std::forward_iterator Iter, std::sentinel_for<Iter> Stop>
         std::unordered_map<InstallationResult, unsigned int> installAll(Iter begin, Stop end) {

@@ -1,6 +1,5 @@
 #include "RemoveAction.h"
-#include "../config/Manifest.h"
-#include "../io/Installer.h"
+#include "../config/ManifestLock.h"
 #include "../io/oki.h"
 #include "../op/fetch.h"
 
@@ -18,12 +17,9 @@ namespace cli {
         std::cout << "Removing " << packageName << " from dependencies\n";
         manifest.saveFile(OKI_MANIFEST_FILE);
         config::ManifestLock manifestLock = config::ManifestLock::readOrResolve(OKI_MANIFEST_FILE, OKI_LOCK_FILE, repository);
-        io::Installer installer{config::InstallationRegistry::loadFileIfExists(OKI_INTERNAL_REGISTRY_FILE), OKI_PACKAGES_DIRECTORY};
-        op::fetch(manifestLock.getLocks(), std::cout, {manifest.listDeclaredPackagesNames(), false});
-        installer.uninstallUnreachable([&](const std::string &package) {
-            return manifestLock.contains(package);
-        });
-        installer.saveRegistry(OKI_INTERNAL_REGISTRY_FILE);
+        std::vector<std::string> directDependencies = manifest.listDeclaredPackagesNames();
+        directDependencies.emplace_back(packageName);
+        op::fetch(manifestLock, std::cout, {directDependencies, false});
         manifestLock.saveFile(OKI_LOCK_FILE);
     }
 }
