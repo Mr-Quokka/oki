@@ -9,6 +9,7 @@ trigger:
     - main
     - feature/ci
     - cli/*
+    - doc/*
 
 steps:
   - name: build-cli
