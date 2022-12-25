@@ -91,9 +91,11 @@ TEST_CASE("diamond dependency - no solution") {
 }
 
 TEST_CASE("diamond dependency - version intersection") {
+    std::string fred = "fred";
+    std::string waldo = "waldo";
     std::vector<Dependency> dependencies{
-        {"fred", Range::parse("=1.0.0")},
-        {"waldo", Range::parse("=1.5.1")},
+        {fred, Range::parse("=1.0.0")},
+        {waldo, Range::parse("=1.5.1")},
     };
     RepositoryMock mock;
     Resolved resolved = resolve(dependencies, mock);
