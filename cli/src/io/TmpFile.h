@@ -1,5 +1,7 @@
 #pragma once
 
+#include <filesystem>
+
 namespace io {
     /**
      * Un fichier temporaire utilisant le principe de RAII.
@@ -8,6 +10,7 @@ namespace io {
     private:
         char filename[20];
         int fd;
+        std::filesystem::path filePath;
 
     public:
         /**
@@ -17,9 +20,10 @@ namespace io {
 
         /**
          * Récupère le chemin absolu vers le fichier temporaire.
-         * @return
+         *
+         * @return Le chemin absolu.
          */
-        const char *getFilename() const;
+        const std::filesystem::path &path() const;
 
         /**
          * Supprime le fichier temporaire.
@@ -33,7 +37,7 @@ namespace io {
     class TmpDir {
     private:
         char dirname[20];
-        int fd;
+        std::filesystem::path dirPath;
 
     public:
         /**
@@ -46,7 +50,7 @@ namespace io {
          *
          * @return Le chemin absolu.
          */
-        const char *getDirname() const;
+        const std::filesystem::path &path() const;
 
         /**
          * Supprime le dossier temporaire.

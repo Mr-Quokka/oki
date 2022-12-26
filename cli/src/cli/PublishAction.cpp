@@ -10,8 +10,8 @@ namespace cli {
     void PublishAction::run(repository::Repository &repository) {
         config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
         io::TmpFile tmp;
-        io::Compressor compressor{tmp.getFilename()};
+        io::Compressor compressor{tmp.path()};
         compressor.compress(fs::current_path() / "src");
-        repository.publish(manifest, tmp.getFilename());
+        repository.publish(manifest, tmp.path());
     }
 }

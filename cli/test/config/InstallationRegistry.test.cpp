@@ -44,12 +44,11 @@ TEST_CASE("erase") {
 
 TEST_CASE("round trip") {
     io::TmpFile tmp;
-    fs::path temp = tmp.getFilename();
-    InstallationRegistry registry = InstallationRegistry::loadFileIfExists(temp);
+    InstallationRegistry registry = InstallationRegistry::loadFileIfExists(tmp.path());
 
     package::DownloadableVersion downloadable{semver::Version(5, 4, 1), ""};
     registry.emplace("baz", downloadable);
-    registry.saveToFile(temp);
-    registry = InstallationRegistry::loadFileIfExists(temp);
+    registry.saveToFile(tmp.path());
+    registry = InstallationRegistry::loadFileIfExists(tmp.path());
     CHECK(registry.containsExact("baz", downloadable));
 }

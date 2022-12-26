@@ -28,9 +28,9 @@ namespace io {
         fs::create_directories(dependencyPath);
         io::HttpRequest request = HttpRequest::createJson(version.getDownloadUrl());
         io::TmpFile tmp;
-        request.download(tmp.getFilename());
+        request.download(tmp.path());
         io::Extractor extractor{dependencyPath};
-        extractor.extract(tmp.getFilename());
+        extractor.extract(tmp.path());
         return std::make_pair(
             it,
             inserted ? InstallationResult::Installed : InstallationResult::Updated);

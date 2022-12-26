@@ -4,15 +4,17 @@
 #include <system_error>
 #include <unistd.h>
 
+namespace fs = std::filesystem;
+
 namespace io {
-    TmpFile::TmpFile() : filename{"/tmp/oki-XXXXXX"}, fd{mkstemp(this->filename)} {
+    TmpFile::TmpFile() : filename{"/tmp/oki-XXXXXX"}, fd{mkstemp(this->filename)}, filePath{this->filename} {
         if (fd == -1) {
             throw std::system_error{errno, std::generic_category()};
         }
     }
 
-    const char *TmpFile::getFilename() const {
-        return filename;
+    const fs::path &TmpFile::path() const {
+        return filePath;
     }
 
     TmpFile::~TmpFile() {
@@ -23,13 +25,14 @@ namespace io {
         if (mkdtemp(dirname) == nullptr) {
             throw std::system_error{errno, std::generic_category()};
         }
+        dirPath = fs::path{dirname};
     }
 
-    const char *TmpDir::getDirname() const {
-        return dirname;
+    const fs::path &TmpDir::path() const {
+        return dirPath;
     }
 
     TmpDir::~TmpDir() {
-        unlink(dirname);
+        fs::remove_all(dirPath);
     }
 }

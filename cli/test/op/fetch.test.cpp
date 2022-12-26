@@ -16,22 +16,22 @@ TEST_CASE("fetch empty") {
     io::TmpDir tmp;
     std::ofstream nullStream;
     nullStream.setstate(std::ios_base::badbit);
-    fetch(config::ManifestLock{}, nullStream, {{}, true}, tmp.getDirname());
+    fetch(config::ManifestLock{}, nullStream, {{}, true}, tmp.path());
 }
 
 TEST_CASE("fetch one dependency") {
     io::TmpDir tmpDir;
     io::TmpFile dependencyFile;
-    Compressor compressor{dependencyFile.getFilename()};
-    compressor.compress(tmpDir.getDirname());
+    Compressor compressor{dependencyFile.path()};
+    compressor.compress(tmpDir.path());
 
     std::string url = "file:///";
-    url += dependencyFile.getFilename();
+    url += dependencyFile.path();
 
     std::stringstream out;
     CHECK_EQ(fetch(config::ManifestLock{std::unordered_map<std::string, package::VersionLock>{
                        {"foo", package::VersionLock{Version{5, 2, 3}, url}}}},
-                   out, {{}, true}, tmpDir.getDirname()),
+                   out, {{}, true}, tmpDir.path()),
              0);
     CHECK_EQ(out.str(), "Installed 1 package\n");
 }
