@@ -2,19 +2,11 @@
 
 #include "../io/Archive.h"
 #include "../io/HttpRequest.h"
-#include "../io/TmpFile.h"
 #include "RemoteRepository.h"
 
 using json = nlohmann::json;
 
 namespace repository {
-    static io::HttpRequest createRequest(std::string_view url) {
-        io::HttpRequest request{url};
-        request.addHeader("Accept: application/json");
-        request.addHeader("User-Agent: oki/0.1");
-        return request;
-    }
-
     static json tryReadRequest(io::HttpRequest &request) {
         io::HttpResponse response = request.get();
         if (!response.getContentType().starts_with("application/json")) {
@@ -31,7 +23,7 @@ namespace repository {
     RemoteRepository::RemoteRepository(std::string_view apiUrl) : apiUrl{apiUrl} {}
 
     std::vector<package::Package> RemoteRepository::listPackages() {
-        io::HttpRequest request = createRequest(apiUrl + "/api/list");
+        io::HttpRequest request = io::HttpRequest::createJson(apiUrl + "/api/list");
         json data = tryReadRequest(request);
         std::vector<package::Package> packages;
         for (const auto &item : data.at("packages")) {
@@ -40,16 +32,8 @@ namespace repository {
         return packages;
     }
 
-    void RemoteRepository::download(const package::DownloadableVersion &packageVersion, const std::filesystem::path &destination) {
-        io::HttpRequest request = createRequest(apiUrl + packageVersion.getDownloadUrl());
-        io::TmpFile tmp;
-        request.download(tmp.getFilename());
-        io::Extractor extractor{destination};
-        extractor.extract(tmp.getFilename());
-    }
-
     package::Package RemoteRepository::getPackageInfo(std::string_view packageName) {
-        io::HttpRequest request = createRequest(apiUrl + "/api/info/" + std::string{packageName});
+        io::HttpRequest request = io::HttpRequest::createJson(apiUrl + "/api/info/" + std::string{packageName});
         json data = tryReadRequest(request);
         std::vector<package::PackageVersion> versions;
         auto it = data.find("versions");
@@ -70,13 +54,14 @@ namespace repository {
     }
 
     std::string RemoteRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
-        io::HttpRequest request = createRequest(apiUrl + "/api/version/" + std::string{packageName} + "?version=" + packageVersion);
+        io::HttpRequest request = io::HttpRequest::createJson(
+            apiUrl + "/api/version/" + std::string{packageName} + "?version=" + packageVersion);
         json data = tryReadRequest(request);
         return data.get<std::string>();
     }
 
     void RemoteRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
-        io::HttpRequest request = createRequest(apiUrl + "/api/publish");
+        io::HttpRequest request = io::HttpRequest::createJson(apiUrl + "/api/publish");
         io::MimePart mime = request.addMime();
         mime.addDataPart("manifest", manifest.asFilteredJson());
         mime.addFilePart("package", source);

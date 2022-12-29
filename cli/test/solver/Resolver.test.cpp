@@ -41,9 +41,6 @@ public:
     std::string getPackageURL([[maybe_unused]] std::string_view packageName, [[maybe_unused]] std::string packageVersion) override {
         return "";
     }
-    void download([[maybe_unused]] const package::DownloadableVersion &packageVersion, [[maybe_unused]] const std::filesystem::path &destination) override {
-    }
-
     void publish([[maybe_unused]] config::Manifest &manifest, [[maybe_unused]] const std::filesystem::path &source) override {
     }
 };

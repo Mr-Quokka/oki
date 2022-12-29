@@ -130,9 +130,51 @@ La classe `HttpRequest` permet de s'abstraire de cette dépendance extérieure e
 Toute requête HTTP peut tout à fait mal se passer, `HttpRequest` est donc susceptible de lever une `RequestException`, abstraites de la `libcurl` et `RemoteRepository` peut ne pas comprendre le JSON que l'API répond, elle lance alors une `APIException`.
 
 L'installateur décrit la procédure d'installation d'un paquet. La plupart du temps, elle dépend d'un type précis (comme `RemoteRepository`).
-Il existe des stratégies différentes d'installation comme la copie des paquets dans le projet de l'utilisateur ou le lien avec le cache local via le système de fichiers.
+Il existe différentes stratégies d'installation comme la copie des paquets dans le projet de l'utilisateur ou le lien avec le cache local via le système de fichiers.
 
 Les versions acceptées par un paquet sont décrites par des contraintes de version. Ces contraintes s'inspirent de la spécification de [gestion sémantique de version](https://semver.org/lang/fr/). Deux versions mineures différentes (par exemple `4.2.0` et `4.5.0`) sont généralement compatibles, tandis que deux versions majeures différentes (comme `1.3.7` et `2.0.0`) peuvent ne pas l'être.
+
+Types des versions
+------------------
+
+Chaque version d'un paquet est décrite par ses métadonnées et son contenu dans une archive. Elle intervient à différents niveaux de l'application :
+
+- lecture du fichier manifeste
+- lecture du fichier verrou
+- récupération des données détaillées à partir du dépôt distant
+- installation d'un paquet
+
+Tous ces composants n'ont pas besoin du même niveau de détails sur une version, c'est pourquoi ont été conçus plusieurs types Version :
+
+```mermaid
+classDiagram
+    class Version {
+        +major: int
+        +minor: int
+        +patch: int
+    }
+    Version "2" <-- Range
+    class Downloadable {
+        -downloadUrl: string
+        -checksum: string
+    }
+    Version <|-- DownloadableVersion
+    Downloadable <|-- DownloadableVersion
+    DownloadableVersion <|-- VersionLock
+    DownloadableVersion <|-- PackageVersion
+    class VersionLock {
+        -dependencies: vector~string~
+    }
+    class PackageVersion {
+        -publishedDate: string
+        -dependencies: map~string, Range~
+    }
+```
+
+Tout d'abord, [`Version`](src/semver/Version.h) représente une version selon la sémantique [semver](https://semver.org/lang/fr/).
+Un intervalle [`Range`](src/semver/Range.h) modélise un ensemble de versions compatibles avec une version minimale et une version maximale.
+Une version doit pouvoir être téléchargée, c'est pourquoi [`DownloadableVersion`](src/package/DownloadableVersion.h) hérite de la classe [`Downloadable`](src/io/Downloadable.h).
+Enfin, alors que le fichier verrou n'a besoin que de connaître les noms des dépendances dans [`VersionLock`](src/package/VersionLock.h), la résolution des dépendances et l'affichage détaillé d'une version demande également la contrainte de version, grâce à la classe [`PackageVersion`](src/package/PackageVersion.h).
 
 Solveur de version
 ------------------

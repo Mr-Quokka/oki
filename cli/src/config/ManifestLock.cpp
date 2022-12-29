@@ -1,6 +1,6 @@
 #include "ManifestLock.h"
 
-#include <iostream>
+#include <fstream>
 #include <toml.hpp>
 #include <utility>
 
@@ -43,6 +43,18 @@ namespace config {
         return locks.cend();
     }
 
+    bool ManifestLock::contains(const std::string &packageName) const {
+        return locks.contains(packageName);
+    }
+
+    bool ManifestLock::containsExact(const std::string &packageName, const package::DownloadableVersion &version) const {
+        auto existing = locks.find(packageName);
+        if (existing == locks.cend()) {
+            return false;
+        }
+        return existing->second == version;
+    }
+
     ManifestLock ManifestLock::fromFile(const fs::path &fileName) {
         toml::table toml = toml::parse_file(fileName.string());
         std::unordered_map<std::string, package::VersionLock> locks;
@@ -70,8 +82,19 @@ namespace config {
         return ManifestLock{locks};
     }
 
+    ManifestLock ManifestLock::fromFileOrEmpty(const fs::path &fileName) {
+        if (fs::exists(fileName)) {
+            return fromFile(fileName);
+        }
+        return ManifestLock{};
+    }
+
     ManifestLock ManifestLock::readOrResolve(const fs::path &manifestFileName, const fs::path &lockFileName, repository::Repository &repository) {
-        if (fs::exists(lockFileName)) {
+        std::error_code lockError;
+        // file_time_type::min() est retourné en cas d'erreur sur la variante sans exception.
+        // La valeur peut être utilisée telle quelle, puisque dans tous les cas elle est inférieure
+        // ou égale à celle du fichier manifeste : une reconstruction du graphe est nécessaire.
+        if (fs::last_write_time(manifestFileName) < fs::last_write_time(lockFileName, lockError)) {
             return fromFile(lockFileName);
         }
         Manifest manifest = Manifest::fromFile(manifestFileName);

@@ -11,7 +11,7 @@ constexpr static std::string_view DEPENDENCY_SECTION_NAME = "dependencies";
 namespace config {
     Manifest Manifest::fromFile(const fs::path &fileName) {
         Manifest manifest;
-        if (manifest.loadFileIfExists(fileName) == true) {
+        if (manifest.loadFileIfExists(fileName)) {
             return manifest;
         } else {
             throw ManifestException("This isn't an project using oki");
@@ -19,7 +19,7 @@ namespace config {
     }
 
     std::unordered_map<std::string, semver::Range> Manifest::listDeclaredPackages() const {
-        auto dependenciesTable = table.get_as<toml::table>(DEPENDENCY_SECTION_NAME);
+        const auto *dependenciesTable = table.get_as<toml::table>(DEPENDENCY_SECTION_NAME);
         std::unordered_map<std::string, semver::Range> packages;
         if (dependenciesTable == nullptr) {
             return packages;
@@ -36,6 +36,22 @@ namespace config {
         return packages;
     }
 
+    std::vector<std::string> Manifest::listDeclaredPackagesNames() const {
+        const auto *dependenciesTable = table.get_as<toml::table>(DEPENDENCY_SECTION_NAME);
+        std::vector<std::string> packages;
+        if (dependenciesTable == nullptr) {
+            return packages;
+        }
+        std::transform(
+            dependenciesTable->cbegin(),
+            dependenciesTable->cend(),
+            std::back_inserter(packages),
+            [](const auto &pair) {
+                return std::string{pair.first};
+            });
+        return packages;
+    }
+
     bool Manifest::addDeclaredPackage(std::string_view packageName, std::string_view version) {
         return addDependencySectionIfNotExists().insert_or_assign(packageName, version).second;
     }
@@ -44,7 +60,11 @@ namespace config {
         return addDeclaredPackage(packageName, version.str());
     }
 
-    toml::v3::table &Manifest::addDependencySectionIfNotExists() {
+    bool Manifest::removeDeclaredPackage(std::string_view packageName) {
+        return addDependencySectionIfNotExists().erase(packageName) != 0;
+    }
+
+    toml::table &Manifest::addDependencySectionIfNotExists() {
         auto it = table.find(DEPENDENCY_SECTION_NAME);
         if (it == table.end()) {
             table.insert(DEPENDENCY_SECTION_NAME, toml::v3::table{});

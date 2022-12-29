@@ -112,6 +112,8 @@ namespace io {
          */
         HttpRequest(const HttpRequest &request);
 
+        static io::HttpRequest createJson(std::string_view url);
+
         /**
          * Copie et assigne les paramètres d'une requête HTTP.
          *

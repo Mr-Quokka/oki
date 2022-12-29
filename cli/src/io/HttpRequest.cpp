@@ -46,6 +46,13 @@ namespace io {
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     }
 
+    HttpRequest HttpRequest::createJson(std::string_view url) {
+        HttpRequest request{url};
+        request.addHeader("Accept: application/json");
+        request.addHeader("User-Agent: oki/0.1");
+        return request;
+    }
+
     HttpRequest &HttpRequest::operator=(HttpRequest other) {
         std::swap(curl, other.curl);
         std::swap(headers, other.headers);

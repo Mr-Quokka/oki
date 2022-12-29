@@ -19,10 +19,6 @@ namespace repository {
         return packages;
     }
 
-    void LocalRepository::download(const package::DownloadableVersion &packageVersion, const fs::path &destination) {
-        std::cerr << "TODO : downloading " << packageVersion << " at " << destination << "\n";
-    }
-
     package::Package LocalRepository::getPackageInfo(std::string_view packageName) {
         std::cerr << "TODO : show " << packageName << "\n";
         throw std::logic_error{"Not implemented"};

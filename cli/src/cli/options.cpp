@@ -3,11 +3,12 @@
 #include <cstring>
 #include <iostream>
 
+#include "FetchAction.h"
 #include "InstallAction.h"
 #include "ListAction.h"
 #include "MakefileAction.h"
 #include "PublishAction.h"
-#include "ReInstallAction.h"
+#include "RemoveAction.h"
 #include "ShowAction.h"
 #include "TreeAction.h"
 
@@ -21,7 +22,8 @@ namespace cli {
         os << "list: List available packages\n";
         os << "show: Show the informations of the package\n";
         os << "install: Install a new package\n";
-        os << "reinstall: Install all the package of the manifest\n";
+        os << "remove: Remove the package\n";
+        os << "fetch: Fetch dependencies\n";
         os << "publish: Publish a new version of the current package\n";
         os << "makefile: Create a makefile\n";
         os << "tree: Display a tree visualization of the dependency graph\n";
@@ -44,6 +46,13 @@ namespace cli {
                 exit(1);
             }
             return std::make_unique<InstallAction>(argv[2]);
+        } else if (strcmp("remove", argv[1]) == 0) {
+            if (argc < 3) {
+                invalidUsage(std::cerr);
+                std::cerr << "Add a package name after remove.\n";
+                exit(1);
+            }
+            return std::make_unique<RemoveAction>(argv[2]);
         } else if (strcmp("show", argv[1]) == 0) {
             if (argc < 3) {
                 invalidUsage(std::cerr);
@@ -51,8 +60,8 @@ namespace cli {
                 exit(1);
             }
             return std::make_unique<ShowAction>(argv[2]);
-        } else if (strcmp("reinstall", argv[1]) == 0) {
-            return std::make_unique<ReInstallAction>();
+        } else if (strcmp("fetch", argv[1]) == 0) {
+            return std::make_unique<FetchAction>();
         } else if (strcmp("publish", argv[1]) == 0) {
             return std::make_unique<PublishAction>();
         } else if (strcmp("makefile", argv[1]) == 0) {
