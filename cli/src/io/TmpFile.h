@@ -18,6 +18,20 @@ namespace io {
          */
         TmpFile();
 
+        TmpFile(const TmpFile &) = delete;
+
+        /**
+         * Récupère la propriété sur un fichier temporaire.
+         */
+        TmpFile(TmpFile &&other) noexcept;
+
+        TmpFile &operator=(const TmpFile &) = delete;
+
+        /**
+         * Récupère la propriété sur un fichier temporaire.
+         */
+        TmpFile &operator=(TmpFile &&other) noexcept;
+
         /**
          * Récupère le chemin absolu vers le fichier temporaire.
          *
@@ -44,6 +58,20 @@ namespace io {
          * Créé un nouveau dossier temporaire.
          */
         TmpDir();
+
+        TmpDir(const TmpDir &) = delete;
+
+        /**
+         * Récupère la propriété sur un dossier temporaire.
+         */
+        TmpDir(TmpDir &&other) noexcept;
+
+        TmpDir &operator=(const TmpDir &) = delete;
+
+        /**
+         * Récupère la propriété sur un dossier temporaire.
+         */
+        TmpDir &operator=(TmpDir &&other) noexcept;
 
         /**
          * Récupère le chemin absolu vers le dossier temporaire.
