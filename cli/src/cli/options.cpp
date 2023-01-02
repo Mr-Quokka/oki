@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "FetchAction.h"
+#include "InitAction.h"
 #include "InstallAction.h"
 #include "ListAction.h"
 #include "MakefileAction.h"
@@ -11,6 +12,7 @@
 #include "RemoveAction.h"
 #include "ShowAction.h"
 #include "TreeAction.h"
+#include "../make/ProjectKind.h"
 
 namespace cli {
     void invalidUsage(std::ostream &os) {
@@ -76,7 +78,15 @@ namespace cli {
             }
         } else if (strcmp("tree", argv[1]) == 0) {
             return std::make_unique<TreeAction>();
+        } else if (strcmp("init", argv[1]) == 0) {
+            if (argc < 3) {
+                invalidUsage(std::cerr);
+                std::cerr << "Add a project kind.\n";
+                exit(1);
+            }
+            return std::make_unique<InitAction>(make::projectKindFromStr(argv[2]));
         } else {
+            std::cerr << "Unknown action.\n";
             exit(1);
         }
     }
