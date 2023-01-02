@@ -2,6 +2,7 @@
 
 #include "../config/InstallationRegistry.h"
 #include "../config/ManifestLock.h"
+#include "../make/BuildConfigurer.h"
 #include <algorithm>
 
 namespace io {
@@ -43,6 +44,7 @@ namespace io {
     private:
         config::InstallationRegistry registry;
         std::filesystem::path workingDirectory;
+        std::vector<std::string> pendingConfigurations;
 
         /**
          * Détermine le chemin où installer une dépendance.
@@ -75,6 +77,14 @@ namespace io {
          * @return Le résultat de l'installation.
          */
         std::pair<Current, InstallationResult> install(const std::string &packageName, package::DownloadableVersion &version);
+
+        /**
+         * Réalise la configuration des paquets installés.
+         *
+         * Elle doit être faite après chaque groupe d'installation.
+         * @param configurer Le configurateur de construction.
+         */
+        void configure(make::BuildConfigurer &configurer);
 
         /**
          * Désinstalle n'importe quelle version d'un paquet donné.

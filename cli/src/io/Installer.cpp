@@ -31,9 +31,17 @@ namespace io {
         request.download(tmp.path());
         io::Extractor extractor{dependencyPath};
         extractor.extract(tmp.path());
+        pendingConfigurations.emplace_back(packageName);
         return std::make_pair(
             it,
             inserted ? InstallationResult::Installed : InstallationResult::Updated);
+    }
+
+    void Installer::configure(make::BuildConfigurer &configurer) {
+        for (const std::string &package : pendingConfigurations) {
+            configurer.configure(package);
+        }
+        pendingConfigurations.clear();
     }
 
     bool Installer::uninstall(const std::string &packageName) {

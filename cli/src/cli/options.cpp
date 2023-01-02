@@ -3,6 +3,7 @@
 #include <cstring>
 #include <iostream>
 
+#include "../make/ProjectKind.h"
 #include "FetchAction.h"
 #include "InitAction.h"
 #include "InstallAction.h"
@@ -12,7 +13,6 @@
 #include "RemoveAction.h"
 #include "ShowAction.h"
 #include "TreeAction.h"
-#include "../make/ProjectKind.h"
 
 namespace cli {
     void invalidUsage(std::ostream &os) {
