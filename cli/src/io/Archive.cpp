@@ -5,12 +5,10 @@
 #include <sys/stat.h>
 
 #include <fstream>
-#include <iostream>
 #include <utility>
 #include <vector>
 
 #define BUFFER_SIZE 256
-#define DIRECTORY_PERMISSIONS 755
 
 // Basé sur https://github.com/madler/zlib/blob/master/contrib/minizip/miniunz.c
 // et https://github.com/madler/zlib/blob/master/contrib/minizip/minizip.c
@@ -38,15 +36,21 @@ namespace io {
                 return;
             }
             std::string_view filename = filenameBuf;
+            fs::path path = destination / filename;
             if (filename.back() == '/') {
-                mkdir((destination / filename).c_str(), DIRECTORY_PERMISSIONS);
+                fs::create_directories(path);
             } else {
                 if (unzOpenCurrentFile(zipFile) != UNZ_OK) {
                     unzClose(zipFile);
                     return;
                 }
 
-                FILE *out = fopen((destination / filename).c_str(), "wb");
+                FILE *out = fopen(path.c_str(), "wb");
+                if (out == nullptr) {
+                    // Le dossier qui contient le fichier n'existe pas
+                    fs::create_directories(path.parent_path());
+                    out = fopen(path.c_str(), "wb");
+                }
                 if (out == nullptr) {
                     unzCloseCurrentFile(zipFile);
                     unzClose(zipFile);
@@ -84,7 +88,7 @@ namespace io {
     Compressor::Compressor(fs::path destination)
         : destination{std::move(destination)} {}
 
-    void Compressor::compress(const std::filesystem::path &workingDirectory) {
+    void Compressor::compress(std::span<const fs::path> files, const std::filesystem::path &relativeTo) {
         unzFile zipFile = zipOpen(destination.c_str(), APPEND_STATUS_CREATE);
         if (zipFile == nullptr) {
             return;
@@ -93,12 +97,12 @@ namespace io {
         zip_fileinfo fileInfo;
         struct stat s;
         struct tm *filedate;
-        for (const auto &dirEntry : fs::recursive_directory_iterator{workingDirectory}) {
-            std::ifstream file{dirEntry.path(), std::ios::binary};
-            if (!dirEntry.is_regular_file() || !file.is_open()) {
+        for (const auto &path : files) {
+            std::ifstream file{path, std::ios::binary};
+            if (!file.is_open()) {
                 continue;
             }
-            if (stat(dirEntry.path().c_str(), &s) == -1 || (filedate = localtime(&s.st_mtim.tv_sec)) == nullptr) {
+            if (stat(path.c_str(), &s) == -1 || (filedate = localtime(&s.st_mtim.tv_sec)) == nullptr) {
                 continue;
             }
             fileInfo.tmz_date.tm_sec = static_cast<uInt>(filedate->tm_sec);
@@ -110,7 +114,7 @@ namespace io {
 
             buffer.reserve(static_cast<std::size_t>(s.st_size));
             if (file.read(buffer.data(), s.st_size)) {
-                fs::path relative = fs::relative(dirEntry.path(), workingDirectory);
+                fs::path relative = fs::relative(path, relativeTo);
                 if (zipOpenNewFileInZip(zipFile, relative.c_str(), &fileInfo, nullptr, 0, nullptr, 0, nullptr, Z_DEFLATED, Z_DEFAULT_COMPRESSION) == ZIP_OK) {
                     zipWriteInFileInZip(zipFile, buffer.data(), static_cast<uInt>(s.st_size));
                     zipCloseFileInZip(zipFile);

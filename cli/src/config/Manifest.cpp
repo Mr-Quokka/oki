@@ -52,6 +52,23 @@ namespace config {
         return packages;
     }
 
+    std::vector<fs::path> Manifest::getInclude() const {
+        const auto *include = getPackageSection().get_as<toml::array>("include");
+        std::vector<fs::path> paths;
+        if (include == nullptr) {
+            return paths;
+        }
+        paths.reserve(include->size());
+        std::transform(
+            include->cbegin(),
+            include->cend(),
+            std::back_inserter(paths),
+            [](const auto &value) {
+                return value.as_string()->get();
+            });
+        return paths;
+    }
+
     bool Manifest::addDeclaredPackage(std::string_view packageName, std::string_view version) {
         return addDependencySectionIfNotExists().insert_or_assign(packageName, version).second;
     }
@@ -70,6 +87,14 @@ namespace config {
             table.insert(DEPENDENCY_SECTION_NAME, toml::v3::table{});
         }
         return *table[DEPENDENCY_SECTION_NAME].as_table();
+    }
+
+    const toml::table &Manifest::getPackageSection() const {
+        const toml::table *package = table.get_as<toml::table>(PACKAGE_SECTION_NAME);
+        if (package == nullptr) {
+            throw ManifestException{"Manifest is missing a [package] section"};
+        }
+        return *package;
     }
 
     bool Manifest::loadFileIfExists(const fs::path &fileName) {

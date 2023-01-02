@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include <span>
 
 namespace io {
     /**
@@ -42,10 +43,11 @@ namespace io {
         explicit Compressor(std::filesystem::path destination);
 
         /**
-         * Compresse tous les fichiers d'un dossier dont le chemin est spécifié.
+         * Compresse tous les fichiers dont le chemin est spécifié.
          *
-         * @param archivePath Le chemin vers le dossier à compresser récursivement.
+         * @param files Les fichiers à compresser.
+         * @param relativeTo Le chemin relatif à utiliser pour les fichiers.
          */
-        void compress(const std::filesystem::path &workingDirectory);
+        void compress(std::span<const std::filesystem::path> files, const std::filesystem::path &relativeTo);
     };
 }

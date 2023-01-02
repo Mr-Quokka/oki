@@ -23,7 +23,7 @@ TEST_CASE("fetch one dependency") {
     io::TmpDir tmpDir;
     io::TmpFile dependencyFile;
     Compressor compressor{dependencyFile.path()};
-    compressor.compress(tmpDir.path());
+    compressor.compress({}, tmpDir.path());
 
     std::string url = "file:///";
     url += dependencyFile.path();

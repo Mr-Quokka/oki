@@ -16,6 +16,7 @@ namespace config {
     private:
         toml::table table{};
         toml::table &addDependencySectionIfNotExists();
+        const toml::table &getPackageSection() const;
 
     public:
         /**
@@ -32,6 +33,13 @@ namespace config {
          * Liste les noms des dépendances directes indiquées dans ce manifeste.
          */
         std::vector<std::string> listDeclaredPackagesNames() const;
+
+        /**
+         * Récupère les directives des fichiers à inclure pour publier.
+         *
+         * @return Les directives.
+         */
+        std::vector<std::filesystem::path> getInclude() const;
 
         /**
          * Ajoute un paquet à la liste des dépendances directes. S'il existe déjà, alors il n'est pas rajouté.
