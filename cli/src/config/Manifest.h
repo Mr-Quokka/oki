@@ -5,6 +5,8 @@
 #include <toml.hpp>
 #include <unordered_map>
 
+#include "make/BuildInfo.h"
+#include "make/ProjectKind.h"
 #include "package/Summary.h"
 #include "semver/Range.h"
 
@@ -35,11 +37,30 @@ namespace config {
         std::vector<std::string> listDeclaredPackagesNames() const;
 
         /**
-         * Récupère les directives des fichiers à inclure pour publier.
+         * Récupère le nom de projet.
          *
-         * @return Les directives.
+         * @return Le nom du projet.
+         */
+        std::string_view getProjectName() const;
+
+        /**
+         * Récupère le chemin des sources.
          */
         std::vector<std::filesystem::path> getInclude() const;
+
+        /**
+         * Récupère le type de projet.
+         *
+         * @return Le type du projet.
+         */
+        make::ProjectKind getProjectKind() const;
+
+        /**
+         * Récupère les informations de construction.
+         *
+         * @return Les informations de construction.
+         */
+        make::BuildInfo getBuildInfo() const;
 
         /**
          * Ajoute un paquet à la liste des dépendances directes. S'il existe déjà, alors il n'est pas rajouté.

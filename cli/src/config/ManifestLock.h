@@ -27,6 +27,7 @@ namespace config {
         bool containsExact(const std::string &packageName, const package::DownloadableVersion &version) const;
 
         Packages::const_iterator find(const std::string &packageName) const;
+        const package::VersionLock &at(const std::string &packageName) const;
 
         Packages::const_iterator cbegin() const;
 
