@@ -15,12 +15,13 @@ namespace cli {
         } else {
             config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
             package::PackageVersion latest = p.getVersions().front();
-            if (manifest.addDeclaredPackage(packageName, latest)) {
+            bool success = manifest.addDeclaredPackage(packageName, latest);
+            
+            solver::Resolved resolved = solver::resolve(manifest.listDeclaredPackages(), repository);
+            if(success){
                 std::cout << "Adding " << packageName << " v" << latest << " to dependencies.\n";
             }
             manifest.saveFile(OKI_MANIFEST_FILE);
-
-            solver::Resolved resolved = solver::resolve(manifest.listDeclaredPackages(), repository);
             config::ManifestLock lock{resolved};
             op::fetch(lock, std::cout, {{std::string{packageName}}, true});
             lock.saveFile(OKI_LOCK_FILE);
