@@ -24,7 +24,7 @@ namespace op {
                 if (result == io::InstallationResult::Updated) {
                     out << " - " << package << " " << version << "\n";
                 }
-                out << " + " << package << " " << version << "\n";
+                out << " + " << package << " " << versionRef << "\n";
             }
         }
 

@@ -22,7 +22,7 @@ namespace io {
 
             // Sinon, remplacer l'ancienne
             std::swap(it->second, version);
-            fs::remove_all(packageName);
+            fs::remove_all(dependencyPath);
         }
 
         fs::create_directories(dependencyPath);
