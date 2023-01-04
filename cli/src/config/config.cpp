@@ -14,6 +14,14 @@ namespace config {
         return xdgData / fs::path{"oki"};
     }
 
+    std::string_view getDefaultRemoteRepository() {
+        const char *okiRepository = std::getenv("OKI_REPOSITORY");
+        if(okiRepository == nullptr) {
+            return "https://oki-pkg.dev";
+        }
+        return okiRepository;
+    }
+
     bool acceptColor() {
         return isatty(STDOUT_FILENO);
     }
