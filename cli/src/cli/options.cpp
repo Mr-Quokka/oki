@@ -3,6 +3,7 @@
 #include <cstring>
 #include <iostream>
 
+#include "BuildAction.h"
 #include "FetchAction.h"
 #include "InitAction.h"
 #include "InstallAction.h"
@@ -12,7 +13,6 @@
 #include "RemoveAction.h"
 #include "ShowAction.h"
 #include "TreeAction.h"
-#include "../make/ProjectKind.h"
 
 namespace cli {
     void invalidUsage(std::ostream &os) {
@@ -78,6 +78,8 @@ namespace cli {
             }
         } else if (strcmp("tree", argv[1]) == 0) {
             return std::make_unique<TreeAction>();
+        } else if (strcmp("build", argv[1]) == 0) {
+            return std::make_unique<BuildAction>();
         } else if (strcmp("init", argv[1]) == 0) {
             if (argc < 3) {
                 invalidUsage(std::cerr);

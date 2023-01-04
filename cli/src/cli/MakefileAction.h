@@ -4,7 +4,7 @@
 
 namespace cli {
     /**
-     * Affiche les informations d'un paquet d'après son nom.
+     * Génère un Makefile pour compiler.
      */
     class MakefileAction : public CliAction {
     private:

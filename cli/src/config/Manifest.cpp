@@ -18,9 +18,9 @@ namespace config {
         }
     }
 
-    std::unordered_map<std::string, semver::Range> Manifest::listDeclaredPackages() const {
+    package::Summaries Manifest::listDeclaredPackages() const {
         const auto *dependenciesTable = table.get_as<toml::table>(DEPENDENCY_SECTION_NAME);
-        std::unordered_map<std::string, semver::Range> packages;
+        package::Summaries packages;
         if (dependenciesTable == nullptr) {
             return packages;
         }
@@ -30,7 +30,7 @@ namespace config {
                 packages.emplace(dependency, semver::Range::parse(constraintValue));
             } catch (semver::ParseException &ex) {
                 ex.addContext("Failed to parse the version requirement `" + constraintValue + "` for dependency `" + std::string{dependency} + "`");
-                throw ex;
+                throw;
             }
         }
         return packages;
@@ -52,6 +52,14 @@ namespace config {
         return packages;
     }
 
+    std::string_view Manifest::getProjectName() const {
+        const auto *name = getPackageSection().get_as<std::string>("name");
+        if (name == nullptr) {
+            throw ManifestException{"Manifest is missing a [package].name field"};
+        }
+        return name->get();
+    }
+
     std::vector<fs::path> Manifest::getInclude() const {
         const auto *include = getPackageSection().get_as<toml::array>("include");
         std::vector<fs::path> paths;
@@ -67,6 +75,23 @@ namespace config {
                 return value.as_string()->get();
             });
         return paths;
+    }
+
+    make::ProjectKind Manifest::getProjectKind() const {
+        const auto *kind = getPackageSection().get_as<std::string>("kind");
+        if (kind == nullptr) {
+            throw ManifestException{"Manifest is missing a [package].kind field"};
+        }
+        return make::projectKindFromStr(kind->get());
+    }
+
+    make::BuildInfo Manifest::getBuildInfo() const {
+        auto view = table["lib"]["c"];
+        auto exportOpt = view["export"].value<std::string>();
+        return make::BuildInfo{
+            view["build-static"].value<std::string>(),
+            exportOpt.has_value() ? std::vector<std::string>{exportOpt.value()} : std::vector<std::string>{},
+            view["static-link"].value<std::string>()};
     }
 
     bool Manifest::addDeclaredPackage(std::string_view packageName, std::string_view version) {

@@ -4,7 +4,8 @@
 
 namespace op {
     int fetch(const config::ManifestLock &manifestLock, std::ostream &out, const LogOptions &options, const std::filesystem::path &workingDirectory) {
-        io::Installer installer{config::InstallationRegistry::loadFileIfExists(workingDirectory / OKI_INTERNAL_REGISTRY_FILE), workingDirectory / OKI_PACKAGES_DIRECTORY};
+        std::filesystem::path packagesDir = workingDirectory / OKI_PACKAGES_DIRECTORY;
+        io::Installer installer{config::InstallationRegistry::loadFileIfExists(workingDirectory / OKI_INTERNAL_REGISTRY_FILE), packagesDir};
 
         unsigned int installed = 0;
         unsigned int updated = 0;
@@ -23,7 +24,7 @@ namespace op {
                 if (result == io::InstallationResult::Updated) {
                     out << " - " << package << " " << version << "\n";
                 }
-                out << " + " << package << " " << version << "\n";
+                out << " + " << package << " " << versionRef << "\n";
             }
         }
 
@@ -41,6 +42,9 @@ namespace op {
             }
             out << "\n";
         }
+
+        make::BuildConfigurer config{solver::DependencyGraph{manifestLock}, packagesDir};
+        installer.configure(config);
 
         unsigned int removed = installer.uninstallUnreachable([&](const std::string &package, const package::DownloadableVersion &version) {
             bool reachable = manifestLock.contains(package);

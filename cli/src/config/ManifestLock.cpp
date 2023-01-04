@@ -35,6 +35,10 @@ namespace config {
         return locks.find(packageName);
     }
 
+    const package::VersionLock &ManifestLock::at(const std::string &packageName) const {
+        return locks.at(packageName);
+    }
+
     ManifestLock::Packages::const_iterator ManifestLock::cbegin() const {
         return locks.cbegin();
     }
