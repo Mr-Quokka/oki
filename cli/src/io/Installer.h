@@ -102,9 +102,9 @@ namespace io {
          */
         template <typename F>
         requires std::invocable<F, const std::string &, const package::DownloadableVersion &> &&
-            std::convertible_to < std::invoke_result_t<F, const std::string &, const package::DownloadableVersion &>,
-        bool >
-            unsigned int uninstallUnreachable(F &&isReachable) {
+            std::convertible_to<std::invoke_result_t<F, const std::string &, const package::DownloadableVersion &>,
+                                bool> unsigned int
+            uninstallUnreachable(F &&isReachable) {
             unsigned int removed = 0;
             auto it = registry.begin();
             while (it != registry.end()) {
