@@ -8,7 +8,7 @@ To create a new package with Oki, use `oki init` in the project root directory:
 
 ```console
 $ mkdir hello-world && cd hello-world
-$ oki init
+$ oki init c
 Created `hello-world` package
 ```
 
@@ -18,6 +18,7 @@ Oki will generate an `oki.toml` file. This manifest describes the package and it
 [package]
 name = "hello-world"
 version = "0.1.0"
+kind = "c"
 
 [dependencies]
 ```
@@ -57,27 +58,9 @@ Hello, world!
 
 ## Add a dependency
 
-Dependencies are listed in the `oki.toml` file. This file can be edited to add a new dependency by specifying the package name and the version you want to use.
+Dependencies are listed in the `oki.toml` file. This file can be edited to add a new dependency, but you can also use the `oki install` command: 
 
-For instance, to add the `mths` package in version `0.1.0`:
-
-```toml
-[package]
-name = "hello-world"
-version = "0.1.0"
-
-[dependencies]
-mths = "0.1.0"
-```
-
-Then fetch this dependency with `oki fetch`:
-```console
-$ oki fetch
- + mths 0.1.0
-Installed 1 package
-```
-
-The `oki install` command may be used alternatively:
+For instance, to add the latest version of the `mths` package:
 
 ```console
 $ oki install mths
