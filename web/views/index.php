@@ -6,12 +6,11 @@
         <a href="<?= $router->url('logout') ?>">Logout</a>
     <?php endif; ?>
 </h2>
-<hr />
 <?php if (empty($params['packages'])) : ?>
     <p style="text-align: center">ERROR : there is no package</p>
 <?php else : ?>
     <?php foreach ($params['packages'] as $pkg) : ?>
-            <div>
+            <div class="package">
                 <h3>
                     <a href="/package/<?= $pkg->getName() ?>" class="package-name">
                         <?= $pkg->getName() ?>

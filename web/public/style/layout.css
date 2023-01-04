@@ -1,22 +1,34 @@
+:root {
+    --backgroundColorTop: #444;
+    --backgroundColorBottom: #f34b7d;
+    --backgroundComplementColor: #00002a;
+    --textColor: #EEE;
+    --subTextColor: #AAA;
+    --complementColor: #088;
+}
+
 body{
-    background-color: #FAFFFF;
+    color: var(--textColor);
+    background: linear-gradient( var(--backgroundColorTop)80%, var(--backgroundColorBottom) );
     font-family: Helvetica, sans-serif;
+    bottom: 0;
+    padding-bottom: 12rem;
 }
 
 header{
-    background: linear-gradient(gray, white);
-    border-radius: 0px 0px 10px 10px;
-    box-shadow: 1px 1px 5px gray;
-    padding-top: 5px;
-    border-bottom: solid #C00 1px;
+    background-color: #333;
     top: 0;
     left: 0;
     right: 0;
+    padding-bottom: 10px;
+    padding-top: 10px;
     position: absolute;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 main{
-    margin-top: 220px;
+    margin-top: 130px;
     position: relative;
 }
 
@@ -25,44 +37,62 @@ h2{
     text-align: center;
 }
 
+hr{
+    color: var(--complementColor);
+    width: 25%;
+}
 
 a{
+    color: var(--textColor);
     text-decoration: none;
-    color: black;
 }
 
 a:hover:not(.logo){
-    color: #C00;
+    color: var(--complementColor);
     text-decoration: underline;
 }
 
-a:focus:not(.logo){
+a:focus{
     text-decoration: underline;
 }
 
 .logo{
-    font-size: 20px;
-    line-height: 23.2px;
+    display: flex;
+    font-weight: bold;
+    font-size: 40px;
+    height: 80px;
+    margin-left: 2%;
+    align-items: center;
 }
 
-.logo>pre{
-    text-align: center;
+.logo>img{
+    height: 100px;
+}
+
+.package{
+    display: box;
+    box-align: center;
+    width: 20%; 
+    border-radius: 20px;
+    border: var(--complementColor) solid 1px;
+    margin-bottom: 20px;
+    padding-left: 20px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .package-name{
-    color: black;
     padding-bottom: 20px;
 }
 
 .package-description{
-    color: gray;
+    color: var(--subTextColor);
     margin-top: -10px;
     padding-bottom: 20px;
-    border-bottom: solid lightgray 1px;
 }
 
 .package-detail-description{
-    color: gray;
+    color: var(--subTextColor);
     margin-top: -10px;
 }
 
