@@ -80,17 +80,27 @@ class PackageGateway
 
 	public function insertVersion(PackageManifest $manifest): int
 	{
+		$this->pdo->beginTransaction();
 		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier) values (:package_id, :version);');
 		try {
-			if ($req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion()])) {
-				$this->insertDependencies($manifest);
-				
-				$req = $this->pdo->prepare('UPDATE package SET description = :description WHERE id_package = :package_id;');
-				$req->execute(['description' => $manifest->getDescription(), 'package_id' => $manifest->getPackageId()]);
-				return 200;
+			if (!($req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion()]))) {
+				$this->pdo->rollBack();
+				return 500;
 			}
-			return 500;
-		} catch (PDOException $e) {
+			if (!($this->insertDependencies($manifest))) {
+				$this->pdo->rollBack();
+				return 500;
+			}
+			
+			$req = $this->pdo->prepare('UPDATE package SET description = :description WHERE id_package = :package_id;');
+			$req->execute(['description' => $manifest->getDescription(), 'package_id' => $manifest->getPackageId()]);
+			
+			$this->pdo->commit();
+			return 200;
+		}
+		catch (PDOException $e) {
+			$this->pdo->rollBack();
+
 			if ($this->config->isUniqueConstraintViolation($e)) {
 				return 409;
 			}
@@ -98,17 +108,21 @@ class PackageGateway
 		}
 	}
 
-	private function insertDependencies(PackageManifest $manifest)
+	private function insertDependencies(PackageManifest $manifest): bool
 	{
 		$constrainer_id = $this->pdo->lastInsertId();
-
+		$req = $this->pdo->prepare('INSERT INTO dependency values (:package_reference_id, :constrainer_id, :constraint_value);');
 
 		foreach ($manifest->getDependencies() as $package => $range) {
-
-			$package_reference_id = $this->getPackageId($package);
-			
-			$req = $this->pdo->prepare('INSERT INTO dependency values (:package_reference_id, :constrainer_id, :constraint_value);');
-			$req->execute(['package_reference_id' => $package_reference_id, 'constrainer_id' => $constrainer_id, 'constraint_value' => $range]);
+			if(($package_reference_id = $this->getPackageId($package)) !== null)
+			{
+				$req->execute(['package_reference_id' => $package_reference_id, 'constrainer_id' => $constrainer_id, 'constraint_value' => $range]);
+			}
+			else
+			{
+				return false;
+			}
 		}
+		return true;
 	}
 }
