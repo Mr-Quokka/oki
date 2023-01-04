@@ -9,6 +9,7 @@
 * [Reference](reference/index.md)
     * [Dependencies](reference/dependencies.md)
     * [Manifest](reference/manifest.md)
+    * [Packaging](reference/packaging.md)
 
 * [Hosting a repository](hosting-repository/index.md)
   * [Setup](hosting-repository/setup.md)
