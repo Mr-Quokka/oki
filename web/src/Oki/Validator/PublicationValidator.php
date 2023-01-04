@@ -81,7 +81,7 @@ final class PublicationValidator
 
     public static function validateRange(string $range): bool
     {
-        return preg_match('/^[\^~=]?([0-9]+)\.([0-9]+)\.([0-9]+)$/', $range) === 1;
+        return preg_match('/^([\^~=]?([0-9]+)\.([0-9]+)\.([0-9]+))|\*$/', $range) === 1;
     }
 
     public static function validateDependencies(array $dependencies): bool
