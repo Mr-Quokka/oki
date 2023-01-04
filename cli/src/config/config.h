@@ -10,7 +10,6 @@ namespace config {
      */
     std::filesystem::path getDefaultLocalRepository();
 
-
     /**
      * Détermine le chemin par défaut vers le répertoire distant.
      * 

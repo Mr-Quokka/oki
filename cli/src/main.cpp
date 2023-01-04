@@ -2,10 +2,10 @@
 
 #include "cli/options.h"
 #include "config/Manifest.h"
+#include "config/config.h"
 #include "io/HttpRequest.h"
 #include "repository/RemoteRepository.h"
 #include "semver/ParseException.h"
-#include "config/config.h"
 
 int main(int argc, char *argv[]) {
     std::unique_ptr<cli::CliAction> action = cli::parseArguments(argc, argv);

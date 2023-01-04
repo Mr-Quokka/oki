@@ -16,7 +16,7 @@ namespace config {
 
     std::string_view getDefaultRemoteRepository() {
         const char *okiRepository = std::getenv("OKI_REPOSITORY");
-        if(okiRepository == nullptr) {
+        if (okiRepository == nullptr) {
             return "https://oki-pkg.dev";
         }
         return okiRepository;
