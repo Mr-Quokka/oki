@@ -56,7 +56,7 @@ static-link = "build/libyaml-cpp.a"
 
 ## Publish
 
-Try to publish it in the local registry to test if the package is correctly configured, then if everything works, you can publish it to a real repository:
+Try to publish it in the local registry to test if the package is correctly configured, then if everything work, you can publish it to a real repository:
 
 ```bash
 oki publish --registry local
@@ -69,7 +69,7 @@ Let's test this new package in a real project!
 
 ```console
 $ cd /tmp && mkdir yaml-cpp-test
-$ cd yaml-cpp-test && oki init c
+$ cd yaml-cpp-test && oki init cpp
 Created `yaml-cpp-test` package
 ```
 

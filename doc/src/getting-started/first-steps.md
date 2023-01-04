@@ -1,7 +1,5 @@
 # First Steps
 
-> Some commands used here are not fully implemented and may change in the near future.
-
 ## Init
 
 To create a new package with Oki, use `oki init` in the project root directory:

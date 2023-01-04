@@ -11,9 +11,9 @@ Open pacKage Installer
 ======================
 
 <div align="center">
-<a href="https://codefirst.iut.uca.fr/documentation/oki/book/oki/">CLI Documentation</a>
-<a href="https://codefirst.iut.uca.fr/swagger?url=/git/oki/oki/raw/branch/main/oki-api.yaml">Repository API</a>
-<a href="https://oki-pkg.dev">Staging</a>
+<a href="https://codefirst.iut.uca.fr/documentation/oki/book/oki/">Documentation</a> -
+<a href="https://codefirst.iut.uca.fr/swagger?url=/git/oki/oki/raw/branch/main/oki-api.yaml">Repository API</a> -
+<a href="https://oki-pkg.dev">Staging instance</a>
 </div>
 <br>
 
