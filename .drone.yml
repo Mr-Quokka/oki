@@ -9,6 +9,7 @@ trigger:
     - main
     - feature/ci
     - cli/*
+    - doc/*
 
 steps:
   - name: build-cli
@@ -23,3 +24,20 @@ steps:
       - ./oki-test
     depends_on:
       - build-cli
+
+  - name: build-book
+    image: hub.codefirst.iut.uca.fr/clement.freville2/oki-build-image:latest
+    commands:
+      - cd doc && mdbook build
+
+  - name: deploy-doc
+    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-docdeployer
+    failure: ignore
+    commands:
+      - doc/entrypoint.sh
+    depends_on:
+      - build-book
+    when:
+      branch:
+        - main
+        - doc/setup
