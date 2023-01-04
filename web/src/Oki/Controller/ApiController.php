@@ -57,17 +57,14 @@ class ApiController
         }
         $manifest->setPackageId($packageId);
 
-        switch ($di->getPackageGateway()->insertVersion($manifest)) {
-            case 200:
-                move_uploaded_file(
-                    $_FILES['package']['tmp_name'],
-                    __DIR__ . '/../../../public/packages/' . $manifest->getName() . '_' . $manifest->getVersion() . '.zip'
-                );
-                return JsonResponse::success(201, 'The version has been successfully published');
-            case 409:
-                return JsonResponse::conflict('This version already exists');
-            default:
-                return new JsonResponse(500, 'Version not published');
+        $res = $di->getPackageGateway()->insertVersion($manifest);
+        if ($res->isSuccess()) {
+            move_uploaded_file(
+                $_FILES['package']['tmp_name'],
+                __DIR__ . '/../../../public/packages/' . $manifest->getName() . '_' . $manifest->getVersion() . '.zip'
+            );
+            $res->validate();
         }
+        return $res->asJson();
     }
 }

@@ -8,6 +8,7 @@ use Oki\Config\DatabaseConfig;
 use Oki\Model\Package;
 use Oki\Model\PackageManifest;
 use Oki\Model\PackageVersion;
+use Oki\Model\TransactionResult;
 use PDO;
 use PDOException;
 
@@ -78,51 +79,48 @@ class PackageGateway
 		return "/packages/" . $res["short_name"] . "_" . $res["identifier"] . ".zip";
 	}
 
-	public function insertVersion(PackageManifest $manifest): int
+	public function insertVersion(PackageManifest $manifest): TransactionResult
 	{
 		$this->pdo->beginTransaction();
+		$res = $this->insertVersionUnsafe($manifest);
+		if ($res->isSuccess()) {
+			$res->setTerminate([$this->pdo, 'commit']);
+		} else {
+			$this->pdo->rollBack();
+		}
+		return $res;
+	}
+
+	public function insertVersionUnsafe(PackageManifest $manifest): TransactionResult
+	{
 		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier) values (:package_id, :version);');
 		try {
-			if (!($req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion()]))) {
-				$this->pdo->rollBack();
-				return 500;
+			if (!$req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion()])) {
+				return new TransactionResult(500, 'Cannot add new version');
 			}
-			if (!($this->insertDependencies($manifest))) {
-				$this->pdo->rollBack();
-				return 500;
-			}
-			
 			$req = $this->pdo->prepare('UPDATE package SET description = :description WHERE id_package = :package_id;');
 			$req->execute(['description' => $manifest->getDescription(), 'package_id' => $manifest->getPackageId()]);
-			
-			$this->pdo->commit();
-			return 200;
-		}
-		catch (PDOException $e) {
-			$this->pdo->rollBack();
-
+		} catch (PDOException $e) {
 			if ($this->config->isUniqueConstraintViolation($e)) {
-				return 409;
+				return new TransactionResult(409, 'This version already exists');
 			}
 			throw $e;
 		}
+		return $this->insertDependencies($manifest);
 	}
 
-	private function insertDependencies(PackageManifest $manifest): bool
+	private function insertDependencies(PackageManifest $manifest): TransactionResult
 	{
 		$constrainer_id = $this->pdo->lastInsertId();
 		$req = $this->pdo->prepare('INSERT INTO dependency values (:package_reference_id, :constrainer_id, :constraint_value);');
 
 		foreach ($manifest->getDependencies() as $package => $range) {
-			if(($package_reference_id = $this->getPackageId($package)) !== null)
-			{
+			if (($package_reference_id = $this->getPackageId($package)) !== null) {
 				$req->execute(['package_reference_id' => $package_reference_id, 'constrainer_id' => $constrainer_id, 'constraint_value' => $range]);
-			}
-			else
-			{
-				return false;
+			} else {
+				return new TransactionResult(400, "The `$package` dependency is present in the registry");
 			}
 		}
-		return true;
+		return new TransactionResult(201, 'The version has been successfully published');
 	}
 }
