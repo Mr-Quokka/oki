@@ -122,8 +122,8 @@ namespace config {
         return *package;
     }
 
-    std::string Manifest::getPackageVersion() const {
-        return getPackageSection().get_as<std::string>("version")->get();
+    semver::Version Manifest::getPackageVersion() const {
+        return semver::Version::parse(getPackageSection().get_as<std::string>("version")->get());
     }
 
     bool Manifest::loadFileIfExists(const fs::path &fileName) {

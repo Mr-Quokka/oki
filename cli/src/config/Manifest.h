@@ -67,7 +67,7 @@ namespace config {
          * 
          * @return La version du paquet.
          */
-        std::string getPackageVersion() const;
+        semver::Version getPackageVersion() const;
 
         /**
          * Ajoute un paquet à la liste des dépendances directes. S'il existe déjà, alors il n'est pas rajouté.

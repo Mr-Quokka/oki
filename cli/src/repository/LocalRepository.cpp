@@ -31,7 +31,7 @@ namespace repository {
             fileName += "_";
             fileName += manifest.getPackageVersion();
             fileName += ".zip";
-            versions.emplace_back(semver::Version::parse(manifest.getPackageVersion()), "",
+            versions.emplace_back(manifest.getPackageVersion(), "",
                                   "file://" + (file.path() / fileName).string());
         }
 
@@ -40,7 +40,7 @@ namespace repository {
     }
 
     void LocalRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
-        fs::path projectDirectory = root / manifest.getProjectName() / manifest.getPackageVersion();
+        fs::path projectDirectory = root / manifest.getProjectName() / manifest.getPackageVersion().str();
         fs::create_directories(projectDirectory);
         std::string projectName{manifest.getProjectName()};
         projectName += "_";

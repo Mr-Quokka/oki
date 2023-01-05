@@ -10,8 +10,7 @@
 
 int main(int argc, char *argv[]) {
     std::unique_ptr<cli::CliAction> action = cli::parseArguments(argc, argv);
-    // repository::RemoteRepository repository{config::getDefaultRemoteRepository()};
-    repository::LocalRepository repository{config::getDefaultLocalRepository()};
+    repository::RemoteRepository repository{config::getDefaultRemoteRepository()};
     try {
         action->run(repository);
     } catch (const semver::ParseException &e) {
