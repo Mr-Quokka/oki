@@ -9,9 +9,18 @@
 <body>
     <header>
         <a class="logo" href="<?= $router->url('') ?>">
-            <img src="/images/OKI.logo.1.png"></img>
+            <img src="/images/logo/BIG-OKI-logo-1.png"></img>
             <p>Open pacKage Installer</p>
         </a>
+        <h2 class="connection">
+            <?php if ($security->getCurrentUser() === null): ?>
+                <a href="<?= $router->url('login') ?>">Login</a> -
+                <a href="<?= $router->url('register') ?>">Register</a>
+            <?php else: ?>
+                Logged as <?= $security->getCurrentUser()->getLogin() ?> -
+                <a href="<?= $router->url('logout') ?>">Logout</a>
+            <?php endif; ?>
+        </h2>
     </header>
 
     <main>

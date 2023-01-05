@@ -1,3 +1,5 @@
+<?php $title="Login" ?>
+<link rel="stylesheet" href="/style/form-layout.css">
 <?php if ($params['fail']) : ?>
     <article class="message is-danger">
         <div class="message-header">
@@ -12,7 +14,7 @@
     <div class="field">
         <label class="label" for="login">Login</label>
         <div class="control">
-            <input class="input" type="text" id="login" name="login" autocomplete="username">
+            <input class="input" type="text" id="login" name="login">
         </div>
     </div>
     <div class="field">

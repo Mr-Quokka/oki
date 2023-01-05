@@ -1,4 +1,5 @@
 <?php $title = "Register"; ?>
+<link rel="stylesheet" href="/style/form-layout.css">
 <?php if ($params['fail']) : ?>
     <article class="message is-danger">
         <div class="message-header">

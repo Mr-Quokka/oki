@@ -1,24 +1,18 @@
-<h2>
-    <?php if ($security->getCurrentUser() == null): ?>
-        <a href="<?= $router->url('login') ?>">Login</a>
-    <?php else: ?>
-        Logged as <?= $security->getCurrentUser()->getLogin() ?> -
-        <a href="<?= $router->url('logout') ?>">Logout</a>
-    <?php endif; ?>
-</h2>
+<?php $title="Home" ?>
+
 <?php if (empty($params['packages'])) : ?>
-    <p style="text-align: center">ERROR : there is no package</p>
+    <h2 class="error">ERROR : there is no package</h2>
 <?php else : ?>
     <?php foreach ($params['packages'] as $pkg) : ?>
             <div class="package">
-                <h3>
-                    <a href="/package/<?= $pkg->getName() ?>" class="package-name">
+                <div class="package-prompt">
+                    <a class="package-name" href="/package/<?= $pkg->getName() ?>">
                         <?= $pkg->getName() ?>
-                        <?php if($pkg->getLatestVersion() !== null): ?>
-                            <?= " v" . $pkg->getLatestVersion() ?>
-                        <?php endif ?>
                     </a>
-                </h3>
+                    <?php if($pkg->getLatestVersion() !== null): ?>
+                        <?= "v" . $pkg->getLatestVersion() ?>
+                    <?php endif ?>
+                </div>
                 <p class="package-description"><?= $pkg->getDescription() ?></p>
             </div>
     <?php endforeach ?>

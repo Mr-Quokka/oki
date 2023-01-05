@@ -1,27 +1,28 @@
 :root {
-    --backgroundColorTop: #444;
-    --backgroundColorBottom: #f34b7d;
-    --backgroundComplementColor: #00002a;
-    --textColor: #EEE;
-    --subTextColor: #AAA;
-    --complementColor: #088;
+    --colorBackground: #444;
+    --colorBackgroundPink: #f34b7d;
+    --colorBackgroundComplement: #333;
+    --colorText: #EEE;
+    --colorSubtext: #AAA;
+    --colorComplement: #0AA;
+    --colorError: #C00;
+
+    --borderDebug: dotted gold 1px;
 }
 
 body{
-    color: var(--textColor);
-    background: linear-gradient( var(--backgroundColorTop)80%, var(--backgroundColorBottom) );
+    color: var(--colorText);
+    background-color: var(--colorBackground);
     font-family: Helvetica, sans-serif;
-    bottom: 0;
-    padding-bottom: 12rem;
 }
 
 header{
-    background-color: #333;
+    background-color: var(--colorBackgroundComplement);
     top: 0;
     left: 0;
     right: 0;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-top: 20px;
     position: absolute;
     display: flex;
     flex-wrap: wrap;
@@ -32,23 +33,20 @@ main{
     position: relative;
 }
 
-
-h2{
-    text-align: center;
-}
-
 hr{
-    color: var(--complementColor);
+    color: var(--colorComplement);
     width: 25%;
+    margin-bottom: 25px;
 }
 
 a{
-    color: var(--textColor);
+    color: var(--colorText);
     text-decoration: none;
+    margin-bottom: 10px;
 }
 
 a:hover:not(.logo){
-    color: var(--complementColor);
+    color: var(--colorComplement);
     text-decoration: underline;
 }
 
@@ -56,43 +54,61 @@ a:focus{
     text-decoration: underline;
 }
 
+.error{
+    border: var(--colorError) solid;
+    text-align: center;
+    font-weight: bold;
+    font-size: 150%;
+    width: 30%;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .logo{
     display: flex;
     font-weight: bold;
     font-size: 40px;
-    height: 80px;
+    height: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     margin-left: 2%;
     align-items: center;
 }
 
 .logo>img{
     height: 100px;
+    border-radius: 30px;
+}
+
+.connection{
+    margin-right: 20px;
+    margin-left: auto;
 }
 
 .package{
-    display: box;
-    box-align: center;
-    width: 20%; 
+    width: 320px; 
     border-radius: 20px;
-    border: var(--complementColor) solid 1px;
+    border: var(--colorComplement) solid 1px;
     margin-bottom: 20px;
     padding-left: 20px;
     margin-left: auto;
     margin-right: auto;
 }
 
+.package-prompt{
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-right: 20px;
+}
+
 .package-name{
-    padding-bottom: 20px;
+    font-weight: bold;
 }
 
 .package-description{
-    color: var(--subTextColor);
-    margin-top: -10px;
-    padding-bottom: 20px;
-}
-
-.package-detail-description{
-    color: var(--subTextColor);
+    color: var(--colorSubtext);
     margin-top: -10px;
 }
 
