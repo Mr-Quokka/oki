@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oki\DI;
 
 use Oki\Config\DatabaseConfig;
+use Oki\Gateway\OwnershipGateway;
 use Oki\Gateway\PackageGateway;
 use Oki\Gateway\UserGateway;
 use Oki\Router\Router;
@@ -22,6 +23,8 @@ final class DI
     private ?PackageGateway $packageGateway = null;
 
     private ?UserGateway $userGateway = null;
+
+    private ?OwnershipGateway $ownershipGateway = null;
 
     private ?Security $security = null;
 
@@ -43,7 +46,7 @@ final class DI
     public function getPackageGateway(): PackageGateway
     {
         if ($this->packageGateway === null) {
-            $this->packageGateway = new PackageGateway($this->getPDO(), $this->dbConfig);
+            $this->packageGateway = new PackageGateway($this->getPDO(), $this->dbConfig, $this->getOwnershipGateway());
         }
         return $this->packageGateway;
     }
@@ -54,6 +57,14 @@ final class DI
             $this->userGateway = new UserGateway($this->getPDO(), $this->dbConfig);
         }
         return $this->userGateway;
+    }
+
+    public function getOwnershipGateway(): OwnershipGateway
+    {
+        if ($this->ownershipGateway === null) {
+            $this->ownershipGateway = new OwnershipGateway($this->getPDO());
+        }
+        return $this->ownershipGateway;
     }
 
     public function getSecurity(): Security

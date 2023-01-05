@@ -7,15 +7,22 @@
 using json = nlohmann::json;
 
 namespace repository {
-    static json tryReadRequest(io::HttpRequest &request) {
+    static json tryReadRequest(config::AuthProvider &auth, io::HttpRequest &request) {
         io::HttpResponse response = request.get();
+        if (response.requiresAuth()) {
+            if (response.requiresBasicAuth()) {
+                auto [username, password] = auth.get();
+                request.authenticate(io::HttpAuth::Basic, username, password);
+                response = request.get();
+            }
+        }
         if (!response.getContentType().starts_with("application/json")) {
-            throw io::APIException{"Invalid content type received (" + response.getContentType() + ") from " + request.getUrl()};
+            throw io::APIException{"Invalid content type received (" + response.getContentType() + ") from " + request.getUrl() + ":" + std::to_string(response.getStatusCode())};
         }
         json data = json::parse(response.getContent());
         auto it = data.find("error");
         if (response.getStatusCode() >= 400 || it != data.end()) {
-            throw io::APIException{(it == data.end() ? "Invalid request" : it->get<std::string>()) + ", tried " + request.getUrl()};
+            throw io::APIException{(it == data.end() ? "Invalid request" : it->get<std::string>()) + ", tried " + request.getUrl() + ":" + std::to_string(response.getStatusCode())};
         }
         return data;
     }
@@ -24,7 +31,7 @@ namespace repository {
 
     std::vector<package::Package> RemoteRepository::listPackages() {
         io::HttpRequest request = io::HttpRequest::createJson(apiUrl + "/api/list");
-        json data = tryReadRequest(request);
+        json data = tryReadRequest(authProvider, request);
         std::vector<package::Package> packages;
         for (const auto &item : data.at("packages")) {
             packages.emplace_back(item.at("name").get<std::string>(), item.at("description").get<std::string>());
@@ -34,7 +41,7 @@ namespace repository {
 
     package::Package RemoteRepository::getPackageInfo(std::string_view packageName) {
         io::HttpRequest request = io::HttpRequest::createJson(apiUrl + "/api/info/" + std::string{packageName});
-        json data = tryReadRequest(request);
+        json data = tryReadRequest(authProvider, request);
         std::vector<package::PackageVersion> versions;
         auto it = data.find("versions");
         if (it != data.end()) {
@@ -56,7 +63,7 @@ namespace repository {
     std::string RemoteRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
         io::HttpRequest request = io::HttpRequest::createJson(
             apiUrl + "/api/version/" + std::string{packageName} + "?version=" + packageVersion);
-        json data = tryReadRequest(request);
+        json data = tryReadRequest(authProvider, request);
         return data.get<std::string>();
     }
 
@@ -65,6 +72,6 @@ namespace repository {
         io::MimePart mime = request.addMime();
         mime.addDataPart("manifest", manifest.asFilteredJson());
         mime.addFilePart("package", source);
-        json data = tryReadRequest(request);
+        json data = tryReadRequest(authProvider, request);
     }
 }

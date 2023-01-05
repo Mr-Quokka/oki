@@ -8,6 +8,7 @@ use Oki\DI\DI;
 use Oki\Http\HttpResponse;
 use Oki\Http\JsonResponse;
 use Oki\Validator\PublicationValidator;
+use Oki\Security\HttpAuth;
 
 class ApiController
 {
@@ -43,6 +44,13 @@ class ApiController
 
     public function publish(DI $di): HttpResponse
     {
+        if (!HttpAuth::authRequest($di->getSecurity())) {
+            return JsonResponse::error(401, 'Invalid credentials');
+        }
+        $user = $di->getSecurity()->getCurrentUser();
+        if ($user === null) {
+            return JsonResponse::authNeeded('Authentification needed');
+        }
         $errors = [];
         $manifest = PublicationValidator::validateJson($_POST, $errors);
         if (!empty($errors)) {
@@ -51,9 +59,9 @@ class ApiController
         if (!PublicationValidator::validateVersionContent($_FILES, $errors)) {
             return JsonResponse::badRequest($errors[0]);
         }
-        $packageId = $di->getPackageGateway()->getPackageId($manifest->getName());
-        if ($packageId === null) {
-            return JsonResponse::notFound('Unknown package name');
+        $packageId = $di->getPackageGateway()->getOrCreatePackage($user, $manifest);
+        if (!$di->getOwnershipGateway()->grantedAccess($user->getId(), $packageId)) {
+            return JsonResponse::error(403, 'Insufficient permissions');
         }
         $manifest->setPackageId($packageId);
 
