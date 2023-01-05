@@ -1,11 +1,13 @@
 #pragma once
 
+#include "../config/AuthProvider.h"
 #include "Repository.h"
 
 namespace repository {
     class RemoteRepository : public Repository {
     private:
         std::string apiUrl;
+        config::AuthProvider authProvider;
 
     public:
         explicit RemoteRepository(std::string_view apiUrl);

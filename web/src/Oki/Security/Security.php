@@ -10,7 +10,7 @@ use Oki\Model\User;
 
 const USER = 'USER';
 
-class Security
+final class Security
 {
     private UserGateway $userGateway;
     private array $session;

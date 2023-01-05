@@ -52,6 +52,9 @@ final class PublicationValidator
             if (empty($json['version']) || !self::validateVersion($json['version'])) {
                 $errors[] = 'Invalid package version';
             }
+            if (empty($json['kind']) || !is_string($json['kind'])) {
+                $errors[] = 'Invalid package kind';
+            }
             if (isset($json['dependencies']) && !self::validateDependencies($json['dependencies'])) {
                 $errors[] = 'Invalid dependencies';
             }
@@ -60,6 +63,7 @@ final class PublicationValidator
                     $json['name'],
                     $json['description'] ?? '',
                     $json['version'],
+                    $json['kind'],
                     $json['dependencies'] ?? []
                 );
             }

@@ -32,6 +32,12 @@ class JsonResponse implements HttpResponse
         return self::error(400, $message);
     }
 
+    public static function authNeeded(string $message): JsonResponse
+    {
+        header('WWW-Authenticate: Basic realm="Publish"');
+        return self::error(401, $message);
+    }
+
     public static function notFound(string $message): JsonResponse
     {
         return self::error(404, $message);

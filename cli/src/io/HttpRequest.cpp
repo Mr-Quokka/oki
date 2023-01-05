@@ -75,6 +75,19 @@ namespace io {
         return MimePart{form};
     }
 
+    void HttpRequest::authenticate(HttpAuth auth, const std::string &username, const std::string &password) {
+        curl_easy_setopt(curl, CURLOPT_USERNAME, username.c_str());
+        curl_easy_setopt(curl, CURLOPT_PASSWORD, password.c_str());
+        switch (auth) {
+        case HttpAuth::Basic:
+            curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            break;
+        case HttpAuth::Digest:
+            curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+            break;
+        }
+    }
+
     HttpResponse HttpRequest::get() {
         std::string buffer;
         std::string contentType;
@@ -89,7 +102,9 @@ namespace io {
         }
         long httpStatus = 0;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpStatus);
-        return HttpResponse{httpStatus, std::move(contentType), std::move(buffer)};
+        long auth;
+        curl_easy_getinfo(curl, CURLINFO_HTTPAUTH_AVAIL, &auth);
+        return HttpResponse{httpStatus, std::move(contentType), std::move(buffer), auth};
     }
 
     void HttpRequest::download(const std::filesystem::path &path) {
@@ -116,11 +131,19 @@ namespace io {
         curl_easy_cleanup(curl);
     }
 
-    HttpResponse::HttpResponse(long statusCode, std::string contentType, std::string content)
-        : statusCode{statusCode}, contentType{std::move(contentType)}, content{std::move(content)} {}
+    HttpResponse::HttpResponse(long statusCode, std::string contentType, std::string content, long auth)
+        : statusCode{statusCode}, contentType{std::move(contentType)}, content{std::move(content)}, auth{auth} {}
 
     long HttpResponse::getStatusCode() const {
         return statusCode;
+    }
+
+    bool HttpResponse::requiresAuth() const {
+        return auth != 0;
+    }
+
+    bool HttpResponse::requiresBasicAuth() const {
+        return (auth & CURLAUTH_BASIC) != 0;
     }
 
     const std::string &HttpResponse::getContentType() const {

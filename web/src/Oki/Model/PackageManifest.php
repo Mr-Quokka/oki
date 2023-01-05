@@ -12,16 +12,19 @@ class PackageManifest
 
     private string $version;
 
+    private string $kind;
+
     /**
      * @var array<string, string>
      */
     private array $dependencies;
 
-    public function __construct(string $name, string $description, string $version, array $dependencies)
+    public function __construct(string $name, string $description, string $version, string $kind, array $dependencies)
     {
         $this->name = $name;
         $this->description = $description;
         $this->version = $version;
+        $this->kind = $kind;
         $this->dependencies = $dependencies;
     }
 
@@ -43,6 +46,11 @@ class PackageManifest
     public function getVersion(): string
     {
         return $this->version;
+    }
+
+    public function getKind(): string
+    {
+        return $this->kind;
     }
 
     /**

@@ -4,6 +4,11 @@
 #include <string>
 
 namespace io {
+    enum class HttpAuth : unsigned char {
+        Basic,
+        Digest
+    };
+
     /**
      * Décrit la réponse du serveur après une requête HTTP.
      */
@@ -12,9 +17,10 @@ namespace io {
         long statusCode;
         std::string contentType;
         std::string content;
+        long auth;
 
     public:
-        HttpResponse(long statusCode, std::string contentType, std::string content);
+        HttpResponse(long statusCode, std::string contentType, std::string content, long auth);
 
         /**
          * Récupère le code de statut HTTP.
@@ -22,6 +28,10 @@ namespace io {
          * @return Le statut de la réponse.
          */
         long getStatusCode() const;
+
+        bool requiresAuth() const;
+
+        bool requiresBasicAuth() const;
 
         /**
          * Récupère le type MIME retourné par le serveur.
@@ -136,6 +146,15 @@ namespace io {
         void addHeader(const char *header);
 
         MimePart addMime();
+
+        /**
+         * Ajoute des informations de connexion HTTP à la requête.
+         *
+         * @param auth Le support d'authentification.
+         * @param username Le nom d'utilisateur.
+         * @param password Le mot de passe.
+         */
+        void authenticate(HttpAuth auth, const std::string &username, const std::string &password);
 
         /**
          * Exécute la requête avec une méthode GET et capture le résultat dans une chaîne de caractères.

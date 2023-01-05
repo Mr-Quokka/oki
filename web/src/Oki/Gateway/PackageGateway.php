@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Oki\Gateway;
 
 use Oki\Config\DatabaseConfig;
+use Oki\Model\Ownership;
 use Oki\Model\Package;
 use Oki\Model\PackageManifest;
 use Oki\Model\PackageResume;
 use Oki\Model\PackageVersion;
 use Oki\Model\TransactionResult;
+use Oki\Model\User;
 use PDO;
 use PDOException;
 
@@ -18,11 +20,13 @@ class PackageGateway
 
 	private DatabaseConfig $config;
 	private PDO $pdo;
+	private OwnershipGateway $ownershipGateway;
 
-	public function __construct(PDO $pdo, DatabaseConfig $config)
+	public function __construct(PDO $pdo, DatabaseConfig $config, OwnershipGateway $ownershipGateway)
 	{
 		$this->config = $config;
 		$this->pdo = $pdo;
+		$this->ownershipGateway = $ownershipGateway;
 	}
 
 	public function listPackages(): array
@@ -69,6 +73,26 @@ class PackageGateway
 		$req->execute(['name' => $packageName]);
 		$res = $req->fetch();
 		return $res === false ? null : intval($res['id_package']);
+	}
+
+	public function getOrCreatePackage(User $user, PackageManifest $manifest): int
+	{
+		$id = $this->getPackageId($manifest->getName());
+		if ($id !== null) {
+			return $id;
+		}
+		$this->pdo->beginTransaction();
+		$req = $this->pdo->prepare('INSERT INTO package (name, description, language_id)
+		VALUES (:name, :description, (SELECT id_language FROM language WHERE designation = :kind));');
+		$req->execute([
+			'name' => $manifest->getName(),
+			'description' => $manifest->getDescription(),
+			'kind' => $manifest->getKind(),
+		]);
+		$ownership = Ownership::from($user->getId(), intval($this->pdo->lastInsertId()));
+		$this->ownershipGateway->insertOwnership($ownership);
+		$this->pdo->commit();
+		return $ownership->getPackageId();
 	}
 
 	public function getPackageVersion(string $name, string $version): ?string
@@ -122,7 +146,7 @@ class PackageGateway
 			if (($package_reference_id = $this->getPackageId($package)) !== null) {
 				$req->execute(['package_reference_id' => $package_reference_id, 'constrainer_id' => $constrainer_id, 'constraint_value' => $range]);
 			} else {
-				return new TransactionResult(400, "The `$package` dependency is present in the registry");
+				return new TransactionResult(400, "The `$package` dependency is not present in the registry");
 			}
 		}
 		return new TransactionResult(201, 'The version has been successfully published');
