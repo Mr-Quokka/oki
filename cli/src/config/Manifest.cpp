@@ -122,6 +122,10 @@ namespace config {
         return *package;
     }
 
+    std::string Manifest::getPackageVersion() const {
+        return getPackageSection().get_as<std::string>("version")->get();
+    }
+
     bool Manifest::loadFileIfExists(const fs::path &fileName) {
         fs::path searchedFile = fs::absolute(fileName);
         fs::path parentPath = searchedFile;

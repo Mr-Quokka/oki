@@ -4,12 +4,14 @@
 #include "config/Manifest.h"
 #include "config/config.h"
 #include "io/HttpRequest.h"
+#include "repository/LocalRepository.h"
 #include "repository/RemoteRepository.h"
 #include "semver/ParseException.h"
 
 int main(int argc, char *argv[]) {
     std::unique_ptr<cli::CliAction> action = cli::parseArguments(argc, argv);
-    repository::RemoteRepository repository{config::getDefaultRemoteRepository()};
+    // repository::RemoteRepository repository{config::getDefaultRemoteRepository()};
+    repository::LocalRepository repository{config::getDefaultLocalRepository()};
     try {
         action->run(repository);
     } catch (const semver::ParseException &e) {

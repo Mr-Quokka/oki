@@ -38,9 +38,6 @@ public:
         }
         throw std::logic_error{"Not implemented"};
     }
-    std::string getPackageURL([[maybe_unused]] std::string_view packageName, [[maybe_unused]] std::string packageVersion) override {
-        return "";
-    }
     void publish([[maybe_unused]] config::Manifest &manifest, [[maybe_unused]] const std::filesystem::path &source) override {
     }
 };

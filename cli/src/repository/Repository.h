@@ -28,7 +28,6 @@ namespace repository {
          * @return Les informations de ce paquet.
          */
         virtual package::Package getPackageInfo(std::string_view packageName) = 0;
-        virtual std::string getPackageURL(std::string_view packageName, std::string packageVersion) = 0;
         virtual void publish(config::Manifest &manifest, const std::filesystem::path &source) = 0;
         virtual ~Repository() = default;
     };
