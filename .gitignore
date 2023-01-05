@@ -20,6 +20,10 @@ oki-test
 third-party
 oki-packages
 packages
+composer.json
+composer.lock
+composer.phar
+vendor/
 
 # Config
 *.toml
