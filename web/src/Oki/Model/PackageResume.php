@@ -18,7 +18,7 @@ class PackageResume extends AbstractPackage
         return $this->latest_version;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $dict = [
             'id_package' => $this->id_package,

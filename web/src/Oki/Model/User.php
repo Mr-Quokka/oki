@@ -52,7 +52,7 @@ class User
 
     public function setPerm(int $perm) 
     {
-        $this->perm = $perm;
+        $this->permissions = $perm;
     }
 
     public function getPermissions(): int

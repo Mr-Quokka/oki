@@ -61,7 +61,7 @@ class PackageVersion implements JsonSerializable
         $this->dependencies[$dependency] = $constraint;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $dict = [];
         $dict["id_version"] = $this->id_version;

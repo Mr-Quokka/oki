@@ -10,6 +10,7 @@ trigger:
     - feature/ci
     - cli/*
     - doc/*
+    - web/*
 
 steps:
   - name: build-cli
@@ -24,6 +25,12 @@ steps:
       - ./oki-test
     depends_on:
       - build-cli
+
+  - name: lint-web
+    image: composer:latest
+    commands:
+      - cd web && composer require --dev phpstan/phpstan
+      - vendor/bin/phpstan analyse src --level 2
 
   - name: build-book
     image: hub.codefirst.iut.uca.fr/clement.freville2/oki-build-image:latest

@@ -21,7 +21,7 @@ class Package extends AbstractPackage
         return $this->versions;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $dict = [
             'id_package' => $this->id_package,
