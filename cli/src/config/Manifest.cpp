@@ -147,7 +147,7 @@ namespace config {
         os << *this;
     }
 
-    std::string Manifest::asFilteredJson() const {
+    std::string Manifest::asFilteredJson(const io::Checksum &checksum) const {
         std::stringstream stream;
         toml::table filtered;
         const toml::node *package = table.get(PACKAGE_SECTION_NAME);
@@ -156,6 +156,7 @@ namespace config {
                 filtered.insert(t.cbegin(), t.cend());
             });
         }
+        filtered.insert("checksum", io::checksumAsString(checksum));
         const toml::node *dependencies = table.get(DEPENDENCY_SECTION_NAME);
         if (dependencies != nullptr) {
             dependencies->visit([&](const toml::table &t) {

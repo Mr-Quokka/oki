@@ -5,6 +5,7 @@
 #include <toml.hpp>
 #include <unordered_map>
 
+#include "io/checksum.h"
 #include "make/BuildInfo.h"
 #include "make/ProjectKind.h"
 #include "package/Summary.h"
@@ -105,7 +106,7 @@ namespace config {
          *
          * @return Les données publiques de version au format JSON.
          */
-        std::string asFilteredJson() const;
+        std::string asFilteredJson(const io::Checksum &checksum) const;
 
         friend std::ostream &operator<<(std::ostream &, const Manifest &);
     };

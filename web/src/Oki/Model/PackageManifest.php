@@ -14,17 +14,20 @@ class PackageManifest
 
     private string $kind;
 
+    private string $checksum;
+
     /**
      * @var array<string, string>
      */
     private array $dependencies;
 
-    public function __construct(string $name, string $description, string $version, string $kind, array $dependencies)
+    public function __construct(string $name, string $description, string $version, string $kind, string $checksum, array $dependencies)
     {
         $this->name = $name;
         $this->description = $description;
         $this->version = $version;
         $this->kind = $kind;
+        $this->checksum = $checksum;
         $this->dependencies = $dependencies;
     }
 
@@ -51,6 +54,11 @@ class PackageManifest
     public function getKind(): string
     {
         return $this->kind;
+    }
+
+    public function getChecksum(): string
+    {
+        return $this->checksum;
     }
 
     /**

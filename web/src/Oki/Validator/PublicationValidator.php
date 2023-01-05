@@ -10,10 +10,14 @@ const HAS_ZIP_EXT = false;
 
 final class PublicationValidator
 {
-    public static function validateVersionContent(array $files, array &$errors, string $key = 'package'): bool
+    public static function validateVersionContent(array $files, array &$errors, string $checksum, string $key = 'package'): bool
     {
         if (empty($files[$key])) {
             $errors[] = 'No content has been found';
+            return false;
+        }
+        if (hash_file('sha256', $files[$key]['tmp_name']) !== $checksum) {
+            $errors[] = 'Invalid checksum';
             return false;
         }
         if (HAS_ZIP_EXT) {
@@ -55,6 +59,9 @@ final class PublicationValidator
             if (empty($json['kind']) || !is_string($json['kind'])) {
                 $errors[] = 'Invalid package kind';
             }
+            if (empty($json['checksum']) || !is_string($json['checksum'])) {
+                $errors[] = 'Invalid checksum';
+            }
             if (isset($json['dependencies']) && !self::validateDependencies($json['dependencies'])) {
                 $errors[] = 'Invalid dependencies';
             }
@@ -64,6 +71,7 @@ final class PublicationValidator
                     $json['description'] ?? '',
                     $json['version'],
                     $json['kind'],
+                    $json['checksum'],
                     $json['dependencies'] ?? []
                 );
             }

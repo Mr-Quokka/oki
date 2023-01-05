@@ -56,7 +56,7 @@ class ApiController
         if (!empty($errors)) {
             return JsonResponse::badRequest($errors[0]);
         }
-        if (!PublicationValidator::validateVersionContent($_FILES, $errors)) {
+        if (!PublicationValidator::validateVersionContent($_FILES, $errors, $manifest->getChecksum())) {
             return JsonResponse::badRequest($errors[0]);
         }
         $packageId = $di->getPackageGateway()->getOrCreatePackage($user, $manifest);
