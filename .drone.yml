@@ -10,6 +10,7 @@ trigger:
     - feature/ci
     - cli/*
     - doc/*
+    - web/*
 
 steps:
   - name: build-cli
