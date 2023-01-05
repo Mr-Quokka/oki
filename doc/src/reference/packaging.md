@@ -27,7 +27,7 @@ The `configure.sh` script should be executed before building and Oki should be i
 Edit the `debian/rule` file like this:
 
 ```Makefile
-#!/usr/bin/make
+#!/usr/bin/make -f
 
 %:
 	dh $@
