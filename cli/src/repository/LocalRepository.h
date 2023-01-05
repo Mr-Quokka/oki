@@ -12,6 +12,6 @@ namespace repository {
         void createIfNotExists();
         std::vector<package::Package> listPackages() override;
         package::Package getPackageInfo(std::string_view packageName) override;
-        std::string getPackageURL(std::string_view packageName, std::string packageVersion) override;
+        void publish(config::Manifest &manifest, const std::filesystem::path &source) override;
     };
 }

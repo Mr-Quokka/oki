@@ -60,13 +60,6 @@ namespace repository {
         return {data.at("name").get<std::string>(), data.at("description").get<std::string>(), versions};
     }
 
-    std::string RemoteRepository::getPackageURL(std::string_view packageName, std::string packageVersion) {
-        io::HttpRequest request = io::HttpRequest::createJson(
-            apiUrl + "/api/version/" + std::string{packageName} + "?version=" + packageVersion);
-        json data = tryReadRequest(authProvider, request);
-        return data.get<std::string>();
-    }
-
     void RemoteRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
         io::HttpRequest request = io::HttpRequest::createJson(apiUrl + "/api/publish");
         io::MimePart mime = request.addMime();

@@ -63,6 +63,13 @@ namespace config {
         make::BuildInfo getBuildInfo() const;
 
         /**
+         * Récupére la version du paquet dans le fichier manifeste.
+         * 
+         * @return La version du paquet.
+         */
+        semver::Version getPackageVersion() const;
+
+        /**
          * Ajoute un paquet à la liste des dépendances directes. S'il existe déjà, alors il n'est pas rajouté.
          *
          * @return Vrai si la dépendance n'était pas déjà référencée, faux sinon.
