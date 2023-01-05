@@ -1,28 +1,26 @@
 :root {
-    --colorBackground: #444;
-    --colorBackgroundPink: #f34b7d;
-    --colorBackgroundComplement: #333;
-    --colorText: #EEE;
-    --colorSubtext: #AAA;
-    --colorComplement: #0AA;
-    --colorError: #C00;
+    --background: #444;
+    --backgroundComplement: #333;
+    --text: #EEE;
+    --subtext: #AAA;
+    --complement: #0AA;
+    --error: #C00;
 
-    --borderDebug: dotted gold 1px;
+    --debug: dotted gold 1px;
 }
 
 body{
-    color: var(--colorText);
-    background-color: var(--colorBackground);
+    color: var(--text);
+    background-color: var(--background);
     font-family: Helvetica, sans-serif;
 }
 
 header{
-    background-color: var(--colorBackgroundComplement);
+    background-color: var(--backgroundComplement);
     top: 0;
     left: 0;
     right: 0;
-    padding-bottom: 20px;
-    padding-top: 20px;
+    padding: 20px 0px;
     position: absolute;
     display: flex;
     flex-wrap: wrap;
@@ -34,19 +32,19 @@ main{
 }
 
 hr{
-    color: var(--colorComplement);
+    color: var(--complement);
     width: 25%;
     margin-bottom: 25px;
 }
 
 a{
-    color: var(--colorText);
+    color: var(--text);
     text-decoration: none;
     margin-bottom: 10px;
 }
 
 a:hover:not(.logo){
-    color: var(--colorComplement);
+    color: var(--complement);
     text-decoration: underline;
 }
 
@@ -55,14 +53,13 @@ a:focus{
 }
 
 .error{
-    border: var(--colorError) solid;
+    border: var(--error) solid;
     text-align: center;
     font-weight: bold;
     font-size: 150%;
     width: 30%;
     padding: 20px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0px auto;
 }
 
 .logo{
@@ -70,9 +67,7 @@ a:focus{
     font-weight: bold;
     font-size: 40px;
     height: 40px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: 2%;
+    margin: 20px 0 20px 2%;
     align-items: center;
 }
 
@@ -87,20 +82,18 @@ a:focus{
 }
 
 .package{
-    width: 320px; 
+    width: 25%; 
     border-radius: 20px;
-    border: var(--colorComplement) solid 1px;
-    margin-bottom: 20px;
-    padding-left: 20px;
-    margin-left: auto;
-    margin-right: auto;
+    border: var(--complement) solid 1px;
+    margin: 0 auto 20px auto;
+    padding: 20px;
 }
 
 .package-prompt{
     display: flex;
     justify-content: space-between;
     padding-top: 20px;
-    padding-right: 20px;
+    font-size: 20px;
 }
 
 .package-name{
@@ -108,7 +101,7 @@ a:focus{
 }
 
 .package-description{
-    color: var(--colorSubtext);
+    color: var(--subtext);
     margin-top: -10px;
 }
 

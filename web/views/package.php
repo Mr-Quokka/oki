@@ -1,4 +1,4 @@
-<?php $title="Package (" . $params['package']->getName() . ")" ?> 
+<?php $title = "Package (" . $params['package']->getName() . ")" ?> 
 
 <div class="center-content">
     <h2><?= $params['package']->getName() ?></h2>
@@ -14,7 +14,7 @@
             <h3>
                 <a class="package-name" href="<?= $version->getDownloadUrl() ?>"><?= $version->getIdentifier() ?></a>
             </h3>
-            <p class="package-description"> Published the <?= $version->getPublishedDate() ?>)</p>
+            <p class="package-description"> Published the <?= $version->getPublishedDate() ?></p>
         </div>
     <?php endforeach ?>
 <?php endif ?>

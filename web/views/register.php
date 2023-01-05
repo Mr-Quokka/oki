@@ -1,16 +1,18 @@
 <?php $title = "Register"; ?>
 <link rel="stylesheet" href="/style/form-layout.css">
-<?php if ($params['fail']) : ?>
-    <article class="message is-danger">
-        <div class="message-header">
-            <p>Registration failed</p>
-        </div>
-        <div class="message-body">
-            Login is already taken.
-        </div>
-    </article>
-<?php endif ?>
 <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
+    <h1>Create an account</h1>
+    <?php if ($params['fail']) : ?>
+        <article class="message is-danger">
+            <div class="message-header">
+                <p>Registration failed</p>
+            </div>
+            <div class="message-body">
+                Login is already taken.
+            </div>
+        </article>
+    <?php endif ?>
+    
     <div class="field">
         <label class="label" for="login">Login</label>
         <div class="control">
@@ -32,7 +34,7 @@
 
     <div class="field">
         <div class="control">
-            <button class="button is-link">Submit</button>
+            <button class="button is-link">Register</button>
         </div>
     </div>
 </form>
