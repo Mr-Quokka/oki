@@ -27,10 +27,10 @@ steps:
       - build-cli
 
   - name: lint-web
-    image: composer:latest
+    image: ghcr.io/phpstan/phpstan:latest-php8.2
     commands:
-      - cd web && composer require --dev phpstan/phpstan
-      - vendor/bin/phpstan analyse src --level 2
+      - cd web
+      - phpstan analyse src --level 2
 
   - name: build-book
     image: hub.codefirst.iut.uca.fr/clement.freville2/oki-build-image:latest
