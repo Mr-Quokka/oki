@@ -1,3 +1,10 @@
+<?php 
+$get = $_SERVER['QUERY_STRING'] ?? '';
+if (!empty($get)) {
+    $get = '?' . $get;
+}
+?>
+
 <h2>
     <?php if ($security->getCurrentUser() == null): ?>
         <a href="<?= $router->url('login') ?>">Login</a>
@@ -24,3 +31,49 @@
             </div>
     <?php endforeach ?>
 <?php endif ?>
+
+<ul>
+    <?php 
+
+    if($params['page'] < 1){
+        $params['page'] = 1;
+    }
+
+    if ($params['page'] > 1) { ?>
+        <li><a href="<?= $router->url('recent/' . ($params['page'] - 1)) . $get ?>"> < </a></li>
+    <?php
+        }
+
+    else { ?>
+        <li><a> < </a></li>
+    <?php
+    }
+    
+    if(($params['page'] - 1) != 0){ ?>
+        <li><a href="<?= $router->url('recent/' . ($params['page'] - 1)) . $get ?>">  <?= ($params['page'] - 1) ?> </a></li>
+    <?php
+        }
+
+    if($params['page'] + 1 <= $params['nbPages'] && $params['page'] - 1 != 0){ ?>
+        <li><a href=""> ... </a></li>
+        
+    <?php 
+    }
+    if($params['page'] < $params['nbPages']) { ?>
+        <li><a href="<?= $router->url('recent/' . ($params['page'] + 1)) . $get ?>">  <?= ($params['page'] + 1) ?> </a></li>
+    <?php 
+    } 
+
+    if ($params['page'] != $params['nbPages']) { ?>
+        <li><a href="<?= $router->url('recent/' . ($params['page'] + 1)) . $get ?>"> > </a></li>
+    <?php
+        }
+
+    else { ?>
+        <li><a> > </a></li>
+    <?php
+    }
+    ?>
+
+</ul>
+
