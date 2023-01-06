@@ -32,48 +32,47 @@ if (!empty($get)) {
     <?php endforeach ?>
 <?php endif ?>
 
-<ul>
-    <?php 
-
-    if($params['page'] < 1){
-        $params['page'] = 1;
-    }
-
-    if ($params['page'] > 1) { ?>
-        <li><a href="<?= $router->url('recent/' . ($params['page'] - 1)) . $get ?>"> < </a></li>
-    <?php
-        }
-
-    else { ?>
-        <li><a> < </a></li>
-    <?php
-    }
-    
-    if(($params['page'] - 1) != 0){ ?>
-        <li><a href="<?= $router->url('recent/' . ($params['page'] - 1)) . $get ?>">  <?= ($params['page'] - 1) ?> </a></li>
-    <?php
-        }
-
-    if($params['page'] + 1 <= $params['nbPages'] && $params['page'] - 1 != 0){ ?>
-        <li><a href=""> ... </a></li>
-        
-    <?php 
-    }
-    if($params['page'] < $params['nbPages']) { ?>
-        <li><a href="<?= $router->url('recent/' . ($params['page'] + 1)) . $get ?>">  <?= ($params['page'] + 1) ?> </a></li>
-    <?php 
-    } 
-
-    if ($params['page'] != $params['nbPages']) { ?>
-        <li><a href="<?= $router->url('recent/' . ($params['page'] + 1)) . $get ?>"> > </a></li>
-    <?php
-        }
-
-    else { ?>
-        <li><a> > </a></li>
-    <?php
-    }
-    ?>
-
-</ul>
+<nav class="pagination" role="navigation" aria-label="pagination">
+    <?php if ($params['page'] > 1) : ?>
+        <a class="pagination-previous" href="<?= $router->url('recent/' . ($params['page'] - 1)) . $get ?>">Previous</a>
+    <?php endif; ?>
+    <?php if ($params['page'] < $params['nbPages']) : ?>
+        <a class="pagination-next" href="<?= $router->url('recent/' . ($params['page'] + 1)) . $get ?>">Next page</a>
+    <?php endif; ?>
+    <ul class="pagination-list">
+        <?php if ($params['page'] > 2) : ?>
+            <li>
+                <a class="pagination-link" aria-label="Goto page 1" href="<?= $router->url('recent/1') . $get ?>">1</a>
+            </li>
+            <?php if ($params['page'] > 3) : ?>
+                <li>
+                    <span class="pagination-ellipsis">&hellip;</span>
+                </li>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($params['page'] > 1) : ?>
+            <li>
+                <a class="pagination-link" aria-label="Goto page <?= $params['page'] - 1 ?>" href="<?= $router->url('recent/' . ($params['page'] - 1)) . $get ?>"><?= $params['page'] - 1 ?></a>
+            </li>
+        <?php endif; ?>
+        <li>
+            <a class="pagination-link is-current" aria-label="Page <?= $params['page'] ?>" aria-current="page"><?= $params['page'] ?></a>
+        </li>
+        <?php if ($params['page'] < ($params['nbPages'] - 1)) : ?>
+            <li>
+                <a class="pagination-link" aria-label="Goto page <?= $params['page'] + 1 ?>" href="<?= $router->url('recent/' . ($params['page'] + 1)) . $get ?>"><?= $params['page'] + 1 ?></a>
+            </li>
+            <?php if ($params['page'] < ($params['nbPages'] - 2)) : ?>
+                <li>
+                    <span class="pagination-ellipsis">&hellip;</span>
+                </li>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($params['page'] < $params['nbPages']) : ?>
+            <li>
+                <a class="pagination-link" aria-label="Goto page <?= $params['nbPages'] ?>" href="<?= $router->url('recent/' . $params['nbPages']) . $get ?>"><?= $params['nbPages'] ?></a>
+            </li>
+        <?php endif; ?>
+    </ul>
+</nav>
 
