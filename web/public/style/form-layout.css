@@ -1,6 +1,10 @@
 :root{
     --formFieldBackground: white;
+    --formComplement: #0AA;
     --formFieldText: #555;
+}
+
+.dark{
     --formComplement: #f34b7d;
 }
 
