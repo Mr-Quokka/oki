@@ -1,8 +1,8 @@
 #include "GlobalRepository.h"
-#include "../io/HttpRequest.h"
-#include "RemoteRepository.h"
-#include "LocalRepository.h"
 #include "../config/config.h"
+#include "../io/HttpRequest.h"
+#include "LocalRepository.h"
+#include "RemoteRepository.h"
 
 namespace repository {
     repository::Repository &GlobalRepository::getRepository(std::string_view name) {
@@ -45,23 +45,23 @@ namespace repository {
 
     bool GlobalRepository::addSource(std::string_view name, std::unique_ptr<repository::Repository> &&repository) {
         if (std::find_if(sources.begin(), sources.end(), [&name](const RepositoryId &id) {
-            return id.name == name;
-        }) != sources.end()) {
+                return id.name == name;
+            }) != sources.end()) {
             return false;
         }
         sources.emplace_back(repository::RepositoryId{
-                std::string{name},
-                std::move(repository),
+            std::string{name},
+            std::move(repository),
         });
         return true;
     }
 
     void GlobalRepository::addDefaultSources() {
         addSource(
-                "default",
-                std::make_unique<RemoteRepository>(config::getDefaultRemoteRepository()));
+            "default",
+            std::make_unique<RemoteRepository>(config::getDefaultRemoteRepository()));
         addSource(
-                "local",
-                std::make_unique<LocalRepository>(config::getDefaultLocalRepository()));
+            "local",
+            std::make_unique<LocalRepository>(config::getDefaultLocalRepository()));
     }
 }

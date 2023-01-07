@@ -15,7 +15,7 @@ CXXFLAGS := -std=c++20 \
 	-pedantic \
 	-MMD -MP \
 	$(CXXFLAGS_$(BUILD))
-LDLIBS := -lcurl -lminizip # Bibliothèques utilisées pour l'édition des liens
+LDLIBS := -lcurl -lminizip -lboost_program_options # Bibliothèques utilisées pour l'édition des liens
 
 # Nom de l'exécutable final
 TARGET_EXE := oki

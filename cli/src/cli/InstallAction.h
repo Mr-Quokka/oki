@@ -1,6 +1,8 @@
 #pragma once
 
+#include "ArgMatches.h"
 #include "CliAction.h"
+#include "Command.h"
 
 namespace cli {
     /**
@@ -8,10 +10,14 @@ namespace cli {
      */
     class InstallAction : public CliAction {
     private:
-        std::string_view packageName;
+        std::string packageName;
+        repository::Repository &repository;
 
     public:
-        explicit InstallAction(const char *packageName);
-        void run(repository::Repository &repository) override;
+        InstallAction(config::UserConfig &config, ArgMatches &&args);
+
+        void run() override;
+
+        static Command cmd();
     };
 }

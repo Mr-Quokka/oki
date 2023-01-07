@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CliAction.h"
+#include "Command.h"
 
 namespace cli {
     /**
@@ -8,10 +9,12 @@ namespace cli {
      */
     class MakefileAction : public CliAction {
     private:
-        std::string_view fileName;
+        config::UserConfig &config;
+        std::string fileName;
 
     public:
-        explicit MakefileAction(const char *fileName = "Makefile");
-        void run(repository::Repository &repository) override;
+        MakefileAction(config::UserConfig &config, ArgMatches &&args);
+        void run() override;
+        static Command cmd();
     };
 }

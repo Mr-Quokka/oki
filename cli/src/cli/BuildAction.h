@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CliAction.h"
+#include "Command.h"
 
 namespace cli {
     /**
@@ -8,9 +9,15 @@ namespace cli {
      */
     class BuildAction : public CliAction {
     private:
-        void bootstrap(repository::Repository &repository);
+        config::UserConfig &config;
+
+        void bootstrap();
 
     public:
-        void run(repository::Repository &repository) override;
+        explicit BuildAction(config::UserConfig &config);
+
+        void run() override;
+
+        static Command cmd();
     };
 }

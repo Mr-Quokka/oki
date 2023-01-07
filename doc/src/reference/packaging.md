@@ -46,7 +46,7 @@ Source: oki
 Section: devel
 Priority: optional
 Maintainer: Lou VALADE <lovalade@etu.uca.fr>
-Build-Depends: debhelper-compat (= 12), nlohmann-json3-dev, libcurl4-openssl-dev, libminizip-dev, doctest-dev
+Build-Depends: debhelper-compat (= 12), nlohmann-json3-dev, libcurl4-openssl-dev, libminizip-dev, libboost-program-options-dev, doctest-dev
 Standards-Version: 4.5.1
 Homepage: https://oki-pkg.dev
 Vcs-Browser: https://codefirst.iut.uca.fr/git/oki/oki

@@ -58,7 +58,7 @@ detectNlohmannJson
 detectTomlPlusPlus
 detectDoctest
 
-for lib in nlohmann_json libcurl minizip; do
+for lib in libcurl minizip; do
     pkg-config --exists --print-errors "$lib"
 done
 

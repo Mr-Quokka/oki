@@ -123,7 +123,11 @@ namespace config {
     }
 
     semver::Version Manifest::getPackageVersion() const {
-        return semver::Version::parse(getPackageSection().get_as<std::string>("version")->get());
+        const auto *version = getPackageSection().get_as<std::string>("version");
+        if (version == nullptr) {
+            throw ManifestException{"Manifest is missing a [package].version field"};
+        }
+        return semver::Version::parse(version->get());
     }
 
     bool Manifest::loadFileIfExists(const fs::path &fileName) {

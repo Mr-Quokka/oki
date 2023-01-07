@@ -6,9 +6,10 @@
 #include <iostream>
 
 namespace cli {
-    InstallAction::InstallAction(const char *packageName) : packageName{packageName} {}
+    InstallAction::InstallAction(config::UserConfig &config, ArgMatches &&args)
+        : packageName{args.require<std::string>("package")}, repository{args.getRegistry(config)} {}
 
-    void InstallAction::run(repository::Repository &repository) {
+    void InstallAction::run() {
         package::Package p = repository.getPackageInfo(packageName);
         if (p.getVersions().empty()) {
             throw io::APIException{"The package doesn't have any version"};
@@ -26,5 +27,15 @@ namespace cli {
             op::fetch(lock, std::cout, {{std::string{packageName}}, true});
             lock.saveFile(OKI_LOCK_FILE);
         }
+    }
+
+    Command InstallAction::cmd() {
+        return Command{"install", "Install a dependency",
+                       [](config::UserConfig &config, ArgMatches &&args) -> std::unique_ptr<CliAction> {
+                           return std::make_unique<InstallAction>(config, std::move(args));
+                       }}
+            .arg<std::string>("registry", "Name of the registry to use")
+            .arg<std::string>("package", "Name of the package to install")
+            .positional("package");
     }
 }

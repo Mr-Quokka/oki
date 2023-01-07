@@ -64,7 +64,7 @@ namespace config {
 
         /**
          * Récupére la version du paquet dans le fichier manifeste.
-         * 
+         *
          * @return La version du paquet.
          */
         semver::Version getPackageVersion() const;
