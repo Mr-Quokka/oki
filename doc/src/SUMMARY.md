@@ -12,6 +12,7 @@
 * [Reference](reference/index.md)
     * [Dependencies](reference/dependencies.md)
     * [Manifest](reference/manifest.md)
+    * [Repositories](reference/repositories.md)
     * [Packaging a .deb](reference/packaging.md)
 
 * [Hosting a repository](hosting-repository/index.md)
