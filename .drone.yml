@@ -48,3 +48,17 @@ steps:
       branch:
         - main
         - doc/setup
+
+  - name: swagger-doc
+    image: hub.codefirst.iut.uca.fr/maxime.batista/codefirst-docdeployer
+    failure: ignore
+    volumes:
+      - name: docs
+        path: /docs
+    commands:
+      - ln -s oki-api.yaml swagger.yml && mkdir /docs/swagger
+      - /entrypoint.sh --type swagger --dir . --dest swagger
+
+volumes:
+  - name: docs
+    temp: { }
