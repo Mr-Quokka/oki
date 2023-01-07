@@ -13,7 +13,7 @@ class Router
     private string $method;
 
     /**
-     * @var Route[]
+     * @var array<string, Route[]>
      */
     private array $routes = [];
 
