@@ -17,7 +17,7 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
- 
+
 /**
  * SplClassLoader implementation that implements the technical interoperability
  * standards for PHP 5.3 namespaces and class names.
@@ -38,15 +38,15 @@
  */
 class SplClassLoader
 {
-    private $_fileExtension = '.php';
-    private $_namespace;
-    private $_includePath;
-    private $_namespaceSeparator = '\\';
+    private string $_fileExtension = '.php';
+    private ?string $_namespace;
+    private ?string $_includePath;
+    private string $_namespaceSeparator = '\\';
 
     /**
      * Creates a new <tt>SplClassLoader</tt> that loads classes of the
      * specified namespace.
-     * 
+     *
      * @param string $ns The namespace to use.
      */
     public function __construct(string $ns = null, string $includePath = null)
@@ -57,7 +57,7 @@ class SplClassLoader
 
     /**
      * Sets the namespace separator used by classes in the namespace of this class loader.
-     * 
+     *
      * @param string $sep The separator to use.
      */
     public function setNamespaceSeparator(string $sep)
@@ -66,18 +66,18 @@ class SplClassLoader
     }
 
     /**
-     * Gets the namespace seperator used by classes in the namespace of this class loader.
+     * Gets the namespace separator used by classes in the namespace of this class loader.
      *
-     * @return void
+     * @return string
      */
-    public function getNamespaceSeparator()
+    public function getNamespaceSeparator(): string
     {
         return $this->_namespaceSeparator;
     }
 
     /**
      * Sets the base include path for all class files in the namespace of this class loader.
-     * 
+     *
      * @param string $includePath
      */
     public function setIncludePath(string $includePath)
@@ -90,17 +90,17 @@ class SplClassLoader
      *
      * @return string $includePath
      */
-    public function getIncludePath()
+    public function getIncludePath(): ?string
     {
         return $this->_includePath;
     }
 
     /**
      * Sets the file extension of class files in the namespace of this class loader.
-     * 
+     *
      * @param string $fileExtension
      */
-    public function setFileExtension($fileExtension)
+    public function setFileExtension(string $fileExtension)
     {
         $this->_fileExtension = $fileExtension;
     }
@@ -110,7 +110,7 @@ class SplClassLoader
      *
      * @return string $fileExtension
      */
-    public function getFileExtension()
+    public function getFileExtension(): string
     {
         return $this->_fileExtension;
     }

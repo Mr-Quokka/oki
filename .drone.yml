@@ -30,7 +30,7 @@ steps:
     image: ghcr.io/phpstan/phpstan:latest-php8.2
     commands:
       - cd web
-      - phpstan analyse src --level 2
+      - phpstan analyse src --level 3
 
   - name: build-book
     image: hub.codefirst.iut.uca.fr/clement.freville2/oki-build-image:latest
