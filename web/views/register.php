@@ -1,25 +1,18 @@
-<?php $title = "Register"; ?>
-<?php if ($params['fail']) : ?>
-    <article class="message is-danger">
-        <div class="message-header">
-            <p>Registration failed</p>
-        </div>
-        <div class="message-body">
-            Login is already taken.
-        </div>
-    </article>
-<?php endif ?>
+<?php
+$title = 'Register';
+require 'errors.php';
+?>
 <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
     <div class="field">
         <label class="label" for="login">Login</label>
         <div class="control">
-            <input class="input" type="text" id="login" name="login" autocomplete="username">
+            <input class="input" type="text" id="login" name="login" required minlength="4" maxlength="64" autocomplete="username">
         </div>
     </div>
     <div class="field">
         <label class="label" for="password">Password</label>
         <div class="control">
-            <input class="input" type="password" id="password" name="password" autocomplete="new-password">
+            <input class="input" type="password" id="password" name="password" required autocomplete="new-password">
         </div>
     </div>
     <div class="field">

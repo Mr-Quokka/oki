@@ -1,24 +1,18 @@
-<?php if ($params['fail']) : ?>
-    <article class="message is-danger">
-        <div class="message-header">
-            <p>Auth failed</p>
-        </div>
-        <div class="message-body">
-            Login and/or password is invalid.
-        </div>
-    </article>
-<?php endif ?>
+<?php
+$title = 'Login';
+require 'errors.php';
+?>
 <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
     <div class="field">
         <label class="label" for="login">Login</label>
         <div class="control">
-            <input class="input" type="text" id="login" name="login" autocomplete="username">
+            <input class="input" type="text" id="login" name="login" required minlength="4" maxlength="64" autocomplete="username">
         </div>
     </div>
     <div class="field">
         <label class="label" for="password">Password</label>
         <div class="control">
-            <input class="input" type="password" id="password" name="password" autocomplete="current-password">
+            <input class="input" type="password" id="password" name="password" required autocomplete="current-password">
         </div>
     </div>
 

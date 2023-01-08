@@ -1,3 +1,6 @@
+<?php
+$title = $params['package']->getName();
+?>
 <div class="center-content">
     <h2><?= $params['package']->getName() ?></h2>
     <h3 class="package-detail-description"><?= $params['package']->getDescription() ?></h3>
