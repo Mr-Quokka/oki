@@ -7,14 +7,24 @@ namespace Oki\Controller;
 use Oki\DI\DI;
 use Oki\Http\HttpResponse;
 use Oki\Http\JsonResponse;
+use Oki\Validator\PaginationValidator;
 use Oki\Validator\PublicationValidator;
 
 class ApiController
 {
     public function listPackages(DI $di): HttpResponse
     {
-        $packages = $di->getPackageGateway()->listPackages();
-        return new JsonResponse(200, ['packages' => $packages]);
+        $limit = PaginationValidator::getLimit($_GET);
+        $page = PaginationValidator::getPage($_GET);
+        $total = $di->getPackageGateway()->getCount();
+        $packages = $di->getPackageGateway()->listPackagesPagination($limit, $page);
+        return new JsonResponse(200, [
+            'pagination' => [
+                'count' => count($packages),
+                'total' => $total
+            ],
+            'packages' => $packages
+        ]);
     }
 
     public function packageInfo(DI $di, array $params): HttpResponse
