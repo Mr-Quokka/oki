@@ -1,4 +1,7 @@
-<?php $title = "Register"; ?>
+<?php
+$title = "Register";
+$small = true;
+?>
 <link rel="stylesheet" href="/style/form-layout.css">
 <form action="<?= $_SERVER['REQUEST_URI'] ?>" method="post">
     <h1>Create an account</h1>
@@ -12,7 +15,7 @@
             </div>
         </article>
     <?php endif ?>
-    
+
     <div class="field">
         <label class="label" for="login">Login</label>
         <div class="control">

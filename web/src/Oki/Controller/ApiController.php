@@ -57,7 +57,7 @@ class ApiController
         }
         $manifest->setPackageId($packageId);
 
-        switch ($di->getPackageGateway()->insertVersion($manifest)) {
+        switch ($di->getPackageGateway()->insertVersion($manifest, $_FILES['package']['size'])) {
             case 200:
                 move_uploaded_file(
                     $_FILES['package']['tmp_name'],

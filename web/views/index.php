@@ -1,4 +1,7 @@
-<?php $title = "Home" ?>
+<?php
+$title = "Home";
+$small = true;
+?>
 
 <?php if (empty($params['packages'])) : ?>
     <h2 class="error">ERROR : there is no package</h2>

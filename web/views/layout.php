@@ -44,7 +44,7 @@
         </h2>
     </header>
 
-    <main>
+    <main <?php if (isset($small)) { echo 'class="small-viewport"'; } ?>>
         <?= $content ?>
     </main>
 </body>

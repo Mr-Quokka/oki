@@ -14,6 +14,7 @@ CREATE TABLE version (
 	id_version SERIAL PRIMARY KEY,
 	package_id INT NOT NULL REFERENCES package(id_package),
 	identifier VARCHAR(10) NOT NULL,
+	file_size INT NOT NULL,
 	published_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	UNIQUE (package_id, identifier)
 );

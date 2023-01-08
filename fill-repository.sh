@@ -16,9 +16,10 @@ for package in packages/*; do
     rm -f "$existingPackage"
     cd $package/src && zip -r "$existingPackage" ./*
     cd -
+    size=$(stat --printf="%s" "$existingPackage")
     requests="$requests
     INSERT INTO package (name, description, language_id) VALUES ('$packageName', 'A random package', (SELECT id_language FROM language WHERE designation = 'C'));
-    INSERT INTO version (package_id, identifier, published_date) VALUES ((SELECT id_package FROM package WHERE name='$packageName'), '0.1.0', CURRENT_TIMESTAMP);"
+    INSERT INTO version (package_id, identifier, published_date, file_size) VALUES ((SELECT id_package FROM package WHERE name='$packageName'), '0.1.0', CURRENT_TIMESTAMP, $size);"
 done
 
 echo "$requests" | sqlite3 "$dest"/web/oki_packages.db

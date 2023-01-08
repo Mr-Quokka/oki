@@ -16,6 +16,8 @@ class PackageVersion implements JsonSerializable
 
     private string $published_date;
 
+    private int $file_size;
+
     /**
      * @var array<string, string>
      */
@@ -44,6 +46,11 @@ class PackageVersion implements JsonSerializable
     public function getPublishedDate(): string
     {
         return $this->published_date;
+    }
+
+    public function getFileSize(): int
+    {
+        return $this->file_size;
     }
 
     public function getDownloadUrl(): string

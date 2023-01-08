@@ -11,11 +11,10 @@
 form{
     display: block;
     text-align: center;
-    margin: 0px auto 0px auto;
+    margin: 0 auto 0 auto;
     padding: 20px;
     font-size: 18px;
     font-weight: bold;
-    width: 25%;
     background-color: var(--backgroundComplement);
     border-radius: 15px;
     border: solid var(--complement) 2px;
@@ -31,7 +30,7 @@ form>h1{
 
 input,
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
+input:-webkit-autofill:hover,
 input:-webkit-autofill:focus{
     width: 40%;
     padding: 10px 5px;

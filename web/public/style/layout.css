@@ -22,6 +22,7 @@ body{
     color: var(--text);
     background-color: var(--background);
     font-family: Helvetica, sans-serif;
+    margin: 0;
 }
 
 header{
@@ -29,20 +30,24 @@ header{
     top: 0;
     left: 0;
     right: 0;
-    padding: 20px 0px;
-    position: absolute;
+    padding: 20px 0;
     display: flex;
     flex-wrap: wrap;
 }
 
 main{
-    margin-top: 130px;
-    position: relative;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
+}
+
+main.small-viewport{
+    max-width: 600px;
 }
 
 hr{
     color: var(--complement);
-    width: 25%;
     margin-bottom: 25px;
 }
 
@@ -69,7 +74,7 @@ a:focus{
     font-size: 150%;
     width: 30%;
     padding: 20px;
-    margin: 0px auto;
+    margin: 0 auto;
 }
 
 .logo{
@@ -100,7 +105,6 @@ a:focus{
 }
 
 .package{
-    width: 25%; 
     border-radius: 20px;
     border: var(--complement) solid 1px;
     margin: 0 auto 20px auto;
@@ -125,4 +129,45 @@ a:focus{
 
 .center-content{
     text-align: center;
+}
+
+.tabs{
+    overflow: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+    min-height: 100%;
+    max-width: calc(100% - 20px);
+    margin-left: auto;
+    margin-right: auto;
+}
+.tabs ul{
+    align-items: center;
+    border-bottom-color: #5e6d6f;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+    justify-content: flex-start;
+    list-style: none;
+    margin-bottom: 0;
+}
+.tabs a{
+    color: #ecf0f1;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -1px;
+    padding: 0.5em 1em;
+    border-bottom: 2px solid #5e6d6f;
+    text-decoration: none;
+}
+.tabs li[aria-selected="true"] a {
+    border-bottom-color: #217dbb;
+}
+.package-info {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 3fr)
+}
+.package-readme {
+    padding: 2rem 1.75rem;
 }
