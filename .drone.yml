@@ -50,7 +50,7 @@ steps:
       - name: docs
         path: /docs
     commands:
-      - ln -s oki-api.yaml swagger.yml
+      - cp oki-api.yaml swagger.yml && mkdir -p /docs/swagger
       - /entrypoint.sh --type swagger --dir . --dest swagger
 
 volumes:
