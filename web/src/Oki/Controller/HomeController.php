@@ -10,10 +10,17 @@ use Oki\Http\HttpResponse;
 
 class HomeController
 {
-    public function index(DI $di): HttpResponse
+    private const PACKAGES_PER_PAGE = 10;
+
+    public function index(DI $di, array $params): HttpResponse
     {
-        $packages = $di->getPackageGateway()->listPackages();
-        return new HtmlResponse(200, 'index', ['packages' => $packages]);
+        $nbPages = intval(ceil($di->getPackageGateway()->getCount() / self::PACKAGES_PER_PAGE));
+        if ($nbPages === 0){
+            $nbPages = 1;
+        }
+        $page = intval($params['page'] ?? '1');
+        $packages = $di->getPackageGateway()->listPackagesPagination(self::PACKAGES_PER_PAGE, $page);
+        return new HtmlResponse(200, 'index', ['packages' => $packages, 'page' => $page, 'nbPages' => $nbPages]);
     }
 
     public function packageInfo(DI $di, array $params): HttpResponse

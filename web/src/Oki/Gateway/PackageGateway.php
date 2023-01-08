@@ -38,6 +38,20 @@ class PackageGateway
 		return $req->fetchAll(PDO::FETCH_CLASS, PackageResume::class);
 	}
 
+	public function listPackagesPagination(int $limit, int $page): array
+	{
+        $req = $this->pdo->prepare('SELECT p.*, v1.identifier latest_version FROM package p
+            LEFT JOIN version v1 ON p.id_package = v1.package_id
+            LEFT JOIN version v2 ON v1.package_id = v2.package_id AND v2.published_date > v1.published_date
+            WHERE v2.published_date IS NULL LIMIT :limit OFFSET :offset;');
+		$req->bindValue('limit', $limit, PDO::PARAM_INT);
+        $req->bindValue('offset', ($page - 1) * $limit, PDO::PARAM_INT);
+		if (!$req->execute()) {
+            return [];
+        }
+		return $req->fetchAll(PDO::FETCH_CLASS, PackageResume::class);
+	}
+
 	public function getPackageInfo(string $packageName): ?Package
 	{
 		$reqPacket = $this->pdo->prepare('SELECT * FROM package WHERE name = :name;');
@@ -171,5 +185,12 @@ class PackageGateway
 			}
 		}
 		return new TransactionResult($manifest->getPackageId(), 201, 'The version has been successfully published');
+	}
+
+	public function getCount(): int
+	{
+		$req = $this->pdo->prepare('SELECT COUNT(*) c FROM package;');
+		$req->execute();
+		return intval($req->fetch() ['c']);
 	}
 }

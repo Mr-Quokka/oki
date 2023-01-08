@@ -25,7 +25,7 @@ paths:
             maximum: 100
           description: The maximum amount of items to return
         - in: query
-          name: offset
+          name: page
           schema:
             type: integer
             example: 0

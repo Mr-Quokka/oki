@@ -12,6 +12,7 @@ $router->post('/^api\/publish$/', [$api, 'publish']);
 $router->get('/^api\/info\/(?<name>[\w-]+)$/', [$api, 'packageInfo']);
 $router->get('/^api\/version\/(?<package>[\w-]+)$/', [$api, 'versionInfo']);
 $router->get('/^$/', [$home, 'index']);
+$router->get('/^list\/(?<page>\d+)$/', [$home, 'index']);
 $router->get('/^package\/(?<name>[\w-]+)$/', [$home, 'packageInfo']);
 $router->match('/^login$/', [$user, 'login']);
 $router->match('/^register$/', [$user, 'register']);

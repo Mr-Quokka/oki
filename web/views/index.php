@@ -1,3 +1,10 @@
+<?php
+$get = $_SERVER['QUERY_STRING'] ?? '';
+if (!empty($get)) {
+    $get = '?' . $get;
+}
+?>
+
 <h2>
     <?php if ($security->getCurrentUser() == null): ?>
         <a href="<?= $router->url('login') ?>">Login</a>
@@ -24,3 +31,8 @@
             </div>
     <?php endforeach ?>
 <?php endif ?>
+
+<?php
+$paginationBase = 'list/';
+require 'pagination.php'
+?>
