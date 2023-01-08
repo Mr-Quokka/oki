@@ -8,11 +8,11 @@ $user = new \Oki\Controller\UserController();
 
 $router = new \Oki\Router\Router($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
 $router->get('/^api\/list$/', [$api, 'listPackages']);
-$router->get('/^recent\/(?<page>\d+)$/', [$home, 'index']);
 $router->post('/^api\/publish$/', [$api, 'publish']);
 $router->get('/^api\/info\/(?<name>[\w-]+)$/', [$api, 'packageInfo']);
 $router->get('/^api\/version\/(?<package>[\w-]+)$/', [$api, 'versionInfo']);
 $router->get('/^$/', [$home, 'index']);
+$router->get('/^list\/(?<page>\d+)$/', [$home, 'index']);
 $router->get('/^package\/(?<name>[\w-]+)$/', [$home, 'packageInfo']);
 $router->match('/^login$/', [$user, 'login']);
 $router->match('/^register$/', [$user, 'register']);
