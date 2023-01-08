@@ -46,22 +46,25 @@ final class PublicationValidator
         }
         try {
             $json = json_decode($post[$key], true, 4, JSON_THROW_ON_ERROR);
-            if (empty($json['name']) || !self::validateShortName($json['name'])) {
+            if (empty($json['name']) || !is_string($json['name']) || !self::validateName($json['name'])) {
                 $errors[] = 'Invalid package name';
             }
-            if (empty($json['version']) || !self::validateVersion($json['version'])) {
+            if (empty($json['description']) || !is_string($json['description']) || !self::validateDescription($json['description'])) {
+                $errors[] = 'Invalid description';
+            }
+            if (empty($json['version']) || !is_string($json['version']) || !self::validateVersion($json['version'])) {
                 $errors[] = 'Invalid package version';
             }
             if (empty($json['kind']) || !is_string($json['kind'])) {
                 $errors[] = 'Invalid package kind';
             }
-            if (isset($json['dependencies']) && !self::validateDependencies($json['dependencies'])) {
+            if (isset($json['dependencies']) && (!is_array($json['dependencies']) || !self::validateDependencies($json['dependencies']))) {
                 $errors[] = 'Invalid dependencies';
             }
             if (empty($errors)) {
                 return new PackageManifest(
                     $json['name'],
-                    $json['description'] ?? '',
+                    htmlspecialchars($json['description']),
                     $json['version'],
                     $json['kind'],
                     $json['dependencies'] ?? []
@@ -73,9 +76,14 @@ final class PublicationValidator
         return null;
     }
 
-    public static function validateShortName(string $name): bool
+    public static function validateName(string $name): bool
     {
-        return preg_match('/^[a-z0-9_-]+$/', $name) && strlen($name) < 64;
+        return strlen($name) < 64 && preg_match('/^[a-z0-9_-]+$/', $name);
+    }
+
+    public static function validateDescription(string $description): bool
+    {
+        return strlen($description) < 256;
     }
 
     public static function validateVersion(string $version): bool
@@ -88,13 +96,13 @@ final class PublicationValidator
         return preg_match('/^([\^~=]?([0-9]+)\.([0-9]+)\.([0-9]+))|\*$/', $range) === 1;
     }
 
+    /**
+     * @param array<string, string> $dependencies
+     */
     public static function validateDependencies(array $dependencies): bool
     {
-        if (!is_array($dependencies)) {
-            return false;
-        }
         foreach ($dependencies as $package => $range) {
-            if (!self::validateShortName($package) || !self::validateRange($range)) {
+            if (!self::validateName($package) || !self::validateRange($range)) {
                 return false;
             }
         }

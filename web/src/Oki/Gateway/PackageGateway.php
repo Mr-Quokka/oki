@@ -75,24 +75,40 @@ class PackageGateway
 		return $res === false ? null : intval($res['id_package']);
 	}
 
-	public function getOrCreatePackage(User $user, PackageManifest $manifest): int
+	private function getLanguageId(string $kind): ?int
+	{
+		$stmt = $this->pdo->prepare('SELECT id_language FROM language WHERE designation = :kind');
+		$stmt->execute(['kind' => $kind]);
+		$row = $stmt->fetch();
+		return $row ? intval($row['id_language']) : null;
+	}
+
+	public function getOrCreatePackage(User $user, PackageManifest $manifest): TransactionResult
 	{
 		$id = $this->getPackageId($manifest->getName());
 		if ($id !== null) {
-			return $id;
+			return new TransactionResult($id, 200, 'Valid existing package name');
 		}
-		$this->pdo->beginTransaction();
-		$req = $this->pdo->prepare('INSERT INTO package (name, description, language_id)
-		VALUES (:name, :description, (SELECT id_language FROM language WHERE designation = :kind));');
-		$req->execute([
-			'name' => $manifest->getName(),
-			'description' => $manifest->getDescription(),
-			'kind' => $manifest->getKind(),
-		]);
-		$ownership = Ownership::from($user->getId(), intval($this->pdo->lastInsertId()));
-		$this->ownershipGateway->insertOwnership($ownership);
-		$this->pdo->commit();
-		return $ownership->getPackageId();
+		$languageId = $this->getLanguageId($manifest->getKind());
+		if ($languageId === null) {
+			return new TransactionResult(-1, 400, 'Unknown package kind');
+		}
+		try {
+			$this->pdo->beginTransaction();
+			$req = $this->pdo->prepare('INSERT INTO package (name, description, language_id) VALUES (:name, :description, :language_id);');
+			$req->execute([
+				'name' => $manifest->getName(),
+				'description' => $manifest->getDescription(),
+				'language_id' => $languageId
+			]);
+			$ownership = Ownership::from($user->getId(), intval($this->pdo->lastInsertId()));
+			$this->ownershipGateway->insertOwnership($ownership);
+			$this->pdo->commit();
+			return new TransactionResult($ownership->getPackageId(), 201, 'Created package');
+		} catch (PDOException $e) {
+			$this->pdo->rollBack();
+			throw $e;
+		}
 	}
 
 	public function getPackageVersion(string $name, string $version): ?string
@@ -109,14 +125,19 @@ class PackageGateway
 
 	public function insertVersion(PackageManifest $manifest): TransactionResult
 	{
-		$this->pdo->beginTransaction();
-		$res = $this->insertVersionUnsafe($manifest);
-		if ($res->isSuccess()) {
-			$res->setTerminate([$this->pdo, 'commit']);
-		} else {
+		try {
+			$this->pdo->beginTransaction();
+			$res = $this->insertVersionUnsafe($manifest);
+			if ($res->isSuccess()) {
+				$res->setTerminate([$this->pdo, 'commit']);
+			} else {
+				$this->pdo->rollBack();
+			}
+			return $res;
+		} catch (PDOException $e) {
 			$this->pdo->rollBack();
+			throw $e;
 		}
-		return $res;
 	}
 
 	public function insertVersionUnsafe(PackageManifest $manifest): TransactionResult
@@ -124,13 +145,13 @@ class PackageGateway
 		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier) values (:package_id, :version);');
 		try {
 			if (!$req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion()])) {
-				return new TransactionResult(500, 'Cannot add new version');
+				return new TransactionResult($manifest->getPackageId(), 500, 'Cannot add new version');
 			}
 			$req = $this->pdo->prepare('UPDATE package SET description = :description WHERE id_package = :package_id;');
 			$req->execute(['description' => $manifest->getDescription(), 'package_id' => $manifest->getPackageId()]);
 		} catch (PDOException $e) {
 			if ($this->config->isUniqueConstraintViolation($e)) {
-				return new TransactionResult(409, 'This version already exists');
+				return new TransactionResult($manifest->getPackageId(), 409, 'This version already exists');
 			}
 			throw $e;
 		}
@@ -146,9 +167,9 @@ class PackageGateway
 			if (($package_reference_id = $this->getPackageId($package)) !== null) {
 				$req->execute(['package_reference_id' => $package_reference_id, 'constrainer_id' => $constrainer_id, 'constraint_value' => $range]);
 			} else {
-				return new TransactionResult(400, "The `$package` dependency is not present in the registry");
+				return new TransactionResult($manifest->getPackageId(), 400, "The `$package` dependency is not present in the registry");
 			}
 		}
-		return new TransactionResult(201, 'The version has been successfully published');
+		return new TransactionResult($manifest->getPackageId(), 201, 'The version has been successfully published');
 	}
 }

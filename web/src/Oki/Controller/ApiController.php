@@ -59,7 +59,11 @@ class ApiController
         if (!PublicationValidator::validateVersionContent($_FILES, $errors)) {
             return JsonResponse::badRequest($errors[0]);
         }
-        $packageId = $di->getPackageGateway()->getOrCreatePackage($user, $manifest);
+        $packageRes = $di->getPackageGateway()->getOrCreatePackage($user, $manifest);
+        if ($packageRes->isError()) {
+            return $packageRes->asJson();
+        }
+        $packageId = $packageRes->getDataId();
         if (!$di->getOwnershipGateway()->grantedAccess($user->getId(), $packageId)) {
             return JsonResponse::error(403, 'Insufficient permissions');
         }

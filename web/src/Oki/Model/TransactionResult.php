@@ -8,14 +8,21 @@ use Oki\Http\JsonResponse;
 
 class TransactionResult
 {
+    private int $dataId;
     private int $httpStatus;
     private string $message;
     private $terminate;
 
-    public function __construct(int $httpStatus, string $message)
+    public function __construct(int $dataId, int $httpStatus, string $message)
     {
+        $this->dataId = $dataId;
         $this->httpStatus = $httpStatus;
         $this->message = $message;
+    }
+
+    public function getDataId(): int
+    {
+        return $this->dataId;
     }
 
     public function isSuccess(): bool
