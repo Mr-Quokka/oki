@@ -52,15 +52,24 @@ class PackageGateway
 		return $req->fetchAll(PDO::FETCH_CLASS, PackageResume::class);
 	}
 
+    public function getPackage(string $packageName): ?Package
+    {
+        $reqPacket = $this->pdo->prepare('SELECT * FROM package WHERE name = :name;');
+        $reqPacket->execute(['name' => $packageName]);
+        $reqPacket->setFetchMode(PDO::FETCH_CLASS, Package::class);
+        $package = $reqPacket->fetch();
+        if ($package === false) {
+            return null;
+        }
+        return $package;
+    }
+
 	public function getPackageInfo(string $packageName): ?Package
 	{
-		$reqPacket = $this->pdo->prepare('SELECT * FROM package WHERE name = :name;');
-		$reqPacket->execute(['name' => $packageName]);
-		$reqPacket->setFetchMode(PDO::FETCH_CLASS, Package::class);
-		$package = $reqPacket->fetch();
-		if ($package === false) {
-			return null;
-		}
+		$package = $this->getPackage($packageName);
+        if ($package === null) {
+            return null;
+        }
 
 		$reqVersion = $this->pdo->prepare('SELECT * FROM version WHERE package_id = :id ORDER BY published_date DESC;');
 		$reqVersion->execute(['id' => $package->getId()]);
@@ -125,23 +134,51 @@ class PackageGateway
 		}
 	}
 
-	public function getPackageVersion(string $name, string $version): ?string
+	public function getPackageVersion(Package $package, ?string $version = null): ?PackageVersion
 	{
-		$req = $this->pdo->prepare('SELECT v.identifier, p.name FROM version v, package p WHERE p.id_package=v.package_id AND :version=v.identifier AND :name=p.name');
-		$req->execute(['name' => $name, 'version' => $version]);
-		$res = $req->fetch();
-		if (!$res) {
-			return null;
-		}
-
-		return "/packages/" . $res["name"] . "_" . $res["identifier"] . ".zip";
+        if ($version === null) {
+            $req = $this->pdo->prepare('SELECT * FROM version WHERE package_id = :package_id ORDER BY published_date DESC LIMIT 1');
+            $req->execute(['package_id' => $package->getId()]);
+        } else {
+            $req = $this->pdo->prepare('SELECT * FROM version WHERE package_id = :package_id AND identifier = :identifier');
+            $req->execute(['package_id' => $package->getId(), 'identifier' => $version]);
+        }
+        $req->setFetchMode(PDO::FETCH_CLASS, PackageVersion::class);
+        $version = $req->fetch();
+        if (!$version) {
+            return null;
+        }
+        $version->setPackage($package);
+		return $version;
 	}
 
-	public function insertVersion(PackageManifest $manifest): TransactionResult
+    public function getPackageVersions(Package $package): Package
+    {
+        $req = $this->pdo->prepare('SELECT * FROM version WHERE package_id = :id ORDER BY published_date DESC;');
+        $req->execute(['id' => $package->getId()]);
+        $versions = $req->fetchAll(PDO::FETCH_CLASS, PackageVersion::class);
+        foreach ($versions as $version) {
+            $version->setPackage($package);
+        }
+        $package->setVersions($versions);
+        return $package;
+    }
+
+    public function getPackageDependencies(PackageVersion $version): PackageVersion
+    {
+        $req = $this->pdo->prepare('SELECT p.name, d.constraint_value FROM dependency d INNER JOIN package p ON p.id_package = d.package_reference_id WHERE d.constrainer_id = :id_version;');
+        $req->execute(['id_version' => $version->getIdVersion()]);
+        while ($dep = $req->fetch()) {
+            $version->addDependency($dep['name'], $dep['constraint_value']);
+        }
+        return $version;
+    }
+
+	public function insertVersion(PackageManifest $manifest, int $fileSize): TransactionResult
 	{
 		try {
 			$this->pdo->beginTransaction();
-			$res = $this->insertVersionUnsafe($manifest);
+			$res = $this->insertVersionUnsafe($manifest, $fileSize);
 			if ($res->isSuccess()) {
 				$res->setTerminate([$this->pdo, 'commit']);
 			} else {
@@ -154,11 +191,11 @@ class PackageGateway
 		}
 	}
 
-	public function insertVersionUnsafe(PackageManifest $manifest): TransactionResult
+	public function insertVersionUnsafe(PackageManifest $manifest, int $fileSize): TransactionResult
 	{
-		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier) values (:package_id, :version);');
+		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier, file_size) values (:package_id, :version, :file_size);');
 		try {
-			if (!$req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion()])) {
+			if (!$req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion(), 'file_size' => $fileSize])) {
 				return new TransactionResult($manifest->getPackageId(), 500, 'Cannot add new version');
 			}
 			$req = $this->pdo->prepare('UPDATE package SET description = :description WHERE id_package = :package_id;');

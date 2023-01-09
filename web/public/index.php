@@ -13,7 +13,7 @@ $router->get('/^api\/info\/(?<name>[\w-]+)$/', [$api, 'packageInfo']);
 $router->get('/^api\/version\/(?<package>[\w-]+)$/', [$api, 'versionInfo']);
 $router->get('/^$/', [$home, 'index']);
 $router->get('/^list\/(?<page>\d+)$/', [$home, 'index']);
-$router->get('/^package\/(?<name>[\w-]+)$/', [$home, 'packageInfo']);
+$router->get('/^package\/(?<name>[\w-]+)\/?(?<version>[\d\.]+)?\/?(?<action>versions|dependencies)?$/', [$home, 'packageInfo']);
 $router->match('/^login$/', [$user, 'login']);
 $router->match('/^register$/', [$user, 'register']);
 $router->match('/^logout/', [$user, 'logout']);

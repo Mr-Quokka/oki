@@ -1,19 +1,80 @@
-#form{
-    text-align: center;
-    font-size: 18px;
+:root{
+    --formFieldBackground: white;
+    --formComplement: #0AA;
+    --formFieldText: #555;
 }
 
-input{
-    padding: 10px 5px 10px 5px;
-    background-color: #DAD1E8;
-    border: 2px ;
+.dark{
+    --formComplement: #f34b7d;
+}
+
+form{
+    display: block;
+    text-align: center;
+    margin: 0 auto 0 auto;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: var(--backgroundComplement);
+    border-radius: 15px;
+    border: solid var(--complement) 2px;
+}
+
+form>h1{
+    margin: 0;
+}
+
+.field{
+    margin-top: 30px;
+}
+
+input,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus{
+    width: 220px;
+    padding: 10px 5px;
+    outline: none;
+    border: var(--formComplement) solid 2px;
+    border-radius: 5px;
+    transition: 0.5s;
+    -webkit-text-fill-color: var(--formFieldText);
+    -webkit-box-shadow: 0 0 0 1000px var(--formFieldBackground) inset;
+}
+
+input[type=text]:focus,
+input[type=password]:focus{
+    border: var(--complement) solid 2px;
     border-radius: 5px;
 }
 
-textarea:focus, input:focus {
-    color: purple;
+button, input[type=submit],
+input[type=button] {
+    padding: 0.5em 2em;
 }
 
-input, select, textarea{
-    color: purple;
+.is-danger{
+    color: var(--error);
+}
+
+.is-danger>.message-header{
+    margin: 0 0 -18px 0;
+}
+
+.is-link{
+    color: var(--text);
+    background-color: var(--formComplement);
+    border: none;
+    border-radius: 5px;
+    margin: 10px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.is-link:hover{
+    cursor: pointer;
+}
+
+.is-link:focus{
+    background-color: var(--complement);
 }

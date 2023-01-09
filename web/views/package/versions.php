@@ -1,12 +1,3 @@
-<?php
-$title = $params['package']->getName();
-?>
-<div class="center-content">
-    <h2><?= $params['package']->getName() ?></h2>
-    <h3 class="package-description"><?= $params['package']->getDescription() ?></h3>
-</div>
-<hr/>
-
 <?php if (empty($params['package']->getVersions())): ?>
     <p class="error">This package doesn't have any version</p>
 <?php else: ?>

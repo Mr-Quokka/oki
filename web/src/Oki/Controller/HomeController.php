@@ -26,10 +26,33 @@ class HomeController
     public function packageInfo(DI $di, array $params): HttpResponse
     {
         $packageName = $params['name'];
-        $package = $di->getPackageGateway()->getPackageInfo($packageName);
+        $package = $di->getPackageGateway()->getPackage($packageName);
         if ($package === null) {
             return HtmlResponse::notFound('Unknown package name');
         }
-        return new HtmlResponse(200, 'package', ['package' => $package]);
+        $action = $params['action'] ?? 'readme';
+
+        $params = [
+            'package' => $package,
+            'action' => $action
+        ];
+        if ($action === 'versions') {
+            $di->getPackageGateway()->getPackageVersions($package);
+            if (!empty($package->getVersions())) {
+                $params['version'] = $package->getVersions()[0];
+            } else {
+                $params['version'] = null;
+            }
+        } else {
+            $version = $di->getPackageGateway()->getPackageVersion($package, $params['version'] ?? null);
+            if ($version === null && isset($params['version'])) {
+                return HtmlResponse::notFound('Unknown package version');
+            }
+            $params['version'] = $version;
+            if ($version !== null && $action === 'dependencies') {
+                $di->getPackageGateway()->getPackageDependencies($version);
+            }
+        }
+        return new HtmlResponse(200, 'package/base', $params);
     }
 }
