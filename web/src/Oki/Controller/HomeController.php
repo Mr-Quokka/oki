@@ -33,6 +33,8 @@ class HomeController
             $di->getPackageGateway()->getPackageVersions($package);
             if (!empty($package->getVersions())) {
                 $params['version'] = $package->getVersions()[0];
+            } else {
+                $params['version'] = null;
             }
         } else {
             $version = $di->getPackageGateway()->getPackageVersion($package, $params['version'] ?? null);

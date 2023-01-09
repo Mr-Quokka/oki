@@ -22,14 +22,14 @@ $base = $router->url('package/' . $package->getName());
 
 <nav class="tabs">
     <ul>
-        <li>
+        <li <?php if ($params['action'] === 'readme') { echo 'aria-selected="true"'; } ?>>
             <a href="<?= $base ?>">Readme</a>
         </li>
-        <li>
+        <li <?php if ($params['action'] === 'versions') { echo 'aria-selected="true"'; } ?>>
             <a href="<?= $base . '/versions' ?>">Versions</a>
         </li>
         <?php if ($version !== null): ?>
-            <li>
+            <li <?php if ($params['action'] === 'dependencies') { echo 'aria-selected="true"'; } ?>>
                 <a href="<?= $base . '/' . $version->getIdentifier() . '/dependencies' ?>">Dependencies</a>
             </li>
         <?php endif; ?>

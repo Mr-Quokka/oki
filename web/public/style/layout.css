@@ -153,7 +153,7 @@ a:focus{
     margin-bottom: 0;
 }
 .tabs a{
-    color: #ecf0f1;
+    color: var(--text);
     display: flex;
     justify-content: center;
     margin-bottom: -1px;
@@ -162,7 +162,7 @@ a:focus{
     text-decoration: none;
 }
 .tabs li[aria-selected="true"] a {
-    border-bottom-color: #217dbb;
+    border-bottom-color: var(--complement);
 }
 .package-info {
     display: grid;
