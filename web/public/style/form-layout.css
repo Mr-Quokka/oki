@@ -48,17 +48,13 @@ input[type=password]:focus{
     border-radius: 5px;
 }
 
+.is-danger>.message-header{
+    margin-bottom: -18px;
+}
+
 .is-link, input[type=submit],
 input[type=button] {
     padding: 0.5em 2em;
-}
-
-.is-danger{
-    color: var(--error);
-}
-
-.is-danger>.message-header{
-    margin: 0 0 -18px 0;
 }
 
 .is-link{

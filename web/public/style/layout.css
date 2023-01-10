@@ -72,13 +72,17 @@ a:focus{
 
 .error{
     background-color: var(--error);
+    color: var(--text);
     border-radius: 20px;
     text-align: center;
     font-weight: bold;
     font-size: 24px;
-    width: 30%;
     padding: 20px;
-    margin: 0 auto;
+    margin: 20px 80px;
+}
+
+@media only screen and (max-width: 720px){
+    .error {margin: 0;}
 }
 
 .logo{
