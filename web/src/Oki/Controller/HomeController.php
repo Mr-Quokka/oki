@@ -10,7 +10,7 @@ use Oki\Http\HttpResponse;
 
 class HomeController
 {
-    private const PACKAGES_PER_PAGE = 10;
+    private const PACKAGES_PER_PAGE = 4;
 
     public function index(DI $di, array $params): HttpResponse
     {
