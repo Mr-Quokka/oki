@@ -61,7 +61,11 @@ a{
     margin-bottom: 10px;
 }
 
-a:hover:not(.logo){
+a:hover
+:not(.logo)
+:not(.pagination-previous)
+:not(.pagination-link)
+:not(.pagination-next){
     color: var(--complement);
     text-decoration: underline;
 }
@@ -153,6 +157,50 @@ a:focus{
 
 .center-content{
     text-align: center;
+}
+
+.pagination{
+    background-color: var(--backgroundComplement);
+    border-radius: 15px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-left: auto;
+}
+
+.pagination-list{
+    list-style-type: none;
+    display: flex;
+    padding-left: 0px;
+}
+
+.pagination-previous,
+.pagination-link,
+.pagination-next{
+    color: white;
+    background-color: var(--complement);
+    text-align: center;
+    font-weight: bold;
+    border-radius: 5px;
+    margin: 10px 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.pagination-previous:hover,
+.pagination-link:hover,
+.pagination-next:hover{
+    background-color: var(--subtext);
+}
+
+.pagination-previous:focus,
+.pagination-link:focus,
+.pagination-next:focus{
+    text-decoration: none;
+}
+
+.is-current{
+    background-color: var(--subtext);
 }
 
 .tabs{

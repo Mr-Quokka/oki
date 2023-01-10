@@ -1,9 +1,8 @@
 <nav class="pagination" role="navigation" aria-label="pagination">
     <?php if ($params['page'] > 1) : ?>
-        <a class="pagination-previous" href="<?= $router->url($paginationBase . ($params['page'] - 1)) . $get ?>">Previous</a>
-    <?php endif; ?>
-    <?php if ($params['page'] < $params['nbPages']) : ?>
-        <a class="pagination-next" href="<?= $router->url($paginationBase . ($params['page'] + 1)) . $get ?>">Next page</a>
+        <a class="pagination-previous" href="<?= $router->url($paginationBase . ($params['page'] - 1)) . $get ?>"><</a>
+    <?php else : ?>
+        <p class="pagination-previous is-current"><</p>
     <?php endif; ?>
     <ul class="pagination-list">
         <?php if ($params['page'] > 2) : ?>
@@ -40,4 +39,9 @@
             </li>
         <?php endif; ?>
     </ul>
+    <?php if ($params['page'] < $params['nbPages']) : ?>
+        <a class="pagination-next" href="<?= $router->url($paginationBase . ($params['page'] + 1)) . $get ?>">></a>
+    <?php else : ?>
+        <p class="pagination-next is-current">></p>
+    <?php endif; ?>
 </nav>
