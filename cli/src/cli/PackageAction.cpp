@@ -13,7 +13,7 @@ namespace cli {
     void PackageAction::run() {
         config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
         fs::path relativeTo = fs::current_path();
-        std::vector<fs::path> include = op::listPackagedFiles(manifest.getInclude(), relativeTo);
+        std::vector<fs::path> include = op::listPackagedFiles(manifest.getInclude(), std::cerr, relativeTo);
         if (!noVerify && !op::verify(manifest, include)) {
             exit(1);
         }
