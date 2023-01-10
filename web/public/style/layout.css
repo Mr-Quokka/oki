@@ -42,6 +42,10 @@ main{
     max-width: 1000px;
 }
 
+@media only screen and (max-width: 500px){
+    main {margin: 30px 10px}
+}
+
 main.small-viewport{
     max-width: 600px;
 }
@@ -71,7 +75,7 @@ a:focus{
     border-radius: 20px;
     text-align: center;
     font-weight: bold;
-    font-size: 150%;
+    font-size: 24px;
     width: 30%;
     padding: 20px;
     margin: 0 auto;
@@ -88,6 +92,14 @@ a:focus{
 
 .logo>img{
     height: 100px;
+}
+
+.logo>p{
+    display: none;
+}
+
+@media only screen and (min-width: 800px){
+    .logo>p {display: inline-block;}
 }
 
 .top-right-menu{
@@ -127,6 +139,14 @@ a:focus{
     margin-top: -10px;
 }
 
+.package-info {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 3fr)
+}
+.package-readme {
+    padding: 2rem 1.75rem;
+}
+
 .center-content{
     text-align: center;
 }
@@ -137,12 +157,11 @@ a:focus{
     white-space: nowrap;
     min-height: 100%;
     max-width: calc(100% - 20px);
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 }
 .tabs ul{
     align-items: center;
-    border-bottom-color: #5e6d6f;
+    border-bottom-color: var(--subtext);
     border-bottom-style: solid;
     border-bottom-width: 1px;
     display: flex;
@@ -158,16 +177,9 @@ a:focus{
     justify-content: center;
     margin-bottom: -1px;
     padding: 0.5em 1em;
-    border-bottom: 2px solid #5e6d6f;
+    border-bottom: 2px solid var(--subtext);
     text-decoration: none;
 }
 .tabs li[aria-selected="true"] a {
     border-bottom-color: var(--complement);
-}
-.package-info {
-    display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 3fr)
-}
-.package-readme {
-    padding: 2rem 1.75rem;
 }
