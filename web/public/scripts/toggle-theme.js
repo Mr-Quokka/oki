@@ -1,18 +1,14 @@
 document.getElementById("theme-toggle").addEventListener("click", () => {
+    document.body.style.transition = "none";
     if (document.body.className.includes("dark")) {
-        setLight();
         localStorage.setItem("pref-theme", 'light');
+        setLight();
     } else {
-        setDark();
         localStorage.setItem("pref-theme", 'dark');
+        setDark();
     }
+    document.body.style.transition = "all 0.5s ease-in-out";
 })
-
-if (localStorage.getItem("pref-theme") === 'dark') {
-    setDark();
-} else {
-    setLight();
-}
 
 function setDark(){
     document.body.classList.add('dark');
@@ -26,4 +22,11 @@ function setLight(){
     document.getElementById("image-logo").src = "/images/logo/BIG-OKI-logo-2.png";
     document.getElementById("sun").style.display = "none";
     document.getElementById("moon").style.display = "block";
+}
+
+if (localStorage.getItem("pref-theme") === 'dark') {
+    setDark();
+} else {
+    localStorage.setItem("pref-theme", 'light');
+    setLight();
 }

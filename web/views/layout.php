@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="/style/layout.css">
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <script src="/scripts/toggle-theme.js" defer></script>
+    <script>
+        if (localStorage.getItem("pref-theme") === 'dark') {
+            document.body.classList.add('dark');
+            document.getElementById("image-logo").src = "/images/logo/BIG-OKI-logo-1.png";
+            document.getElementById("sun").style.display = "block";
+            document.getElementById("moon").style.display = "none";
+        } else {
+            document.body.classList.remove('dark');
+            document.getElementById("image-logo").src = "/images/logo/BIG-OKI-logo-2.png";
+            document.getElementById("sun").style.display = "none";
+            document.getElementById("moon").style.display = "block";
+        }
+    </script>
     <title><?= $title ?? 'Package registry' ?> - OKI</title>
 </head>
 <body>
