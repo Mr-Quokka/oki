@@ -48,7 +48,7 @@ input[type=password]:focus{
     border-radius: 5px;
 }
 
-button, input[type=submit],
+.is-link, input[type=submit],
 input[type=button] {
     padding: 0.5em 2em;
 }
