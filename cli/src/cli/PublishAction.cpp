@@ -12,13 +12,15 @@ namespace cli {
 
     void PublishAction::run() {
         io::TmpFile tmp;
-        op::package(tmp.path(), fs::current_path());
         config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
+        std::vector<fs::path> include = op::listPackagedFiles(manifest.getInclude(), fs::current_path());
+        op::package(tmp.path(), fs::current_path(), include);
         registry.publish(manifest, tmp.path());
     }
 
     Command PublishAction::cmd() {
-        return Command{"publish", "Upload a package to a repository", [](config::UserConfig &conf, ArgMatches &&args) -> std::unique_ptr<CliAction> {
+        return Command{"publish", "Upload a package to a repository",
+                       [](config::UserConfig &conf, ArgMatches &&args) -> std::unique_ptr<CliAction> {
                            return std::make_unique<PublishAction>(conf, std::move(args));
                        }}
             .arg<std::string>("registry", "Name of the registry to publish to");

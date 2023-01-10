@@ -52,12 +52,24 @@ namespace config {
         return packages;
     }
 
-    std::string_view Manifest::getProjectName() const {
+    std::string Manifest::getProjectName() const {
         const auto *name = getPackageSection().get_as<std::string>("name");
         if (name == nullptr) {
             throw ManifestException{"Manifest is missing a [package].name field"};
         }
         return name->get();
+    }
+
+    std::optional<std::string> Manifest::getDescription() const {
+        return getPackageSection()["description"].value<std::string>();
+    }
+
+    fs::path Manifest::getPackageArchive() const {
+        fs::path packageArchive{getProjectName()};
+        packageArchive += "_";
+        packageArchive += getPackageVersion();
+        packageArchive += ".zip";
+        return packageArchive;
     }
 
     std::vector<fs::path> Manifest::getInclude() const {

@@ -8,6 +8,7 @@
 #include "InstallAction.h"
 #include "ListAction.h"
 #include "MakefileAction.h"
+#include "PackageAction.h"
 #include "PublishAction.h"
 #include "RemoveAction.h"
 #include "ShowAction.h"
@@ -31,6 +32,7 @@ namespace cli {
             {"tree", TreeAction::cmd()},
             {"build", BuildAction::cmd()},
             {"makefile", MakefileAction::cmd()},
+            {"package", PackageAction::cmd()},
             {"publish", PublishAction::cmd()},
         };
         auto it = commands.find(args[1]);

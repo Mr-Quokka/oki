@@ -41,7 +41,21 @@ namespace config {
          *
          * @return Le nom du projet.
          */
-        std::string_view getProjectName() const;
+        std::string getProjectName() const;
+
+        /**
+         * Récupère la description du projet.
+         *
+         * @return La description du projet.
+         */
+        std::optional<std::string> getDescription() const;
+
+        /**
+         * Récupère le nom supposé du fichier archive de ce paquet.
+         *
+         * @return Le nom du fichier archive.
+         */
+        std::filesystem::path getPackageArchive() const;
 
         /**
          * Récupère le chemin des sources.
