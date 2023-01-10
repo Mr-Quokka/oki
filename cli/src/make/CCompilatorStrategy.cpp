@@ -22,4 +22,12 @@ namespace make {
                       "\toki build\n"
                       "\n-include $(dependances)\n";
     }
+
+    std::ostream &CCompilatorStrategy::writeMain(std::ostream &out) {
+        return out << "#include <stdio.h>\n\n"
+                    << "int main(void) {\n"
+                    << "    printf(\"Hello world!\\n\");\n"
+                    << "    return 0;\n"
+                    << "}\n";
+    }
 }

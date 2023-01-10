@@ -1,5 +1,7 @@
 #include "init.h"
 #include "../io/oki.h"
+#include "../make/CppCompilatorStrategy.h"
+#include "../make/CCompilatorStrategy.h"
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -29,32 +31,30 @@ namespace op {
 
         manifest << "\n[dependencies]\n";
 
-        fs::path src{workingDirectory / "src"};
-        fs::create_directories(src);
-        if (options.kind == make::ProjectKind::C && !options.lib) {
-            std::ofstream main{src / "main.c"};
-            if (!manifest) {
-                std::cerr << "Cannot write main source file: " << strerror(errno);
-                return 1;
-            }
-            main << "#include <stdio.h>\n\n"
-                 << "int main(void) {\n"
-                 << "    printf(\"Hello world!\\n\");\n"
-                 << "    return 0;\n"
-                 << "}\n";
-        } else if (options.kind == make::ProjectKind::Cpp && !options.lib) {
-            std::ofstream main{src / "main.cpp"};
-            if (!manifest) {
-                std::cerr << "Cannot write main source file: " << strerror(errno);
-                return 1;
-            }
-            main << "#include <iostream>\n\n"
-                 << "int main() {\n"
-                 << "    std::cout << \"Hello world!\\n\";\n"
-                 << "    return 0;\n"
-                 << "}\n";
+        std::unique_ptr<make::CompilatorStrategy> strategy;
+        switch (options.kind) {
+        case make::ProjectKind::C:
+            strategy = std::make_unique<make::CCompilatorStrategy>();
+            break;
+        case make::ProjectKind::Cpp:
+            strategy = std::make_unique<make::CppCompilatorStrategy>();
+            break;
+        default:
+            throw std::range_error("Unknown project kind");
         }
 
+        fs::path src{workingDirectory / "src"};
+        fs::create_directories(src);
+        if(!options.lib) {
+            if(!fs::exists(src / "main.c")){
+                std::ofstream main{src / "main.c"};
+                if (!main) {
+                    std::cerr << "Cannot write main source file: " << strerror(errno);
+                    return 1;
+                }
+                strategy->writeMain(main);
+            }
+        }
         std::cout << "Created `" << options.projectName << "` package\n";
         return 0;
     }
