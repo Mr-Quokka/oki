@@ -9,7 +9,7 @@ namespace cli {
         /**
          * Exécute l'action.
          */
-        virtual void run() = 0;
+        virtual int run() = 0;
 
         virtual ~CliAction() = default;
     };

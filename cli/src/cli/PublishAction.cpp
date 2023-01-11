@@ -4,6 +4,7 @@
 #include "../io/oki.h"
 #include "../op/package.h"
 #include "../op/verify.h"
+#include "ExitStatuses.h"
 #include <iostream>
 
 namespace fs = std::filesystem;
@@ -12,16 +13,17 @@ namespace cli {
     PublishAction::PublishAction(config::UserConfig &config, ArgMatches &&args)
         : registry{config.getRepository(args.get<std::string>("registry").value_or("default"))} {}
 
-    void PublishAction::run() {
+    int PublishAction::run() {
         io::TmpFile tmp;
         config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
         std::vector<fs::path> include = op::listPackagedFiles(manifest.getInclude(), std::cerr, fs::current_path());
         if (!op::verify(manifest, include)) {
-            exit(1);
+            return ERR_CONFIG;
         }
         op::package(tmp.path(), fs::current_path(), include);
         registry.publish(manifest, tmp.path());
         std::cout << manifest.getProjectName() << " has been published.\n";
+        return OK;
     }
 
     Command PublishAction::cmd() {

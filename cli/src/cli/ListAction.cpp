@@ -6,7 +6,7 @@ namespace cli {
     ListAction::ListAction(config::UserConfig &config, ArgMatches &&args)
         : repository{args.getRegistry(config)} {}
 
-    void ListAction::run() {
+    int ListAction::run() {
         for (const package::Package &package : repository.listPackages()) {
             std::cout << package.getName() << ": " << package.getDescription() << "\n";
         }

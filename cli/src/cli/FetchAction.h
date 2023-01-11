@@ -15,7 +15,7 @@ namespace cli {
     public:
         explicit FetchAction(config::UserConfig &config);
 
-        void run() override;
+        int run() override;
 
         static Command cmd();
     };

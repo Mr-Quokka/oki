@@ -7,6 +7,7 @@
 #include "../make/CppCompilatorStrategy.h"
 #include "../solver/DependencyGraph.h"
 #include "../util/ostreamJoin.h"
+#include "ExitStatuses.h"
 
 #include <fstream>
 #include <iostream>
@@ -16,7 +17,7 @@ namespace cli {
     MakefileAction::MakefileAction(config::UserConfig &config, ArgMatches &&args)
         : config{config}, fileName{args.get<std::string>("file").value_or("Makefile")} {}
 
-    void MakefileAction::run() {
+    int MakefileAction::run() {
         config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
         config::ManifestLock manifestLock = config::ManifestLock::readOrResolve(OKI_MANIFEST_FILE, OKI_LOCK_FILE, config.getGlobalRepository());
 
@@ -37,7 +38,7 @@ namespace cli {
         std::cout << "Creating Makefile : " << fileName << "\n";
         std::ofstream makefile{std::string{fileName}};
         if (!makefile) {
-            exit(1);
+            return ERR_CANT_CREATE;
         }
 
         // Debut du makefile
@@ -68,6 +69,7 @@ namespace cli {
         strategy->writeEnd(makefile);
         std::ofstream internalMakefile{OKI_INTERNAL_MAKEFILE};
         depBuild.asMakefile(internalMakefile);
+        return OK;
     }
 
     Command MakefileAction::cmd() {

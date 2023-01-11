@@ -17,7 +17,7 @@ namespace cli {
         InitAction(const char *projectName, make::ProjectKind kind);
         InitAction(config::UserConfig &config, ArgMatches &&args);
 
-        void run() override;
+        int run() override;
 
         static Command cmd();
     };

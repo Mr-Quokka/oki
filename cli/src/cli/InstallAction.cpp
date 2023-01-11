@@ -3,13 +3,14 @@
 #include "../io/HttpRequest.h"
 #include "../io/oki.h"
 #include "../op/fetch.h"
+#include "ExitStatuses.h"
 #include <iostream>
 
 namespace cli {
     InstallAction::InstallAction(config::UserConfig &config, ArgMatches &&args)
         : packageName{args.require<std::string>("package")}, repository{args.getRegistry(config)} {}
 
-    void InstallAction::run() {
+    int InstallAction::run() {
         package::Package p = repository.getPackageInfo(packageName);
         if (p.getVersions().empty()) {
             throw io::APIException{"The package doesn't have any version"};
@@ -27,6 +28,7 @@ namespace cli {
             op::fetch(lock, std::cout, {{std::string{packageName}}, true});
             lock.saveFile(OKI_LOCK_FILE);
         }
+        return OK;
     }
 
     Command InstallAction::cmd() {

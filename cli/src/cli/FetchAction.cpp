@@ -9,10 +9,10 @@ namespace cli {
     FetchAction::FetchAction(config::UserConfig &config)
         : config{config} {}
 
-    void FetchAction::run() {
+    int FetchAction::run() {
         config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
         config::ManifestLock manifestLock = config::ManifestLock::readOrResolve(OKI_MANIFEST_FILE, OKI_LOCK_FILE, config.getGlobalRepository());
-        op::fetch(manifestLock, std::cout, {manifest.listDeclaredPackagesNames(), true});
+        return op::fetch(manifestLock, std::cout, {manifest.listDeclaredPackagesNames(), true});
     }
 
     Command FetchAction::cmd() {

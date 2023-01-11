@@ -14,7 +14,7 @@ namespace cli {
     public:
         PackageAction(config::UserConfig &config, ArgMatches &&args);
 
-        void run() override;
+        int run() override;
 
         static Command cmd();
     };

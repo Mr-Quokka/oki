@@ -2,6 +2,7 @@
 #include "../io/oki.h"
 #include "../op/package.h"
 #include "../op/verify.h"
+#include "ExitStatuses.h"
 #include <iostream>
 
 namespace fs = std::filesystem;
@@ -10,22 +11,23 @@ namespace cli {
     PackageAction::PackageAction(config::UserConfig &config, ArgMatches &&args)
         : config{config}, list{args.contains("list")}, noVerify{args.contains("no-verify")} {}
 
-    void PackageAction::run() {
+    int PackageAction::run() {
         config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
         fs::path relativeTo = fs::current_path();
         std::vector<fs::path> include = op::listPackagedFiles(manifest.getInclude(), std::cerr, relativeTo);
         if (!noVerify && !op::verify(manifest, include)) {
-            exit(1);
+            return ERR_CONFIG;
         }
         if (list) {
             for (const auto &path : include) {
                 std::cout << fs::relative(path, relativeTo).string() << "\n";
             }
-            return;
+            return OK;
         }
         fs::path archivePath = manifest.getPackageArchive();
         op::package(archivePath, relativeTo, include);
         std::cout << "Created " << archivePath.string() << "\n";
+        return OK;
     }
 
     Command PackageAction::cmd() {

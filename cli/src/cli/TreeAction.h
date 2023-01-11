@@ -17,7 +17,7 @@ namespace cli {
     public:
         TreeAction(config::UserConfig &config);
 
-        void run() override;
+        int run() override;
 
         static Command cmd();
     };

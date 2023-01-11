@@ -4,6 +4,7 @@
 #include "../make/BuildConfigurer.h"
 #include "../make/DependencyBuild.h"
 #include "../solver/DependencyGraph.h"
+#include "ExitStatuses.h"
 #include <fstream>
 #include <unistd.h>
 
@@ -13,9 +14,12 @@ namespace cli {
     BuildAction::BuildAction(config::UserConfig &config)
         : config{config} {}
 
-    void BuildAction::run() {
+    int BuildAction::run() {
         bootstrap();
-        execlp("make", "make", "-f", OKI_INTERNAL_MAKEFILE.c_str(), nullptr);
+        if (execlp("make", "make", "-f", OKI_INTERNAL_MAKEFILE.c_str(), nullptr) == -1) {
+            return ERR_OSERR;
+        }
+        return OK;
     }
 
     void BuildAction::bootstrap() {

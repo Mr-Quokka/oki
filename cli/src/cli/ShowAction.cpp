@@ -1,13 +1,14 @@
 #include "ShowAction.h"
 #include "../config/config.h"
 
+#include "ExitStatuses.h"
 #include <iostream>
 
 namespace cli {
     ShowAction::ShowAction(config::UserConfig &config, ArgMatches &&args)
         : packageName{args.require<std::string>("package")}, repository{args.getRegistry(config)} {}
 
-    void ShowAction::run() {
+    int ShowAction::run() {
         bool color = config::acceptColor();
         package::Package p = repository.getPackageInfo(packageName);
         if (color) {
@@ -33,6 +34,7 @@ namespace cli {
         for (const package::PackageVersion &version : p.getVersions()) {
             std::cout << "\t" << version << " (" << version.getPublishedDate() << ")\n";
         }
+        return OK;
     }
 
     Command ShowAction::cmd() {

@@ -2,6 +2,7 @@
 #include "../config/ManifestLock.h"
 #include "../io/oki.h"
 #include "../op/fetch.h"
+#include "ExitStatuses.h"
 
 #include <iostream>
 
@@ -9,11 +10,11 @@ namespace cli {
     RemoveAction::RemoveAction(config::UserConfig &config, ArgMatches &&args)
         : config{config}, packageName{args.require<std::string>("package")} {}
 
-    void RemoveAction::run() {
+    int RemoveAction::run() {
         config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
         if (!manifest.removeDeclaredPackage(packageName)) {
             std::cerr << "The dependency `" << packageName << "` could not be found in `dependencies`.\n";
-            exit(1);
+            return ERR_USAGE;
         }
         std::cout << "Removing " << packageName << " from dependencies\n";
         manifest.saveFile(OKI_MANIFEST_FILE);
@@ -22,6 +23,7 @@ namespace cli {
         directDependencies.emplace_back(packageName);
         op::fetch(manifestLock, std::cout, {directDependencies, false});
         manifestLock.saveFile(OKI_LOCK_FILE);
+        return OK;
     }
 
     Command RemoveAction::cmd() {

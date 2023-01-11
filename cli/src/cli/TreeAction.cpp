@@ -2,19 +2,21 @@
 #include "../config/ManifestLock.h"
 #include "../io/oki.h"
 #include "../tree/TreeRenderer.h"
+#include "ExitStatuses.h"
 #include <iostream>
 
 namespace cli {
     TreeAction::TreeAction(config::UserConfig &config)
         : config{config} {}
 
-    void TreeAction::run() {
+    int TreeAction::run() {
         config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
         config::ManifestLock manifestLock = config::ManifestLock::readOrResolve(OKI_MANIFEST_FILE, OKI_LOCK_FILE, config.getGlobalRepository());
 
         std::vector<std::string> directDependencies = manifest.listDeclaredPackagesNames();
         tree::TreeRenderer renderer{manifestLock, directDependencies};
         std::cout << renderer;
+        return OK;
     }
 
     Command TreeAction::cmd() {

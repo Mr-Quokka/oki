@@ -1,6 +1,7 @@
 #include <boost/program_options/errors.hpp>
 #include <iostream>
 
+#include "cli/ExitStatuses.h"
 #include "cli/options.h"
 #include "config/Manifest.h"
 #include "config/UserConfig.h"
@@ -21,20 +22,24 @@ int main(int argc, const char *argv[]) {
         action = cli::parseArguments(config, args);
     } catch (const boost::program_options::error &e) {
         std::cerr << e.what() << "\n";
-        return 1;
+        return ERR_USAGE;
     }
     if (!action) {
-        return 0;
+        return EX_OK;
     }
 
+    int exit = ERR_BASE;
     try {
         action->run();
+        exit = OK;
     } catch (const semver::ParseException &e) {
         std::cerr << e << "\n";
+        return ERR_DATAERR;
     } catch (const io::APIException &e) {
         std::cerr << e.what() << "\n";
     } catch (const config::ManifestException &e) {
         std::cerr << e.what() << "\n";
+        return ERR_CONFIG;
     }
-    return 0;
+    return exit;
 }

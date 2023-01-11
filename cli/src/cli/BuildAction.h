@@ -16,7 +16,7 @@ namespace cli {
     public:
         explicit BuildAction(config::UserConfig &config);
 
-        void run() override;
+        int run() override;
 
         static Command cmd();
     };

@@ -1,6 +1,7 @@
 #include "InitAction.h"
 #include "../io/oki.h"
 #include "../op/init.h"
+#include "ExitStatuses.h"
 #include <iostream>
 
 namespace fs = std::filesystem;
@@ -17,12 +18,13 @@ namespace cli {
           projectKind{make::projectKindFromStr(args.require<std::string>("kind"))},
           lib{args.contains("lib")} {}
 
-    void InitAction::run() {
+    int InitAction::run() {
         if (fs::exists(OKI_MANIFEST_FILE)) {
             std::cerr << "`oki init` cannot be run on already existing packages\n";
-            exit(1);
+            return ERR_BASE;
         }
         op::init(op::InitOptions{projectName, projectKind, lib}, fs::current_path());
+        return OK;
     }
 
     Command InitAction::cmd() {
