@@ -26,7 +26,7 @@ namespace cli {
             {"init", InitAction::cmd()},
             {"list", ListAction::cmd()},
             {"show", ShowAction::cmd()},
-            {"fetch", PublishAction::cmd()},
+            {"fetch", FetchAction::cmd()},
             {"install", InstallAction::cmd()},
             {"remove", RemoveAction::cmd()},
             {"tree", TreeAction::cmd()},

@@ -30,8 +30,7 @@ int main(int argc, const char *argv[]) {
 
     int exit = ERR_BASE;
     try {
-        action->run();
-        exit = OK;
+        exit = action->run();
     } catch (const semver::ParseException &e) {
         std::cerr << e << "\n";
         return ERR_DATAERR;
