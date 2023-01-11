@@ -123,7 +123,7 @@ namespace config {
                 for (const std::string &dependency : version.getDependencies()) {
                     dependencies.push_back(dependency);
                 }
-                table.insert("dependencies", dependencies);
+                versionTable.insert("dependencies", dependencies);
             }
             table.insert(package, versionTable);
         }
