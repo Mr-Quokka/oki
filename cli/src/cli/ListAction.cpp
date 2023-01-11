@@ -1,5 +1,6 @@
 #include "ListAction.h"
 
+#include "ExitStatuses.h"
 #include <iostream>
 
 namespace cli {
@@ -10,6 +11,7 @@ namespace cli {
         for (const package::Package &package : repository.listPackages()) {
             std::cout << package.getName() << ": " << package.getDescription() << "\n";
         }
+        return OK;
     }
 
     Command ListAction::cmd() {
