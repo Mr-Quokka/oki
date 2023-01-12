@@ -22,8 +22,8 @@
     </script>
     <title><?= $title ?? 'Package registry' ?> - OKI</title>
 </head>
-<body>
-    <header>
+<body id="body">
+    <header id="header">
         <a title="Home - OKI" class="logo" href="<?= $router->url('') ?>">
             <img id="image-logo" src="/images/logo/BIG-OKI-logo-2.png"></img>
             <p>Open pacKage Installer</p>

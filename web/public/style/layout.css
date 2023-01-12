@@ -18,14 +18,14 @@
     --error: #C33;
 }
 
-body{
+#body{
     color: var(--text);
     background-color: var(--background);
     font-family: Helvetica, sans-serif;
     margin: 0;
 }
 
-header{
+#header{
     background-color: var(--backgroundComplement);
     top: 0;
     left: 0;
@@ -33,7 +33,6 @@ header{
     padding: 20px 0;
     display: flex;
     flex-wrap: wrap;
-    transition: all 0.5s ease-in-out;
 }
 
 main{
@@ -176,6 +175,7 @@ a:focus{
 .pagination-link,
 .pagination-next{
     background-color: var(--complement);
+    color: white;
     text-align: center;
     font-weight: bold;
     border-radius: 5px;

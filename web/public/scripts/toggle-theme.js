@@ -1,5 +1,6 @@
 document.getElementById("theme-toggle").addEventListener("click", () => {
     document.body.style.transition = "none";
+    document.getElementById("header").style.transition = "none";
     if (document.body.className.includes("dark")) {
         localStorage.setItem("pref-theme", 'light');
         setLight();
@@ -8,6 +9,7 @@ document.getElementById("theme-toggle").addEventListener("click", () => {
         setDark();
     }
     document.body.style.transition = "all 0.5s ease-in-out";
+    document.getElementById("header").style.transition = "all 0.5s ease-in-out";
 })
 
 function setDark(){
@@ -25,6 +27,7 @@ function setLight(){
 }
 
 if (localStorage.getItem("pref-theme") === 'dark') {
+    localStorage.setItem("pref-theme", 'dark');
     setDark();
 } else {
     localStorage.setItem("pref-theme", 'light');
