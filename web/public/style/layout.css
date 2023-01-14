@@ -1,6 +1,5 @@
 :root {
     --debug: dotted gold 1px;
-
     --background: #EEE;
     --backgroundComplement: #DDD;
     --text: #262626;
@@ -88,7 +87,7 @@ a:focus{
     margin: 20px 80px;
 }
 
-@media only screen and (max-width: 720px){
+@media (max-width: 720px){
     .error {
         margin: 0;
     }
@@ -112,7 +111,7 @@ h1 {
     display: none;
 }
 
-@media only screen and (min-width: 800px){
+@media (min-width: 800px){
     h1{
         display: block;
     }
@@ -162,9 +161,11 @@ body:not(.dark) #sun{
     margin-top: -10px;
 }
 
-.package-info {
-    display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 3fr)
+@media (min-width: 800px){
+    .package-info {
+        display: grid;
+        grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+    }
 }
 .package-readme {
     padding: 2rem 1.75rem;
@@ -235,10 +236,9 @@ body:not(.dark) #sun{
     border-bottom-style: solid;
     border-bottom-width: 1px;
     display: flex;
-    flex-grow: 1;
-    flex-shrink: 0;
     justify-content: flex-start;
     list-style: none;
+    padding-left: 0;
     margin-bottom: 0;
 }
 .tabs a{
