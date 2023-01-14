@@ -1,6 +1,5 @@
 :root {
     --debug: dotted gold 1px;
-
     --background: #EEE;
     --backgroundComplement: #DDD;
     --text: #262626;
@@ -25,7 +24,14 @@ body{
     margin: 0;
 }
 
-header{
+@media (prefers-reduced-motion: no-preference) {
+    body{
+        transition: 0.5s;
+        transition-property: background-color, color;
+    }
+}
+
+#header{
     background-color: var(--backgroundComplement);
     top: 0;
     left: 0;
@@ -40,6 +46,10 @@ main{
     margin-left: auto;
     margin-right: auto;
     max-width: 1000px;
+}
+
+@media only screen and (max-width: 500px){
+    main {margin: 30px 10px}
 }
 
 main.small-viewport{
@@ -68,26 +78,43 @@ a:focus{
 
 .error{
     background-color: var(--error);
+    color: var(--text);
     border-radius: 20px;
     text-align: center;
     font-weight: bold;
-    font-size: 150%;
-    width: 30%;
+    font-size: 24px;
     padding: 20px;
-    margin: 0 auto;
+    margin: 20px 80px;
+}
+
+@media (max-width: 720px){
+    .error {
+        margin: 0;
+    }
 }
 
 .logo{
     display: flex;
-    font-weight: bold;
-    font-size: 40px;
     height: 40px;
     margin: 20px 0 20px 2%;
     align-items: center;
 }
 
-.logo>img{
+.image-logo {
     height: 100px;
+}
+.image-logo img {
+    max-height: 100%;
+}
+
+h1 {
+    display: none;
+}
+
+@media (min-width: 800px){
+    h1{
+        display: block;
+    }
 }
 
 .top-right-menu{
@@ -102,6 +129,13 @@ a:focus{
 
 #theme-toggle:hover{
     cursor: pointer;
+}
+
+body.dark #moon{
+    display: none;
+}
+body:not(.dark) #sun{
+    display: none;
 }
 
 .package{
@@ -127,8 +161,65 @@ a:focus{
     margin-top: -10px;
 }
 
+@media (min-width: 800px){
+    .package-info {
+        display: grid;
+        grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+    }
+}
+.package-readme {
+    padding: 2rem 1.75rem;
+}
+
 .center-content{
     text-align: center;
+}
+
+.pagination{
+    background-color: var(--backgroundComplement);
+    color: white;
+    border-radius: 15px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    margin-left: auto;
+}
+
+.pagination-list{
+    list-style-type: none;
+    display: flex;
+    padding-left: 0px;
+}
+
+.pagination-previous,
+.pagination-link,
+.pagination-next{
+    background-color: var(--complement);
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 5px;
+    margin: 10px 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.pagination-previous:hover,
+.pagination-link:hover,
+.pagination-next:hover{
+    background-color: var(--subtext);
+    color: white !important;
+    text-decoration: none !important;
+}
+
+.pagination-previous:focus,
+.pagination-link:focus,
+.pagination-next:focus{
+    text-decoration: none;
+}
+
+.is-current{
+    background-color: var(--subtext);
 }
 
 .tabs{
@@ -137,19 +228,17 @@ a:focus{
     white-space: nowrap;
     min-height: 100%;
     max-width: calc(100% - 20px);
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 }
 .tabs ul{
     align-items: center;
-    border-bottom-color: #5e6d6f;
+    border-bottom-color: var(--subtext);
     border-bottom-style: solid;
     border-bottom-width: 1px;
     display: flex;
-    flex-grow: 1;
-    flex-shrink: 0;
     justify-content: flex-start;
     list-style: none;
+    padding-left: 0;
     margin-bottom: 0;
 }
 .tabs a{
@@ -158,16 +247,13 @@ a:focus{
     justify-content: center;
     margin-bottom: -1px;
     padding: 0.5em 1em;
-    border-bottom: 2px solid #5e6d6f;
+    border-bottom: 2px solid var(--subtext);
     text-decoration: none;
 }
 .tabs li[aria-selected="true"] a {
     border-bottom-color: var(--complement);
 }
-.package-info {
-    display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 3fr)
-}
-.package-readme {
-    padding: 2rem 1.75rem;
+
+.preload{
+    transition: none !important;
 }
