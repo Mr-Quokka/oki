@@ -18,11 +18,18 @@
     --error: #C33;
 }
 
-#body{
+body{
     color: var(--text);
     background-color: var(--background);
     font-family: Helvetica, sans-serif;
     margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    body{
+        transition: 0.5s;
+        transition-property: background-color, color;
+    }
 }
 
 #header{
@@ -82,28 +89,33 @@ a:focus{
 }
 
 @media only screen and (max-width: 720px){
-    .error {margin: 0;}
+    .error {
+        margin: 0;
+    }
 }
 
 .logo{
     display: flex;
-    font-weight: bold;
-    font-size: 40px;
     height: 40px;
     margin: 20px 0 20px 2%;
     align-items: center;
 }
 
-.logo>img{
+.image-logo {
     height: 100px;
 }
+.image-logo img {
+    max-height: 100%;
+}
 
-.logo>p{
+h1 {
     display: none;
 }
 
 @media only screen and (min-width: 800px){
-    .logo>p {display: inline-block;}
+    h1{
+        display: block;
+    }
 }
 
 .top-right-menu{
@@ -118,6 +130,13 @@ a:focus{
 
 #theme-toggle:hover{
     cursor: pointer;
+}
+
+body.dark #moon{
+    display: none;
+}
+body:not(.dark) #sun{
+    display: none;
 }
 
 .package{
@@ -233,4 +252,8 @@ a:focus{
 }
 .tabs li[aria-selected="true"] a {
     border-bottom-color: var(--complement);
+}
+
+.preload{
+    transition: none !important;
 }

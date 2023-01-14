@@ -7,29 +7,28 @@
     <link rel="stylesheet" href="/style/layout.css">
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
     <script src="/scripts/toggle-theme.js" defer></script>
-    <script>
-        if (localStorage.getItem("pref-theme") === 'dark') {
-            document.body.classList.add('dark');
-            document.getElementById("image-logo").src = "/images/logo/BIG-OKI-logo-1.png";
-            document.getElementById("sun").style.display = "block";
-            document.getElementById("moon").style.display = "none";
-        } else {
-            document.body.classList.remove('dark');
-            document.getElementById("image-logo").src = "/images/logo/BIG-OKI-logo-2.png";
-            document.getElementById("sun").style.display = "none";
-            document.getElementById("moon").style.display = "block";
-        }
-    </script>
     <title><?= $title ?? 'Package registry' ?> - OKI</title>
 </head>
-<body id="body">
+<body class="preload">
+    <script>
+        if (localStorage.getItem("pref-theme") === "dark") {
+            document.body.classList.add('dark');
+        } else if (localStorage.getItem("pref-theme") === "light") {
+            document.body.classList.remove('dark');
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.classList.add('dark');
+        }
+    </script>
     <header id="header">
         <a title="Home - OKI" class="logo" href="<?= $router->url('') ?>">
-            <img id="image-logo" src="/images/logo/BIG-OKI-logo-2.png"></img>
-            <p>Open pacKage Installer</p>
+            <picture class="image-logo">
+                <source srcset="/images/logo/BIG-OKI-logo-1.png" media="(prefers-color-scheme: dark)" />
+                <img src="/images/logo/BIG-OKI-logo-2.png" alt="The K letter surrounded by the letter O and an I" />
+            </picture>
+            <h1>Open pacKage Installer</h1>
         </a>
         <h2 class="top-right-menu">
-            <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+            <button id="theme-toggle" accesskey="t" title="Toggles light & dark" aria-label="auto" aria-live="polite">
                 <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                     stroke-linejoin="round">

@@ -1,35 +1,34 @@
-document.getElementById("theme-toggle").addEventListener("click", () => {
-    document.body.style.transition = "none";
-    document.getElementById("header").style.transition = "none";
-    if (document.body.className.includes("dark")) {
-        localStorage.setItem("pref-theme", 'light');
-        setLight();
+/**
+ * @param {'dark'|'light'} colorPreference
+ */
+function updateSourceMedia(colorPreference) {
+    document.querySelectorAll('picture').forEach((picture) => {
+        const sources = picture.querySelectorAll(`
+        source[media*="prefers-color-scheme"], 
+        source[data-media*="prefers-color-scheme"]
+      `);
+
+        sources.forEach((source) => {
+            if (source.media.includes('prefers-color-scheme')) {
+                source.dataset.media = source.media;
+            }
+            if (source.dataset.media.includes(colorPreference)) {
+                source.media = 'all';
+            } else if (source) {
+                source.media = 'none';
+            }
+        })
+    })
+}
+
+document.getElementById('theme-toggle').addEventListener('click', () => {
+    if (document.body.classList.toggle('dark')) {
+        updateSourceMedia('dark');
+        localStorage.setItem('pref-theme', 'dark');
     } else {
-        localStorage.setItem("pref-theme", 'dark');
-        setDark();
+        updateSourceMedia('light');
+        localStorage.setItem('pref-theme', 'light');
     }
-    document.body.style.transition = "all 0.5s ease-in-out";
-    document.getElementById("header").style.transition = "all 0.5s ease-in-out";
-})
-
-function setDark(){
-    document.body.classList.add('dark');
-    document.getElementById("image-logo").src = "/images/logo/BIG-OKI-logo-1.png";
-    document.getElementById("sun").style.display = "block";
-    document.getElementById("moon").style.display = "none";
-}
-
-function setLight(){
-    document.body.classList.remove('dark');
-    document.getElementById("image-logo").src = "/images/logo/BIG-OKI-logo-2.png";
-    document.getElementById("sun").style.display = "none";
-    document.getElementById("moon").style.display = "block";
-}
-
-if (localStorage.getItem("pref-theme") === 'dark') {
-    localStorage.setItem("pref-theme", 'dark');
-    setDark();
-} else {
-    localStorage.setItem("pref-theme", 'light');
-    setLight();
-}
+});
+window.addEventListener('load', () => document.body.classList.remove('preload'));
+updateSourceMedia(document.body.classList.contains('dark') ? 'dark' : 'light');
