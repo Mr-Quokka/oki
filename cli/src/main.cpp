@@ -12,7 +12,7 @@
 int main(int argc, const char *argv[]) {
     if (argc < 2) {
         std::cout << "See " << argv[0] << " help for all available actions.\n";
-        return 0;
+        return OK;
     }
 
     std::span<const char *> args(argv, static_cast<std::span<const char *>::size_type>(argc));

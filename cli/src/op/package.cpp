@@ -1,4 +1,5 @@
 #include "package.h"
+#include "../cli/ExitStatuses.h"
 #include "../config/Manifest.h"
 #include "../io/Archive.h"
 #include "../io/oki.h"
@@ -34,6 +35,6 @@ namespace op {
         config::Manifest manifest = config::Manifest::fromFile(workingDirectory / OKI_MANIFEST_FILE);
         io::Compressor compressor{packagePath};
         compressor.compress(include, fs::current_path());
-        return 0;
+        return OK;
     }
 }
