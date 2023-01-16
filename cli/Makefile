@@ -15,7 +15,7 @@ CXXFLAGS := -std=c++20 \
 	-pedantic \
 	-MMD -MP \
 	$(CXXFLAGS_$(BUILD))
-LDLIBS := -lcurl -lminizip # Bibliothèques utilisées pour l'édition des liens
+LDLIBS := -lcurl -lminizip -lboost_program_options # Bibliothèques utilisées pour l'édition des liens
 
 # Nom de l'exécutable final
 TARGET_EXE := oki
@@ -85,10 +85,13 @@ coverage.html: $(TARGET_EXE)-test build/test/test/main.o
 install: $(TARGET_EXE)
 	install -d $(INSTALL_BIN_DIR)
 	install -m 755 $(TARGET_EXE) $(INSTALL_BIN_DIR)
+	install -d $(DESTDIR)/usr/share/bash-completion
+	install -m 644 contrib/completion/oki-completion.bash $(DESTDIR)/usr/share/bash-completion/completions/oki
 
 # Supprime l'exécutable installé
 uninstall:
 	rm -f $(INSTALL_BIN_DIR)/$(TARGET_EXE)
+	rm -f $(DESTDIR)/usr/share/bash-completion/completions/oki
 
 # Réalise une archive des fichiers sources
 dist:

@@ -7,19 +7,19 @@
 #include "../make/CppCompilatorStrategy.h"
 #include "../solver/DependencyGraph.h"
 #include "../util/ostreamJoin.h"
+#include "ExitStatuses.h"
 
 #include <fstream>
 #include <iostream>
 #include <vector>
 
-namespace fs = std::filesystem;
-
 namespace cli {
-    MakefileAction::MakefileAction(const char *fileName) : fileName{fileName} {}
+    MakefileAction::MakefileAction(config::UserConfig &config, ArgMatches &&args)
+        : config{config}, fileName{args.get<std::string>("file").value_or("Makefile")} {}
 
-    void MakefileAction::run(repository::Repository &repository) {
+    int MakefileAction::run() {
         config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
-        config::ManifestLock manifestLock = config::ManifestLock::readOrResolve(OKI_MANIFEST_FILE, OKI_LOCK_FILE, repository);
+        config::ManifestLock manifestLock = config::ManifestLock::readOrResolve(OKI_MANIFEST_FILE, OKI_LOCK_FILE, config.getGlobalRepository());
 
         std::unique_ptr<make::CompilatorStrategy> strategy;
 
@@ -38,7 +38,7 @@ namespace cli {
         std::cout << "Creating Makefile : " << fileName << "\n";
         std::ofstream makefile{std::string{fileName}};
         if (!makefile) {
-            exit(1);
+            return ERR_CANT_CREATE;
         }
 
         // Debut du makefile
@@ -69,5 +69,15 @@ namespace cli {
         strategy->writeEnd(makefile);
         std::ofstream internalMakefile{OKI_INTERNAL_MAKEFILE};
         depBuild.asMakefile(internalMakefile);
+        return OK;
+    }
+
+    Command MakefileAction::cmd() {
+        return Command{"makefile", "Generate a makefile",
+                       [](config::UserConfig &conf, ArgMatches &&args) -> std::unique_ptr<CliAction> {
+                           return std::make_unique<MakefileAction>(conf, std::move(args));
+                       }}
+            .arg<std::string>("file", "Name of the makefile to generate")
+            .positional("file");
     }
 }

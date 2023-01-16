@@ -1,14 +1,14 @@
 #include "ShowAction.h"
 #include "../config/config.h"
 
+#include "ExitStatuses.h"
 #include <iostream>
 
-namespace fs = std::filesystem;
-
 namespace cli {
-    ShowAction::ShowAction(const char *packageName) : packageName{packageName} {}
+    ShowAction::ShowAction(config::UserConfig &config, ArgMatches &&args)
+        : packageName{args.require<std::string>("package")}, repository{args.getRegistry(config)} {}
 
-    void ShowAction::run(repository::Repository &repository) {
+    int ShowAction::run() {
         bool color = config::acceptColor();
         package::Package p = repository.getPackageInfo(packageName);
         if (color) {
@@ -34,5 +34,15 @@ namespace cli {
         for (const package::PackageVersion &version : p.getVersions()) {
             std::cout << "\t" << version << " (" << version.getPublishedDate() << ")\n";
         }
+        return OK;
+    }
+
+    Command ShowAction::cmd() {
+        return Command{"show", "Show package information", [](config::UserConfig &config, ArgMatches &&args) -> std::unique_ptr<CliAction> {
+                           return std::make_unique<ShowAction>(config, std::move(args));
+                       }}
+            .arg<std::string>("registry", "Name of the registry to use")
+            .arg<std::string>("package", "Name of the package to show")
+            .positional("package");
     }
 }

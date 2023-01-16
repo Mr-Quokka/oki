@@ -29,8 +29,8 @@ vdn-ssh root@$VDN_SYSTEM << EOF
 route del default gw 192.168.2.1
 route add default gw 10.0.2.2
 export http_proxy=http://193.49.118.36:8080/
-if ! pkg-config nlohmann_json --exists || ! pkg-config libcurl --exists || ! pkg-config minizip --exists  || ! command -v gcovr &> /dev/null || ! [ -f /usr/include/doctest/doctest.h ]; then
-  apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev doctest-dev gcovr
+if ! pkg-config nlohmann_json --exists || ! pkg-config libcurl --exists || ! pkg-config minizip --exists || ! command -v gcovr &> /dev/null || ! [ -f /usr/include/doctest/doctest.h ] || ! [ -d /usr/share/doc/libboost-program-options-dev ]; then
+  apt-get install -y nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev libboost-program-options-dev doctest-dev gcovr
 fi
 ./configure.sh -d
 make $*

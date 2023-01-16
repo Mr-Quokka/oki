@@ -1,4 +1,5 @@
 #include "init.h"
+#include "../cli/ExitStatuses.h"
 #include "../io/oki.h"
 #include <cstring>
 #include <fstream>
@@ -13,7 +14,7 @@ namespace op {
         std::ofstream manifest{workingDirectory / OKI_MANIFEST_FILE};
         if (!manifest) {
             std::cerr << "Cannot write manifest: " << strerror(errno);
-            return 1;
+            return ERR_CANT_CREATE;
         }
         manifest << "[package]\n"
                     "name = \""
@@ -33,9 +34,9 @@ namespace op {
         fs::create_directories(src);
         if (options.kind == make::ProjectKind::C && !options.lib) {
             std::ofstream main{src / "main.c"};
-            if (!manifest) {
+            if (!main) {
                 std::cerr << "Cannot write main source file: " << strerror(errno);
-                return 1;
+                return ERR_CANT_CREATE;
             }
             main << "#include <stdio.h>\n\n"
                  << "int main(void) {\n"
@@ -44,9 +45,9 @@ namespace op {
                  << "}\n";
         } else if (options.kind == make::ProjectKind::Cpp && !options.lib) {
             std::ofstream main{src / "main.cpp"};
-            if (!manifest) {
+            if (!main) {
                 std::cerr << "Cannot write main source file: " << strerror(errno);
-                return 1;
+                return ERR_CANT_CREATE;
             }
             main << "#include <iostream>\n\n"
                  << "int main() {\n"
@@ -56,6 +57,6 @@ namespace op {
         }
 
         std::cout << "Created `" << options.projectName << "` package\n";
-        return 0;
+        return OK;
     }
 }

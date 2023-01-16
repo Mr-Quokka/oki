@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CliAction.h"
+#include "Command.h"
 
 namespace cli {
     /**
@@ -8,10 +9,12 @@ namespace cli {
      */
     class ShowAction : public CliAction {
     private:
-        std::string_view packageName;
+        std::string packageName;
+        repository::Repository &repository;
 
     public:
-        explicit ShowAction(const char *packageName);
-        void run(repository::Repository &repository) override;
+        ShowAction(config::UserConfig &config, ArgMatches &&args);
+        int run() override;
+        static Command cmd();
     };
 }

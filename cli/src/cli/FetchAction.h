@@ -1,13 +1,22 @@
 #pragma once
 
+#include "../repository/Repository.h"
 #include "CliAction.h"
+#include "Command.h"
 
 namespace cli {
     /**
-     * Réinstalle tous les paquets present dans le manifeste.
+     * Réinstalle tous les paquets présents dans le manifeste qui ne sont pas à jour.
      */
     class FetchAction : public CliAction {
+    private:
+        config::UserConfig &config;
+
     public:
-        void run(repository::Repository &repository) override;
+        explicit FetchAction(config::UserConfig &config);
+
+        int run() override;
+
+        static Command cmd();
     };
 }

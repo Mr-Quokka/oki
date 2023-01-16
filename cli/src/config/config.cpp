@@ -1,4 +1,6 @@
 #include "config.h"
+#include "../repository/LocalRepository.h"
+#include "../repository/RemoteRepository.h"
 
 #include <unistd.h>
 
@@ -20,6 +22,21 @@ namespace config {
             return "https://oki-pkg.dev";
         }
         return okiRepository;
+    }
+
+    fs::path getConfigPath() {
+        const char *xdgData = std::getenv("XDG_CONFIG_HOME");
+        if (xdgData == nullptr) {
+            return std::getenv("HOME") / fs::path{".config/oki.toml"};
+        }
+        return xdgData / fs::path{"oki.toml"};
+    }
+
+    std::unique_ptr<repository::Repository> readRepositoryPath(std::string_view source) {
+        if (source.starts_with("local:")) {
+            return std::make_unique<repository::LocalRepository>(repository::LocalRepository{source.substr(6)});
+        }
+        return std::make_unique<repository::RemoteRepository>(repository::RemoteRepository{source});
     }
 
     bool acceptColor() {

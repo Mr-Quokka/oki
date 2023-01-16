@@ -1,20 +1,18 @@
 #pragma once
 
+#include "../config/UserConfig.h"
 #include "CliAction.h"
 #include "Command.h"
 
 namespace cli {
-    /**
-     * Compile le projet de l'utilisateur.
-     */
-    class BuildAction : public CliAction {
+    class PackageAction : public CliAction {
     private:
         config::UserConfig &config;
-
-        void bootstrap();
+        bool list;
+        bool noVerify;
 
     public:
-        explicit BuildAction(config::UserConfig &config);
+        PackageAction(config::UserConfig &config, ArgMatches &&args);
 
         int run() override;
 

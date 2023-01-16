@@ -1,4 +1,5 @@
 #include "fetch.h"
+#include "../cli/ExitStatuses.h"
 #include "io/Installer.h"
 #include "io/oki.h"
 
@@ -69,7 +70,7 @@ namespace op {
         }
 
         installer.saveRegistry(OKI_INTERNAL_REGISTRY_FILE);
-        return 0;
+        return OK;
     }
 
     int fetch(const config::ManifestLock &manifestLock, std::ostream &out, const LogOptions &options) {

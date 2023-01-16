@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CliAction.h"
+#include "Command.h"
 
 namespace cli {
     /**
@@ -10,7 +11,14 @@ namespace cli {
      * l'aide de traits (des caractères UTF-8) et d'une indentation.
      */
     class TreeAction : public CliAction {
+    private:
+        config::UserConfig &config;
+
     public:
-        void run(repository::Repository &repository) override;
+        TreeAction(config::UserConfig &config);
+
+        int run() override;
+
+        static Command cmd();
     };
 }

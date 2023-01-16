@@ -23,9 +23,12 @@ namespace repository {
     }
 
     package::Package LocalRepository::getPackageInfo(std::string_view packageName) {
-
+        fs::path packagePath{root / packageName};
+        if (!fs::exists(packagePath)) {
+            throw io::APIException("This package does not exist");
+        }
         std::vector<package::PackageVersion> versions;
-        for (const auto &file : fs::directory_iterator(root / packageName)) {
+        for (const auto &file : fs::directory_iterator(packagePath)) {
             config::Manifest manifest = config::Manifest::fromFile(file.path() / OKI_MANIFEST_FILE);
             std::string fileName{packageName};
             fileName += "_";

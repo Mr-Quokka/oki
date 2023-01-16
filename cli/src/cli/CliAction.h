@@ -1,11 +1,16 @@
 #pragma once
 
-#include "../repository/Repository.h"
-
 namespace cli {
+    /**
+     * Une action paramétrée à effectuer.
+     */
     class CliAction {
     public:
-        virtual void run(repository::Repository &repository) = 0;
+        /**
+         * Exécute l'action.
+         */
+        virtual int run() = 0;
+
         virtual ~CliAction() = default;
     };
 }
