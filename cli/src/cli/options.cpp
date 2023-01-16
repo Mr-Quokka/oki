@@ -35,10 +35,14 @@ namespace cli {
             {"package", PackageAction::cmd()},
             {"publish", PublishAction::cmd()},
         };
+        if (strcmp("help", args[1]) == 0) {
+            help(std::cout, commands);
+            return nullptr;
+        }
         auto it = commands.find(args[1]);
         if (it == commands.end()) {
-            help(std::cerr, commands);
-            exit(1);
+            std::cerr << "Unknown action.\n";
+            return nullptr;
         }
         return it->second.create(config, args.subspan(1));
     }

@@ -19,7 +19,6 @@ namespace cli {
         return Command{"fetch", "Fetch dependencies",
                        [](config::UserConfig &conf, ArgMatches &&) -> std::unique_ptr<CliAction> {
                            return std::make_unique<FetchAction>(conf);
-                       }}
-            .arg<std::string>("registry", "Name of the registry to use");
+                       }};
     }
 }
