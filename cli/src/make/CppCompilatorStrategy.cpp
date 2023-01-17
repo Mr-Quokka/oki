@@ -30,4 +30,8 @@ namespace make {
                     << "    return 0;\n"
                     << "}\n";
     }
+
+    std::string_view CppCompilatorStrategy::getMainName(){
+        return "main.cpp";
+    }
 }

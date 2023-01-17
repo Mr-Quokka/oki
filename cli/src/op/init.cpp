@@ -2,6 +2,7 @@
 #include "../io/oki.h"
 #include "../make/CppCompilatorStrategy.h"
 #include "../make/CCompilatorStrategy.h"
+#include "../make/SourceFactory.h"
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -32,22 +33,13 @@ namespace op {
         manifest << "\n[dependencies]\n";
 
         std::unique_ptr<make::CompilatorStrategy> strategy;
-        switch (options.kind) {
-        case make::ProjectKind::C:
-            strategy = std::make_unique<make::CCompilatorStrategy>();
-            break;
-        case make::ProjectKind::Cpp:
-            strategy = std::make_unique<make::CppCompilatorStrategy>();
-            break;
-        default:
-            throw std::range_error("Unknown project kind");
-        }
+        strategy = make::SourceFactory::fabrique(options.kind);
 
         fs::path src{workingDirectory / "src"};
         fs::create_directories(src);
         if(!options.lib) {
-            if(!fs::exists(src / "main.c")){
-                std::ofstream main{src / "main.c"};
+            if(!fs::exists(src / strategy->getMainName())){
+                std::ofstream main{src / strategy->getMainName()};
                 if (!main) {
                     std::cerr << "Cannot write main source file: " << strerror(errno);
                     return 1;
