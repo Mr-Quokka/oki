@@ -24,13 +24,17 @@ TARGET_VERSION := 0.1.0
 # Répertoire d'installation
 prefix := /usr/local
 exec_prefix := $(prefix)
+datarootdir := $(prefix)/share
 bindir := $(exec_prefix)/bin
+mandir := $(datarootdir)/man
 INSTALL_BIN_DIR := $(DESTDIR)/$(bindir)
+INSTALL_MAN_DIR := $(DESTDIR)/$(mandir)/man1
 
 # Répertoires des fichiers compilés et de sources
 BUILD_DIR := build/$(BUILD)
 SRC_DIR := src src/cli src/config src/io src/make src/op src/package src/repository src/semver src/solver src/tree
 TEST_DIR := test test/config test/op test/semver test/solver test/tree
+MAN_BUILD_DIR := man/build
 
 # Répertoires où rechercher les fichiers header
 CPPFLAGS=-isystemthird-party -Isrc
@@ -63,9 +67,15 @@ $(BUILD_DIR)/test/%.o: test/%.cpp | $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir -p $(addprefix $(BUILD_DIR)/,$(SRC_DIR)) $(addprefix $(BUILD_DIR)/,$(TEST_DIR))
 
+$(MAN_BUILD_DIR):
+	mkdir $@
+
 # Génère la documentation avec Doxygen
 doc/html/index.html: Doxyfile $(foreach dir,$(SRC_DIR),$(wildcard $(dir)/*.h))
 	doxygen
+
+man/build/%: man/%.md | $(MAN_BUILD_DIR)
+	pandoc --standalone --to man $< --output $@
 
 # Supprime tous les fichiers issus de la compilation
 clean:
@@ -88,10 +98,16 @@ install: $(TARGET_EXE)
 	install -d $(DESTDIR)/usr/share/bash-completion
 	install -m 644 contrib/completion/oki-completion.bash $(DESTDIR)/usr/share/bash-completion/completions/oki
 
+# Installe les pages de manuel
+install-man: $(MAN_BUILD_DIR)/oki
+	install -d $(INSTALL_MAN_DIR)
+	gzip -c $(MAN_BUILD_DIR)/oki > $(INSTALL_MAN_DIR)/oki.1.gz
+
 # Supprime l'exécutable installé
 uninstall:
 	rm -f $(INSTALL_BIN_DIR)/$(TARGET_EXE)
 	rm -f $(DESTDIR)/usr/share/bash-completion/completions/oki
+	rm -f $(INSTALL_MAN_DIR)/oki.1.gz
 
 # Réalise une archive des fichiers sources
 dist:
