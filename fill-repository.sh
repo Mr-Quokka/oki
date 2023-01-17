@@ -26,7 +26,7 @@ else
 fi
 
 dest=$(dirname $(realpath "$0"))
-# L'ordre est important ! Publier un paquet qui dépend d'un paquet pas encore publier provoque des conflits.
+#L'ordre est important ! Publier un paquet qui dépend d'un paquet qui pas encore publié empêche la publication.
 for package in packages/{guess-mime-type,linked-list,mths,static-string-builder,shell-escape} ; do
     packageName=$(basename $package)
     echo "Publication du paquet $package"
