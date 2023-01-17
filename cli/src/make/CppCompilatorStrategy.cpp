@@ -25,13 +25,13 @@ namespace make {
 
     std::ostream &CppCompilatorStrategy::writeMain(std::ostream &out) {
         return out << "#include <iostream>\n\n"
-                    << "int main() {\n"
-                    << "    std::cout << \"Hello world!\\n\";\n"
-                    << "    return 0;\n"
-                    << "}\n";
+                   << "int main() {\n"
+                   << "    std::cout << \"Hello world!\\n\";\n"
+                   << "    return 0;\n"
+                   << "}\n";
     }
 
-    std::string_view CppCompilatorStrategy::getMainName(){
+    std::string_view CppCompilatorStrategy::getMainName() {
         return "main.cpp";
     }
 }

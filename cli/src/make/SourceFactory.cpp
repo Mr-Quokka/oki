@@ -1,10 +1,10 @@
 #include "SourceFactory.h"
-#include "../make/CppCompilatorStrategy.h"
 #include "../make/CCompilatorStrategy.h"
+#include "../make/CppCompilatorStrategy.h"
 
 namespace make {
-	std::unique_ptr<make::CompilatorStrategy> SourceFactory::fabrique(ProjectKind kind){
-		switch (kind) {
+    std::unique_ptr<make::CompilatorStrategy> SourceFactory::fabrique(ProjectKind kind) {
+        switch (kind) {
         case make::ProjectKind::C:
             return std::make_unique<make::CCompilatorStrategy>();
             break;
@@ -14,5 +14,5 @@ namespace make {
         default:
             return nullptr;
         }
-	}
+    }
 }

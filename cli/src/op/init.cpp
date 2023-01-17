@@ -1,7 +1,7 @@
 #include "init.h"
 #include "../io/oki.h"
-#include "../make/CppCompilatorStrategy.h"
 #include "../make/CCompilatorStrategy.h"
+#include "../make/CppCompilatorStrategy.h"
 #include "../make/SourceFactory.h"
 #include <cstring>
 #include <fstream>
@@ -37,8 +37,8 @@ namespace op {
 
         fs::path src{workingDirectory / "src"};
         fs::create_directories(src);
-        if(!options.lib) {
-            if(!fs::exists(src / strategy->getMainName())){
+        if (!options.lib) {
+            if (!fs::exists(src / strategy->getMainName())) {
                 std::ofstream main{src / strategy->getMainName()};
                 if (!main) {
                     std::cerr << "Cannot write main source file: " << strerror(errno);

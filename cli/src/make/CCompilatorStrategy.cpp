@@ -25,13 +25,13 @@ namespace make {
 
     std::ostream &CCompilatorStrategy::writeMain(std::ostream &out) {
         return out << "#include <stdio.h>\n\n"
-                    << "int main(void) {\n"
-                    << "    printf(\"Hello world!\\n\");\n"
-                    << "    return 0;\n"
-                    << "}\n";
+                   << "int main(void) {\n"
+                   << "    printf(\"Hello world!\\n\");\n"
+                   << "    return 0;\n"
+                   << "}\n";
     }
 
-        std::string_view CCompilatorStrategy::getMainName(){
+    std::string_view CCompilatorStrategy::getMainName() {
         return "main.c";
     }
 }
