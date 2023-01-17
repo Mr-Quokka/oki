@@ -1,6 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
+
+export OKI_USERNAME=xxxx
+export OKI_PASSWORD=x
+export OKI_REPOSITORY=https://oki-pkg.dev
+
+while [ $# -ne 0 ] ; do
+    case "$1" in
+    "-r" | "--registry")
+        OKI_REPOSITORY="$2"
+        shift 2
+        ;;
+    *)
+        echo "unknown option $1" >&2
+        exit 1
+        ;;
+    esac
+done
 
 if [ -d packages ]; then
     cd packages && git pull --rebase --autostash && cd ..
@@ -9,17 +26,9 @@ else
 fi
 
 dest=$(dirname $(realpath "$0"))
-requests=''
-for package in packages/*; do
+#L'ordre est important ! Publier un paquet qui dépend d'un paquet qui n'est pas encore publié empêche la publication.
+for package in packages/{guess-mime-type,linked-list,mths,static-string-builder,shell-escape} ; do
     packageName=$(basename $package)
-    existingPackage="$dest"/web/public/packages/${packageName}_0.1.0.zip
-    rm -f "$existingPackage"
-    cd $package/src && zip -r "$existingPackage" ./*
-    cd -
-    size=$(stat --printf="%s" "$existingPackage")
-    requests="$requests
-    INSERT INTO package (name, description, language_id) VALUES ('$packageName', 'A random package', (SELECT id_language FROM language WHERE designation = 'c'));
-    INSERT INTO version (package_id, identifier, published_date, file_size) VALUES ((SELECT id_package FROM package WHERE name='$packageName'), '0.1.0', CURRENT_TIMESTAMP, $size);"
+    echo "Publication du paquet $package"
+    (cd $package && oki publish)
 done
-
-echo "$requests" | sqlite3 "$dest"/web/oki_packages.db
