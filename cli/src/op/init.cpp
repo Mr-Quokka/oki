@@ -1,6 +1,9 @@
 #include "init.h"
 #include "../cli/ExitStatuses.h"
 #include "../io/oki.h"
+#include "../make/CCompilatorStrategy.h"
+#include "../make/CppCompilatorStrategy.h"
+#include "../make/SourceFactory.h"
 #include <cstring>
 #include <fstream>
 #include <iostream>
@@ -30,32 +33,22 @@ namespace op {
 
         manifest << "\n[dependencies]\n";
 
+        std::unique_ptr<make::CompilatorStrategy> strategy;
+        strategy = make::SourceFactory::fabrique(options.kind);
+
         fs::path src{workingDirectory / "src"};
         fs::create_directories(src);
-        if (options.kind == make::ProjectKind::C && !options.lib) {
-            std::ofstream main{src / "main.c"};
-            if (!main) {
-                std::cerr << "Cannot write main source file: " << strerror(errno);
-                return ERR_CANT_CREATE;
-            }
-            main << "#include <stdio.h>\n\n"
-                 << "int main(void) {\n"
-                 << "    printf(\"Hello world!\\n\");\n"
-                 << "    return 0;\n"
-                 << "}\n";
-        } else if (options.kind == make::ProjectKind::Cpp && !options.lib) {
-            std::ofstream main{src / "main.cpp"};
-            if (!main) {
-                std::cerr << "Cannot write main source file: " << strerror(errno);
-                return ERR_CANT_CREATE;
-            }
-            main << "#include <iostream>\n\n"
-                 << "int main() {\n"
-                 << "    std::cout << \"Hello world!\\n\";\n"
-                 << "    return 0;\n"
-                 << "}\n";
-        }
 
+        if (!options.lib && strategy != nullptr) {
+            if (!fs::exists(src / strategy->getMainName())) {
+                std::ofstream main{src / strategy->getMainName()};
+                if (!main) {
+                    std::cerr << "Cannot write main source file: " << strerror(errno);
+                    return ERR_CANT_CREATE;
+                }
+                strategy->writeMain(main);
+            }
+        }
         std::cout << "Created `" << options.projectName << "` package\n";
         return OK;
     }
