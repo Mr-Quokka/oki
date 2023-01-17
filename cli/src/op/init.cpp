@@ -37,7 +37,7 @@ namespace op {
 
         fs::path src{workingDirectory / "src"};
         fs::create_directories(src);
-        if (!options.lib) {
+        if (!options.lib && strategy != nullptr) {
             if (!fs::exists(src / strategy->getMainName())) {
                 std::ofstream main{src / strategy->getMainName()};
                 if (!main) {
