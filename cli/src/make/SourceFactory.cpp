@@ -7,10 +7,8 @@ namespace make {
         switch (kind) {
         case make::ProjectKind::C:
             return std::make_unique<make::CCompilatorStrategy>();
-            break;
         case make::ProjectKind::Cpp:
             return std::make_unique<make::CppCompilatorStrategy>();
-            break;
         default:
             return nullptr;
         }
