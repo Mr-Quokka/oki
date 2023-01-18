@@ -41,6 +41,7 @@ class UserController
 
     public function changePassword(DI $di): HttpResponse
     {
+        $di->getSecurity()->assertLogged();
         $errors = [];
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && UserValidator::isValidPasswordChange($_POST, $errors)) {
             $success = $di->getSecurity()->changeCurrentPassword($di->getSecurity()->getCurrentUser(), $_POST['password'], $_POST['new-password']);

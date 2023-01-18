@@ -54,11 +54,18 @@ final class Security
         return true;
     }
 
-    public function checkPerms(int $level): void
+    public function assertPerms(int $level): void
     {
         $user = $this->getCurrentUser();
         if ($user === null || $user->getPermissions() < $level) {
-            throw new AssertionError();
+            throw new SecurityException('Insufficient permissions');
+        }
+    }
+
+    public function assertLogged(): void
+    {
+        if ($this->user === null && empty($this->session[USER])) {
+            throw new SecurityException('Not logged');
         }
     }
 

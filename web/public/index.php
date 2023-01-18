@@ -21,4 +21,4 @@ $router->match('/^logout/', [$user, 'logout']);
 
 $di = new \Oki\DI\DI();
 $di->setRouter($router);
-$router->run($di)->render($di, __DIR__ . '/../views');
+Oki\Controller\FrontController::run($router, $di);
