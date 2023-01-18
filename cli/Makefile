@@ -95,8 +95,8 @@ coverage.html: $(TARGET_EXE)-test build/test/test/main.o
 install: $(TARGET_EXE)
 	install -d $(INSTALL_BIN_DIR)
 	install -m 755 $(TARGET_EXE) $(INSTALL_BIN_DIR)
-	install -d $(DESTDIR)/usr/share/bash-completion
-	install -m 644 contrib/completion/oki-completion.bash $(DESTDIR)/usr/share/bash-completion/completions/oki
+	install -d $(DESTDIR)/$(datarootdir)/bash-completion/completions
+	install -m 644 contrib/completion/oki-completion.bash $(DESTDIR)/$(datarootdir)/bash-completion/completions/oki
 
 # Installe les pages de manuel
 install-man: $(MAN_BUILD_DIR)/oki
@@ -106,12 +106,12 @@ install-man: $(MAN_BUILD_DIR)/oki
 # Supprime l'exécutable installé
 uninstall:
 	rm -f $(INSTALL_BIN_DIR)/$(TARGET_EXE)
-	rm -f $(DESTDIR)/usr/share/bash-completion/completions/oki
+	rm -f $(DESTDIR)/$(datarootdir)/bash-completion/completions/oki
 	rm -f $(INSTALL_MAN_DIR)/oki.1.gz
 
 # Réalise une archive des fichiers sources
 dist:
-	tar -czvf $(TARGET_EXE)-$(TARGET_VERSION).tar.gz --transform='s,^,$(TARGET_EXE)-$(TARGET_VERSION)/,' src Makefile configure.sh
+	tar -czvf $(TARGET_EXE)-$(TARGET_VERSION).tar.gz --transform='s,^,$(TARGET_EXE)-$(TARGET_VERSION)/,' src Makefile configure.sh contrib man
 
 .PHONY: all clean doc format
 
