@@ -16,7 +16,7 @@ namespace cli {
 
     int BuildAction::run() {
         bootstrap();
-        if (execlp("make", "make", "-f", OKI_INTERNAL_MAKEFILE.c_str(), nullptr) == -1) {
+        if (execlp("unshare", "unshare", "-r", "-n", "make", "-f", OKI_INTERNAL_MAKEFILE.c_str(), nullptr) == -1) {
             return ERR_OSERR;
         }
         return OK;
