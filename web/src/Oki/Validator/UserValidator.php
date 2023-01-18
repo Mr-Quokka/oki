@@ -39,4 +39,16 @@ final class UserValidator
         }
         return empty($errors);
     }
+
+    public static function isValidPasswordChange(array &$post, array &$errors): bool
+    {
+        if (empty($post['password-confirmation'])) {
+            $errors[] = 'Empty password confirmation';
+            return false;
+        }
+        if ($post['new-password'] !== $post['password-confirmation']) {
+            $errors[] = 'Password confirmation must match the original password';
+        }
+        return empty($errors);
+    }
 }

@@ -43,6 +43,17 @@ final class Security
         return true;
     }
 
+    public function changeCurrentPassword(User $user, string $currentPassword, string $newPassword): bool
+    {
+        $user = $this->getCurrentUser();
+        if ($user === null || !password_verify($currentPassword, $user->getPassword())) {
+            return false;
+        }
+        $user->setPassword($newPassword);
+        $this->userGateway->update($user);
+        return true;
+    }
+
     public function checkPerms(int $level): void
     {
         $user = $this->getCurrentUser();

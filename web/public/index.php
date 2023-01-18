@@ -16,6 +16,7 @@ $router->get('/^list\/(?<page>\d+)$/', [$home, 'index']);
 $router->get('/^package\/(?<name>[\w-]+)\/?(?<version>[\d\.]+)?\/?(?<action>versions|dependencies)?$/', [$home, 'packageInfo']);
 $router->match('/^login$/', [$user, 'login']);
 $router->match('/^register$/', [$user, 'register']);
+$router->match('/^change-password$/', [$user, 'changePassword']);
 $router->match('/^logout/', [$user, 'logout']);
 
 $di = new \Oki\DI\DI();

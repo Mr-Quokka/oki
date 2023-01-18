@@ -39,6 +39,19 @@ class UserController
         return new HtmlResponse(200, 'register', ['errors' => $errors]);
     }
 
+    public function changePassword(DI $di): HttpResponse
+    {
+        $errors = [];
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && UserValidator::isValidPasswordChange($_POST, $errors)) {
+            $success = $di->getSecurity()->changeCurrentPassword($di->getSecurity()->getCurrentUser(), $_POST['password'], $_POST['new-password']);
+            if ($success) {
+                return new RedirectResponse($di->getRouter()->url(''));
+            }
+            $errors[] = 'Invalid current password';
+        }
+        return new HtmlResponse(200, 'change-password', ['errors' => $errors]);
+    }
+
     public function logout(DI $di): HttpResponse
     {
         $di->getSecurity()->logout();

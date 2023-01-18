@@ -39,7 +39,7 @@ class UserGateway
 
     public function insert(User $user): bool
     {
-        $req = $this->pdo->prepare("INSERT INTO registered_user (login, password, permissions) Values(:login, :password, :permissions)");
+        $req = $this->pdo->prepare("INSERT INTO registered_user (login, password, permissions) VALUES(:login, :password, :permissions);");
         try {
             $req->execute(['login' => $user->getLogin(), 'password' => $user->getPassword(), 'permissions' => $user->getPermissions()]);
         } catch (\PDOException $ex) {
@@ -49,6 +49,17 @@ class UserGateway
             throw $ex;
         }
         $user->setId(intval($this->pdo->lastInsertId()));
+        return true;
+    }
+
+    public function update(User $user): bool
+    {
+        $req = $this->pdo->prepare("UPDATE registered_user SET password = :password, permissions = :permissions WHERE login = :login;");
+        $req->execute([
+            'login' => $user->getLogin(),
+            'password' => $user->getPassword(),
+            'permissions' => $user->getPermissions()
+        ]);
         return true;
     }
 }
