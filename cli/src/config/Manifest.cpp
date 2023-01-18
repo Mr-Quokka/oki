@@ -14,7 +14,7 @@ namespace config {
         if (manifest.loadFileIfExists(fileName)) {
             return manifest;
         } else {
-            throw ManifestException("This isn't an project using oki");
+            throw ManifestException("This isn't a project using oki");
         }
     }
 
