@@ -10,7 +10,7 @@ namespace cli {
     class RemoveAction : public CliAction {
     private:
         config::UserConfig &config;
-        std::string_view packageName;
+        std::string packageName;
 
     public:
         RemoveAction(config::UserConfig &config, ArgMatches &&args);

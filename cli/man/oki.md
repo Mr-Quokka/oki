@@ -39,7 +39,7 @@ This program is a package manager focused on configuration simplicity.
 **oki-list**(1)
 : Search packages.
 
-**oki-uninstall**(1)
+**oki-remove**(1)
 : Remove a dependency.
 
 ## Publishing Commands
