@@ -79,13 +79,17 @@ man/build/%: man/%.md | $(MAN_BUILD_DIR)
 
 # Supprime tous les fichiers issus de la compilation
 clean:
-	rm -rf build $(TARGET_EXE) doc
+	rm -rf build $(TARGET_EXE) $(MAN_BUILD_DIR) doc
 
 doc: doc/html/index.html
 
 # Formate les sources
 format:
 	find src/ test/ \( -name '*.cpp' -o -name '*.h' \) -exec clang-format -i {} \;
+
+# Teste le programme
+check: $(TARGET_EXE)-test
+	./$(TARGET_EXE)-test
 
 # Couverture des tests
 coverage.html: $(TARGET_EXE)-test build/test/test/main.o
@@ -111,7 +115,7 @@ uninstall:
 
 # Réalise une archive des fichiers sources
 dist:
-	tar -czvf $(TARGET_EXE)-$(TARGET_VERSION).tar.gz --transform='s,^,$(TARGET_EXE)-$(TARGET_VERSION)/,' src Makefile configure.sh contrib man
+	tar -czvf $(TARGET_EXE)-$(TARGET_VERSION).tar.gz --transform='s,^,$(TARGET_EXE)-$(TARGET_VERSION)/,' src test Makefile configure.sh contrib man
 
 .PHONY: all clean doc format
 
