@@ -90,6 +90,8 @@ paths:
   /api/publish:
     post:
       summary: Publish a new version of a package
+      security:
+        - BasicAuth: []
       requestBody:
         content:
           multipart/form-data:
@@ -112,6 +114,10 @@ paths:
           description: The version already exists
 
 components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
   schemas:
     Package:
       type: object
