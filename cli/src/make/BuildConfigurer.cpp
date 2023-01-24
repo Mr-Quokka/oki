@@ -13,9 +13,13 @@ namespace make {
     }
 
     void BuildConfigurer::linkLocalDependencies(const std::string &packageName) {
+        std::vector<std::string_view> dependencies = graph.getTransitiveDependencies(packageName);
+        if (dependencies.empty()) {
+            return;
+        }
         fs::path packageDependenciesDir = shared / packageName / OKI_PACKAGES_DIRECTORY;
         fs::create_directory(packageDependenciesDir);
-        for (std::string_view dependency : graph.getTransitiveDependencies(packageName)) {
+        for (std::string_view dependency : dependencies) {
             fs::create_symlink(fs::relative(shared / dependency, packageDependenciesDir), packageDependenciesDir / dependency);
         }
         std::ofstream makefile{packageDependenciesDir / "Makefile"};
