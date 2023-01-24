@@ -42,7 +42,7 @@ namespace cli {
         }
 
         // Debut du makefile
-        strategy->writeStart(makefile);
+        strategy->writeMakefileStart(makefile);
         makefile << "\nTARGET_EXE := "
                  << manifest.getProjectName() << "\n";
         makefile << "\nBUILD_DIR := build\n"
@@ -66,7 +66,7 @@ namespace cli {
         makefile << "\n";
 
         // Suite du makefile
-        strategy->writeEnd(makefile);
+        strategy->writeMakefileEnd(makefile);
         std::ofstream internalMakefile{OKI_INTERNAL_MAKEFILE};
         depBuild.asMakefile(internalMakefile);
         return OK;

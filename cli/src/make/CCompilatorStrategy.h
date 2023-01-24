@@ -5,9 +5,9 @@
 namespace make {
     class CCompilatorStrategy : public CompilatorStrategy {
     public:
-        std::ostream &writeStart(std::ostream &out) override;
-        std::ostream &writeEnd(std::ostream &out) override;
-        std::ostream &writeMain(std::ostream &out) override;
-        std::string_view getMainName() override;
+        std::ostream &writeMakefileStart(std::ostream &out) override;
+        std::ostream &writeMakefileEnd(std::ostream &out) override;
+        std::ostream &writeSampleMain(std::ostream &out) override;
+        std::string_view getMainFileName() override;
     };
 }

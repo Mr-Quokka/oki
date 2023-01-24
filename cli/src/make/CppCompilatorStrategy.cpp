@@ -1,11 +1,11 @@
 #include "CppCompilatorStrategy.h"
 
 namespace make {
-    std::ostream &CppCompilatorStrategy::writeStart(std::ostream &out) {
+    std::ostream &CppCompilatorStrategy::writeMakefileStart(std::ostream &out) {
         return out << "CXX := g++\nCXXFLAGS := -std=c++20 -Wall -Wextra -pedantic -g -MMD -MP\n";
     }
 
-    std::ostream &CppCompilatorStrategy::writeEnd(std::ostream &out) {
+    std::ostream &CppCompilatorStrategy::writeMakefileEnd(std::ostream &out) {
         return out << "\nsources := $(wildcard $(SRC_DIR)/*.cpp)\n"
                       "objets := $(sources:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%.o)\n"
                       "dependances := $(objets:.o=.d)\n"
@@ -23,7 +23,7 @@ namespace make {
                       "\n-include $(dependances)\n";
     }
 
-    std::ostream &CppCompilatorStrategy::writeMain(std::ostream &out) {
+    std::ostream &CppCompilatorStrategy::writeSampleMain(std::ostream &out) {
         return out << "#include <iostream>\n\n"
                    << "int main() {\n"
                    << "    std::cout << \"Hello world!\\n\";\n"
@@ -31,7 +31,7 @@ namespace make {
                    << "}\n";
     }
 
-    std::string_view CppCompilatorStrategy::getMainName() {
+    std::string_view CppCompilatorStrategy::getMainFileName() {
         return "main.cpp";
     }
 }

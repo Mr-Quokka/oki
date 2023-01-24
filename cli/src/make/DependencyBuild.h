@@ -5,6 +5,9 @@
 #include <vector>
 
 namespace make {
+    /**
+     * Représente les étapes de construction des dépendances.
+     */
     class DependencyBuild {
     private:
         std::vector<std::string> staticLinks;

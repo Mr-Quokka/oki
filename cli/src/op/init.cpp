@@ -34,19 +34,19 @@ namespace op {
         manifest << "\n[dependencies]\n";
 
         std::unique_ptr<make::CompilatorStrategy> strategy;
-        strategy = make::SourceFactory::fabrique(options.kind);
+        strategy = make::SourceFactory::fromKind(options.kind);
 
         fs::path src{workingDirectory / "src"};
         fs::create_directories(src);
 
         if (!options.lib && strategy != nullptr) {
-            if (!fs::exists(src / strategy->getMainName())) {
-                std::ofstream main{src / strategy->getMainName()};
+            if (!fs::exists(src / strategy->getMainFileName())) {
+                std::ofstream main{src / strategy->getMainFileName()};
                 if (!main) {
                     std::cerr << "Cannot write main source file: " << strerror(errno);
                     return ERR_CANT_CREATE;
                 }
-                strategy->writeMain(main);
+                strategy->writeSampleMain(main);
             }
         }
         std::cout << "Created `" << options.projectName << "` package\n";

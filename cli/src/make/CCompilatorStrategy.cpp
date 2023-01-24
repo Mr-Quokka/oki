@@ -1,11 +1,11 @@
 #include "CCompilatorStrategy.h"
 
 namespace make {
-    std::ostream &CCompilatorStrategy::writeStart(std::ostream &out) {
+    std::ostream &CCompilatorStrategy::writeMakefileStart(std::ostream &out) {
         return out << "CC := gcc\nCFLAGS := -std=c17 -Wall -Wextra -pedantic -g -MMD -MP\n";
     }
 
-    std::ostream &CCompilatorStrategy::writeEnd(std::ostream &out) {
+    std::ostream &CCompilatorStrategy::writeMakefileEnd(std::ostream &out) {
         return out << "\nsources := $(wildcard $(SRC_DIR)/*.c)\n"
                       "objets := $(sources:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)\n"
                       "dependances := $(objets:.o=.d)\n"
@@ -23,7 +23,7 @@ namespace make {
                       "\n-include $(dependances)\n";
     }
 
-    std::ostream &CCompilatorStrategy::writeMain(std::ostream &out) {
+    std::ostream &CCompilatorStrategy::writeSampleMain(std::ostream &out) {
         return out << "#include <stdio.h>\n\n"
                    << "int main(void) {\n"
                    << "    printf(\"Hello world!\\n\");\n"
@@ -31,7 +31,7 @@ namespace make {
                    << "}\n";
     }
 
-    std::string_view CCompilatorStrategy::getMainName() {
+    std::string_view CCompilatorStrategy::getMainFileName() {
         return "main.c";
     }
 }

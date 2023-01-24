@@ -3,7 +3,7 @@
 #include "../make/CppCompilatorStrategy.h"
 
 namespace make {
-    std::unique_ptr<make::CompilatorStrategy> SourceFactory::fabrique(ProjectKind kind) {
+    std::unique_ptr<make::CompilatorStrategy> SourceFactory::fromKind(ProjectKind kind) {
         switch (kind) {
         case make::ProjectKind::C:
             return std::make_unique<make::CCompilatorStrategy>();
