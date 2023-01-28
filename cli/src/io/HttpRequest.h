@@ -9,25 +9,35 @@ namespace io {
         Digest
     };
 
+    class HttpCode {
+    private:
+        long code;
+
+    public:
+        explicit HttpCode(long code);
+        long getCode() const;
+        bool isError() const;
+    };
+
     /**
      * Décrit la réponse du serveur après une requête HTTP.
      */
     class HttpResponse {
     private:
-        long statusCode;
+        HttpCode statusCode;
         std::string contentType;
         std::string content;
         long auth;
 
     public:
-        HttpResponse(long statusCode, std::string contentType, std::string content, long auth);
+        HttpResponse(HttpCode statusCode, std::string contentType, std::string content, long auth);
 
         /**
          * Récupère le code de statut HTTP.
          *
          * @return Le statut de la réponse.
          */
-        long getStatusCode() const;
+        HttpCode getStatusCode() const;
 
         bool requiresAuth() const;
 
@@ -168,7 +178,7 @@ namespace io {
          *
          * @param path Le chemin vers le fichier où télécharger.
          */
-        void download(const std::filesystem::path &path);
+        HttpCode download(const std::filesystem::path &path);
 
         /**
          * Récupère l'url de la requête.
@@ -187,23 +197,14 @@ namespace io {
      * Une erreur lors de la transmission de la requête.
      */
     class RequestException : public std::exception {
+    };
+
+    class CurlException : public RequestException {
     private:
         int code;
 
     public:
-        explicit RequestException(int code);
-        const char *what() const noexcept override;
-    };
-
-    /**
-     * Une erreur retournée par l'API.
-     */
-    class APIException : public std::exception {
-    private:
-        std::string msg;
-
-    public:
-        explicit APIException(std::string_view msg);
+        explicit CurlException(int code);
         const char *what() const noexcept override;
     };
 }

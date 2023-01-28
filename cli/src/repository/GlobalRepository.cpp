@@ -3,6 +3,7 @@
 #include "../io/HttpRequest.h"
 #include "LocalRepository.h"
 #include "RemoteRepository.h"
+#include "RepositoryException.h"
 
 namespace repository {
     repository::Repository &GlobalRepository::getRepository(std::string_view name) {
@@ -22,7 +23,7 @@ namespace repository {
         if (it != sources.cend()) {
             return *it->repository;
         }
-        throw std::invalid_argument("Repository not found");
+        throw RepositoryException{"Repository `" + std::string{name} + "` not found"};
     }
 
     std::vector<package::Package> GlobalRepository::listPackages() {
@@ -33,14 +34,14 @@ namespace repository {
         for (const auto &source : sources) {
             try {
                 return source.repository->getPackageInfo(packageName);
-            } catch (const io::APIException &) {
+            } catch (const RepositoryException &) {
             }
         }
-        throw io::APIException("Unable to find package on any repository");
+        throw RepositoryException{"Unable to find package on any repository"};
     }
 
-    void GlobalRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
-        sources.front().repository->publish(manifest, source);
+    bool GlobalRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
+        return sources.front().repository->publish(manifest, source);
     }
 
     bool GlobalRepository::addSource(std::string_view name, std::unique_ptr<repository::Repository> &&repository) {

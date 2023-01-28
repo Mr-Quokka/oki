@@ -1,9 +1,9 @@
 #include "LocalRepository.h"
 #include "../io/HttpRequest.h"
 #include "../io/oki.h"
+#include "RepositoryException.h"
 
 #include <algorithm>
-#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -25,7 +25,7 @@ namespace repository {
     package::Package LocalRepository::getPackageInfo(std::string_view packageName) {
         fs::path packagePath{root / packageName};
         if (!fs::exists(packagePath)) {
-            throw io::APIException("This package does not exist");
+            throw repository::RepositoryException{"This package does not exist"};
         }
         std::vector<package::PackageVersion> versions;
         for (const auto &file : fs::directory_iterator(packagePath)) {
@@ -42,7 +42,7 @@ namespace repository {
         return package::Package{packageName, "description", versions};
     }
 
-    void LocalRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
+    bool LocalRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
         fs::path projectDirectory = root / manifest.getProjectName() / manifest.getPackageVersion().str();
         fs::create_directories(projectDirectory);
         std::string projectName{manifest.getProjectName()};
@@ -50,9 +50,10 @@ namespace repository {
         projectName += manifest.getPackageVersion();
         projectName += ".zip";
         if (fs::exists(projectDirectory / projectName)) {
-            throw io::APIException("This file already exists");
+            throw repository::RepositoryException{"This file already exists"};
         }
         fs::copy(source, projectDirectory / projectName);
         manifest.saveFile(projectDirectory / OKI_MANIFEST_FILE);
+        return true;
     }
 }

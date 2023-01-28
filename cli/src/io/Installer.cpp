@@ -1,4 +1,5 @@
 #include "Installer.h"
+#include "../repository/RepositoryException.h"
 #include "Archive.h"
 #include "HttpRequest.h"
 #include "TmpFile.h"
@@ -28,7 +29,12 @@ namespace io {
         fs::create_directories(dependencyPath);
         io::HttpRequest request = HttpRequest::createJson(version.getDownloadUrl());
         io::TmpFile tmp;
-        request.download(tmp.path());
+        HttpCode code = request.download(tmp.path());
+        if (code.isError()) {
+            fs::remove(dependencyPath);
+            throw repository::RepositoryException(
+                "Failed to retrieve " + packageName + " from " + version.getDownloadUrl() + " (status code: " + std::to_string(code.getCode()) + ")");
+        }
         io::Extractor extractor{dependencyPath};
         extractor.extract(tmp.path());
         pendingConfigurations.emplace_back(packageName);

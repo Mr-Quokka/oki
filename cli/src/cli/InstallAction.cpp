@@ -3,6 +3,7 @@
 #include "../io/HttpRequest.h"
 #include "../io/oki.h"
 #include "../op/fetch.h"
+#include "../repository/RepositoryException.h"
 #include "ExitStatuses.h"
 #include <iostream>
 
@@ -13,7 +14,7 @@ namespace cli {
     int InstallAction::run() {
         package::Package p = repository.getPackageInfo(packageName);
         if (p.getVersions().empty()) {
-            throw io::APIException{"The package doesn't have any version"};
+            throw repository::RepositoryException{"The package doesn't have any version"};
         } else {
             config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
             package::PackageVersion latest = p.getVersions().front();

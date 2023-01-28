@@ -98,16 +98,16 @@ namespace io {
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
         CURLcode res = curl_easy_perform(curl);
         if (res != CURLE_OK) {
-            throw RequestException{static_cast<int>(res)};
+            throw CurlException{static_cast<int>(res)};
         }
         long httpStatus = 0;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpStatus);
         long auth;
         curl_easy_getinfo(curl, CURLINFO_HTTPAUTH_AVAIL, &auth);
-        return HttpResponse{httpStatus, std::move(contentType), std::move(buffer), auth};
+        return HttpResponse{HttpCode{httpStatus}, std::move(contentType), std::move(buffer), auth};
     }
 
-    void HttpRequest::download(const std::filesystem::path &path) {
+    HttpCode HttpRequest::download(const std::filesystem::path &path) {
         // Utilisation de l'API C FILE plutôt qu'ofstream pour pouvoir faire un simple fwrite() avec les arguments renseignés par CURL.
         FILE *file = fopen(path.c_str(), "wb");
         if (file == nullptr) {
@@ -118,8 +118,12 @@ namespace io {
         CURLcode res = curl_easy_perform(curl);
         fclose(file);
         if (res != CURLE_OK) {
-            throw RequestException{static_cast<int>(res)};
+            remove(path.c_str());
+            throw CurlException{static_cast<int>(res)};
         }
+        long httpStatus = 0;
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &httpStatus);
+        return HttpCode{httpStatus};
     }
 
     const std::string &HttpRequest::getUrl() const {
@@ -131,10 +135,10 @@ namespace io {
         curl_easy_cleanup(curl);
     }
 
-    HttpResponse::HttpResponse(long statusCode, std::string contentType, std::string content, long auth)
+    HttpResponse::HttpResponse(HttpCode statusCode, std::string contentType, std::string content, long auth)
         : statusCode{statusCode}, contentType{std::move(contentType)}, content{std::move(content)}, auth{auth} {}
 
-    long HttpResponse::getStatusCode() const {
+    HttpCode HttpResponse::getStatusCode() const {
         return statusCode;
     }
 
@@ -180,15 +184,20 @@ namespace io {
         curl_mime_free(static_cast<curl_mime *>(form));
     }
 
-    RequestException::RequestException(int code) : code{code} {}
+    CurlException::CurlException(int code) : code{code} {}
 
-    const char *RequestException::what() const noexcept {
+    const char *CurlException::what() const noexcept {
         return curl_easy_strerror(static_cast<CURLcode>(code));
     }
 
-    APIException::APIException(std::string_view msg) : msg{msg} {}
+    bool HttpCode::isError() const {
+        return code >= 400L;
+    }
 
-    const char *APIException::what() const noexcept {
-        return this->msg.c_str();
+    long HttpCode::getCode() const {
+        return code;
+    }
+
+    HttpCode::HttpCode(long code) : code{code} {
     }
 }

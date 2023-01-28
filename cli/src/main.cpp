@@ -6,7 +6,7 @@
 #include "config/Manifest.h"
 #include "config/UserConfig.h"
 #include "config/config.h"
-#include "io/HttpRequest.h"
+#include "repository/RepositoryException.h"
 #include "semver/ParseException.h"
 
 int main(int argc, const char *argv[]) {
@@ -34,7 +34,7 @@ int main(int argc, const char *argv[]) {
     } catch (const semver::ParseException &e) {
         std::cerr << e << "\n";
         return ERR_DATAERR;
-    } catch (const io::APIException &e) {
+    } catch (const repository::RepositoryException &e) {
         std::cerr << e.what() << "\n";
     } catch (const config::ManifestException &e) {
         std::cerr << e.what() << "\n";

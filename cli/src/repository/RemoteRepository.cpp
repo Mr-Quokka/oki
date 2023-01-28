@@ -1,8 +1,8 @@
 #include <nlohmann/json.hpp>
 
-#include "../io/Archive.h"
 #include "../io/HttpRequest.h"
 #include "RemoteRepository.h"
+#include "RepositoryException.h"
 
 using json = nlohmann::json;
 
@@ -17,12 +17,12 @@ namespace repository {
             }
         }
         if (!response.getContentType().starts_with("application/json")) {
-            throw io::APIException{"Invalid content type received (" + response.getContentType() + ") from " + request.getUrl() + ":" + std::to_string(response.getStatusCode())};
+            throw RepositoryException{"Invalid content type received (" + response.getContentType() + ") from " + request.getUrl() + " (" + std::to_string(response.getStatusCode().getCode()) + ")"};
         }
         json data = json::parse(response.getContent());
         auto it = data.find("error");
-        if (response.getStatusCode() >= 400 || it != data.end()) {
-            throw io::APIException{(it == data.end() ? "Invalid request" : it->get<std::string>()) + ", tried " + request.getUrl() + ":" + std::to_string(response.getStatusCode())};
+        if (response.getStatusCode().isError() || it != data.end()) {
+            throw RepositoryException{(it == data.end() ? "Invalid request" : it->get<std::string>()) + ", tried " + request.getUrl() + " (" + std::to_string(response.getStatusCode().getCode()) + ")"};
         }
         return data;
     }
@@ -60,11 +60,12 @@ namespace repository {
         return {data.at("name").get<std::string>(), data.at("description").get<std::string>(), versions};
     }
 
-    void RemoteRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
+    bool RemoteRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
         io::HttpRequest request = io::HttpRequest::createJson(apiUrl + "/api/publish");
         io::MimePart mime = request.addMime();
         mime.addDataPart("manifest", manifest.asFilteredJson());
         mime.addFilePart("package", source);
         json data = tryReadRequest(authProvider, request);
+        return true;
     }
 }
