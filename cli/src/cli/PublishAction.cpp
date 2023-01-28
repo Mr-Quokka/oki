@@ -21,8 +21,12 @@ namespace cli {
             return ERR_CONFIG;
         }
         op::package(tmp.path(), fs::current_path(), include);
-        registry.publish(manifest, tmp.path());
-        std::cout << manifest.getProjectName() << " has been published.\n";
+        if (registry.publish(manifest, tmp.path())) {
+            std::cout << manifest.getProjectName() << " has been published.\n";
+        } else {
+            std::cerr << "Failed to publish " << manifest.getProjectName() << ".\n";
+            return ERR_BASE;
+        }
         return OK;
     }
 

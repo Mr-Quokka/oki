@@ -38,7 +38,8 @@ public:
         }
         throw std::logic_error{"Not implemented"};
     }
-    void publish([[maybe_unused]] config::Manifest &manifest, [[maybe_unused]] const std::filesystem::path &source) override {
+    bool publish([[maybe_unused]] config::Manifest &manifest, [[maybe_unused]] const std::filesystem::path &source) override {
+        return true;
     }
 };
 
