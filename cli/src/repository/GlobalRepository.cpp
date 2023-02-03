@@ -65,4 +65,22 @@ namespace repository {
             "local",
             std::make_unique<LocalRepository>(config::getDefaultLocalRepository()));
     }
+
+    std::pair<package::Package, std::reference_wrapper<Repository>> GlobalRepository::getPackageInfo(std::string_view packageName, Repository *repository) {
+        if (repository != nullptr) {
+            try {
+                std::reference_wrapper<Repository> ref{*repository};
+                return std::make_pair(repository->getPackageInfo(packageName), ref);
+            } catch (const RepositoryException &) {
+            }
+        }
+        for (const auto &source : sources) {
+            try {
+                std::reference_wrapper<Repository> ref{*source.repository};
+                return std::make_pair(source.repository->getPackageInfo(packageName), ref);
+            } catch (const RepositoryException &) {
+            }
+        }
+        throw RepositoryException{"Unable to find package on any repository"};
+    }
 }

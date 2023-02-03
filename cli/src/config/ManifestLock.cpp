@@ -93,7 +93,7 @@ namespace config {
         return ManifestLock{};
     }
 
-    ManifestLock ManifestLock::readOrResolve(const fs::path &manifestFileName, const fs::path &lockFileName, repository::Repository &repository) {
+    ManifestLock ManifestLock::readOrResolve(const fs::path &manifestFileName, const fs::path &lockFileName, repository::GlobalRepository &repository) {
         std::error_code lockError;
         // file_time_type::min() est retourné en cas d'erreur sur la variante sans exception.
         // La valeur peut être utilisée telle quelle, puisque dans tous les cas elle est inférieure

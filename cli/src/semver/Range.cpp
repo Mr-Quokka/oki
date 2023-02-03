@@ -1,4 +1,5 @@
 #include "Range.h"
+#include <sstream>
 
 #include "ParseException.h"
 
@@ -35,6 +36,12 @@ namespace semver {
         return minInclusive == maxExclusive;
     }
 
+    std::string Range::str() const {
+        std::ostringstream oss;
+        oss << *this;
+        return oss.str();
+    }
+
     Range Range::parse(std::string_view s) {
         if (s == "*") {
             return {Version{}, Version::maxVersion()};
@@ -62,5 +69,29 @@ namespace semver {
         } else {
             throw ParseException{"Unknown version requirement", s, 0L};
         }
+    }
+
+    Range Range::featureSatisfying(const Version &version) {
+        Version v2 = version;
+        v2.minor = Version::MaxValue;
+        v2.patch = Version::MaxValue;
+        return {version, v2.nextAfter()};
+    }
+
+    std::ostream &operator<<(std::ostream &os, const Range &range) {
+        if (range.minInclusive.nextAfter() == range.maxExclusive) {
+            os << range.minInclusive;
+        } else if (range.minInclusive == Version{} && range.maxExclusive == Version::maxVersion()) {
+            os << "*";
+        } else if (range.minInclusive.major == (range.maxExclusive.major + 1) && range.maxExclusive.patch == 0) {
+            if (range.minInclusive.minor == (range.maxExclusive.minor + 1)) {
+                os << "~" << range.minInclusive;
+            } else {
+                os << range.minInclusive;
+            }
+        } else {
+            os << ">=" << range.minInclusive << ", <" << range.maxExclusive;
+        }
+        return os;
     }
 }

@@ -8,6 +8,7 @@
 #include "make/BuildInfo.h"
 #include "make/ProjectKind.h"
 #include "package/Summary.h"
+#include "package/VersionRequirement.h"
 #include "semver/Range.h"
 
 namespace config {
@@ -29,7 +30,7 @@ namespace config {
         /**
          * Liste les dépendances directes indiquées dans ce manifeste.
          */
-        package::Summaries listDeclaredPackages() const;
+        std::unordered_map<std::string, package::VersionRequirement> listDeclaredPackages() const;
 
         /**
          * Liste les noms des dépendances directes indiquées dans ce manifeste.
@@ -102,7 +103,7 @@ namespace config {
          *
          * @return Vrai si la dépendance n'était pas déjà référencée, faux sinon.
          */
-        bool addDeclaredPackage(std::string_view packageName, semver::Version &version);
+        bool addDeclaredPackage(std::string_view packageName, package::VersionRequirement &&requirement);
 
         /**
          * Créé un manifeste à partir d'un fichier existant potentiellement.

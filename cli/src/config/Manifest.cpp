@@ -18,16 +18,34 @@ namespace config {
         }
     }
 
-    package::Summaries Manifest::listDeclaredPackages() const {
+    std::unordered_map<std::string, package::VersionRequirement> Manifest::listDeclaredPackages() const {
         const auto *dependenciesTable = table.get_as<toml::table>(DEPENDENCY_SECTION_NAME);
-        package::Summaries packages;
+        std::unordered_map<std::string, package::VersionRequirement> packages;
         if (dependenciesTable == nullptr) {
             return packages;
         }
         for (const auto &[dependency, constraint] : *dependenciesTable) {
-            std::string constraintValue = constraint.as_string()->get();
+            std::string constraintValue;
+            std::optional<std::string> registry;
+            const auto *dependencyString = constraint.as_string();
+            const auto *dependencyTable = constraint.as_table();
+            if (dependencyTable != nullptr) {
+                const auto *versionField = dependencyTable->get_as<std::string>("constraintValue");
+                if (versionField != nullptr) {
+                    constraintValue = versionField->get();
+                }
+                registry = (*dependencyTable)["registry"].value<std::string>();
+            } else if (dependencyString != nullptr) {
+                constraintValue = dependencyString->get();
+            } else {
+                throw ManifestException("Dependency `" + std::string{dependency} + "` has an invalid format");
+            }
+
+            if (constraintValue.empty()) {
+                throw ManifestException("Dependency `" + std::string{dependency} + "` is missing a constraintValue field");
+            }
             try {
-                packages.emplace(dependency, semver::Range::parse(constraintValue));
+                packages.emplace(dependency, package::VersionRequirement{semver::Range::parse(constraintValue), std::move(registry)});
             } catch (semver::ParseException &ex) {
                 ex.addContext("Failed to parse the version requirement `" + constraintValue + "` for dependency `" + std::string{dependency} + "`");
                 throw;
@@ -110,8 +128,16 @@ namespace config {
         return addDependencySectionIfNotExists().insert_or_assign(packageName, version).second;
     }
 
-    bool Manifest::addDeclaredPackage(std::string_view packageName, semver::Version &version) {
-        return addDeclaredPackage(packageName, version.str());
+    bool Manifest::addDeclaredPackage(std::string_view packageName, package::VersionRequirement &&requirement) {
+        if (requirement.getRegistry().has_value()) {
+            return addDependencySectionIfNotExists().insert_or_assign(
+                                                        packageName,
+                                                        toml::table{
+                                                            {"constraintValue", requirement.getRange().str()},
+                                                            {"registry", requirement.getRegistry().value()}})
+                .second;
+        }
+        return addDeclaredPackage(packageName, requirement.getRange().str());
     }
 
     bool Manifest::removeDeclaredPackage(std::string_view packageName) {

@@ -2,6 +2,8 @@
 
 #include <unordered_map>
 
+#include "../package/VersionRequirement.h"
+#include "../repository/GlobalRepository.h"
 #include "../repository/Repository.h"
 #include "../semver/Range.h"
 
@@ -9,7 +11,7 @@ namespace solver {
     /**
      * Contraint la version d'un paquet.
      */
-    using Requirement = semver::Range;
+    using Requirement = package::VersionRequirement;
 
     /**
      * Les dépendances directes, c'est-à-dire celles qui sont déclarées dans le paquet source.
@@ -28,8 +30,9 @@ namespace solver {
      */
     struct Dependency {
         std::reference_wrapper<const std::string> dep;
-        Requirement range;
-        Dependency(const std::string &dep, const Requirement &range);
+        semver::Range req;
+        repository::Repository *repository;
+        Dependency(const std::string &dep, const Requirement &req);
     };
 
     /**
@@ -49,7 +52,7 @@ namespace solver {
     private:
         using Registry = std::unordered_map<std::string, package::Package>;
 
-        repository::Repository &repository;
+        repository::GlobalRepository &repository;
         Registry registry;
 
         /**
@@ -57,17 +60,18 @@ namespace solver {
          *
          * Cette méthode est un proxy vers le dépôt utilisé, puisqu'elle garde en mémoire les paquets déjà recherchés.
          *
-         * @param packageName Le nom du paquet auquel doivent appartenir les versions.
+         * @param dep La dépendance à rechercher.
          * @return Les versions disponibles.
          */
-        const std::vector<package::PackageVersion> &getVersions(const std::string &packageName);
+        const std::vector<package::PackageVersion> &getVersions(const Dependency &dep);
 
     public:
-        explicit Resolver(repository::Repository &repository);
+        explicit Resolver(repository::GlobalRepository &repository);
         Resolved resolve(const solver::Summaries &summaries);
         Resolved resolve(const std::vector<Dependency> &dependencies);
     };
 
-    Resolved resolve(const solver::Summaries &summaries, repository::Repository &repository);
-    Resolved resolve(const std::vector<Dependency> &dependencies, repository::Repository &repository);
+    Resolved resolve(const package::Summaries &summaries, repository::GlobalRepository &repository);
+    Resolved resolve(const solver::Summaries &summaries, repository::GlobalRepository &repository);
+    Resolved resolve(const std::vector<Dependency> &dependencies, repository::GlobalRepository &repository);
 }
