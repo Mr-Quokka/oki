@@ -6,7 +6,7 @@
 
 namespace solver {
     Dependency::Dependency(const std::string &dep, const Requirement &req)
-        : dep{dep}, req{req.getRange()} {}
+        : dep{dep}, req{req.getRange()}, repository{nullptr} {}
 
     Resolver::Resolver(repository::GlobalRepository &repository)
         : repository{repository} {}
