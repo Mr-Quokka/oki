@@ -11,6 +11,7 @@ trigger:
     - cli/*
     - doc/*
     - web/*
+    - ci/*
 
 steps:
   - name: build-cli
@@ -32,19 +33,16 @@ steps:
       - cd web
       - phpstan analyse src --level 3
 
-  - name: build-book
-    image: hub.codefirst.iut.uca.fr/clement.freville2/oki-build-image:latest
-    commands:
-      - cd doc && mdbook build
-
   - name: deploy-doc
-    image: hub.codefirst.iut.uca.fr/thomas.bellembois/codefirst-docdeployer
+    image: hub.codefirst.iut.uca.fr/maxime.batista/codefirst-docdeployer
     failure: ignore
+    volumes:
+      - name: docs
+        path: /docs
     commands:
-      - doc/entrypoint.sh
-    depends_on:
-      - build-book
-    when:
-      branch:
-        - main
-        - doc/setup
+      - /entrypoint.sh --type swagger --loc oki-api.yaml --dest swagger --branch 'main|ci/*'
+      - /entrypoint.sh --type mdbook --loc doc --dest book --branch 'main|ci/*'
+
+volumes:
+  - name: docs
+    temp: { }
