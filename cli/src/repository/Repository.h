@@ -7,6 +7,7 @@
 
 #include "../config/Manifest.h"
 #include "../package/Package.h"
+#include "SearchParameters.h"
 
 namespace repository {
     /**
@@ -17,9 +18,10 @@ namespace repository {
         /**
          * Liste tous les paquets présents sur le dépôt.
          *
+         * @param params Les paramètres de recherche à utiliser.
          * @return Tous les noms des paquets disponibles.
          */
-        virtual std::vector<package::Package> listPackages() = 0;
+        virtual std::vector<package::Package> listPackages(SearchParameters &params) = 0;
 
         /**
          * Récupère les informations détaillées d'un paquet nommé.

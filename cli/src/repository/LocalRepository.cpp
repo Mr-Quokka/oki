@@ -14,12 +14,14 @@ namespace repository {
         fs::create_directories(root);
     }
 
-    std::vector<package::Package> LocalRepository::listPackages() {
+    std::vector<package::Package> LocalRepository::listPackages(SearchParameters &params) {
         std::vector<package::Package> packages;
         for (const auto &file : fs::directory_iterator(root)) {
             packages.emplace_back(file.path().filename().string(), "");
         }
-        return packages;
+        ptrdiff_t start = static_cast<ptrdiff_t>(std::min(packages.size(), static_cast<size_t>((params.page - 1) * params.limit)));
+        ptrdiff_t end = static_cast<ptrdiff_t>(std::min(packages.size(), static_cast<size_t>(params.page * params.limit)));
+        return {packages.begin() + start, packages.begin() + end};
     }
 
     package::Package LocalRepository::getPackageInfo(std::string_view packageName) {

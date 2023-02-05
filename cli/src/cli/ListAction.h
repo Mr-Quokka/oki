@@ -11,6 +11,7 @@ namespace cli {
     class ListAction : public CliAction {
     private:
         repository::Repository &repository;
+        repository::SearchParameters params;
 
     public:
         ListAction(config::UserConfig &config, ArgMatches &&args);

@@ -29,6 +29,11 @@ _oki_package() {
   COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
 }
 
+_oki_list() {
+  opts='--registry --limit --page'
+  COMPREPLY=($(compgen -W "${opts}" -- "${cur}"))
+}
+
 _oki_registrable() {
   [ "$prev" = '--registry' ] && return 0
   opts='--registry'
@@ -57,7 +62,10 @@ _oki() {
     package)
       _oki_package
     ;;
-    list | publish | show)
+    list)
+      _oki_list
+    ;;
+    publish | show)
       _oki_registrable
     ;;
   esac

@@ -26,8 +26,8 @@ namespace repository {
         throw RepositoryException{"Repository `" + std::string{name} + "` not found"};
     }
 
-    std::vector<package::Package> GlobalRepository::listPackages() {
-        return sources.front().repository->listPackages();
+    std::vector<package::Package> GlobalRepository::listPackages(SearchParameters &params) {
+        return sources.front().repository->listPackages(params);
     }
 
     package::Package GlobalRepository::getPackageInfo(std::string_view packageName) {

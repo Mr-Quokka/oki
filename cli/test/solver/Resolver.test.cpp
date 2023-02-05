@@ -14,7 +14,7 @@ static PackageVersion pkg(const semver::Version &version, const Summaries &summa
 
 class RepositoryMock : public repository::Repository {
 public:
-    std::vector<package::Package> listPackages() override {
+    std::vector<package::Package> listPackages([[maybe_unused]] repository::SearchParameters &params) override {
         return {};
     }
     package::Package getPackageInfo(std::string_view packageName) override {

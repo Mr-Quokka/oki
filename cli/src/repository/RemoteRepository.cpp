@@ -29,8 +29,8 @@ namespace repository {
 
     RemoteRepository::RemoteRepository(std::string_view apiUrl) : apiUrl{apiUrl} {}
 
-    std::vector<package::Package> RemoteRepository::listPackages() {
-        io::HttpRequest request = io::HttpRequest::createJson(apiUrl + "/api/list");
+    std::vector<package::Package> RemoteRepository::listPackages(SearchParameters &params) {
+        io::HttpRequest request = io::HttpRequest::createJson(apiUrl + "/api/list?page=" + std::to_string(params.page) + "&limit=" + std::to_string(params.limit));
         json data = tryReadRequest(authProvider, request);
         std::vector<package::Package> packages;
         for (const auto &item : data.at("packages")) {
