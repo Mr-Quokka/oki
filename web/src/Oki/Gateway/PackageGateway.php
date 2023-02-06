@@ -38,12 +38,17 @@ class PackageGateway
 		return $req->fetchAll(PDO::FETCH_CLASS, PackageResume::class);
 	}
 
-	public function listPackagesPagination(int $limit, int $page): array
+	public function listPackagesPagination(?string $search, int $limit, int $page): array
 	{
-        $req = $this->pdo->prepare('SELECT p.*, v1.identifier latest_version FROM package p
+        $searchClause = $search === null ? '' : 'AND ' . $this->config->textSearch('p.ts', ':ts');
+        $req = $this->pdo->prepare("SELECT p.*, v1.identifier latest_version FROM package p
             LEFT JOIN version v1 ON p.id_package = v1.package_id
             LEFT JOIN version v2 ON v1.package_id = v2.package_id AND v2.published_date > v1.published_date
-            WHERE v2.published_date IS NULL LIMIT :limit OFFSET :offset;');
+            WHERE v2.published_date IS NULL $searchClause
+            LIMIT :limit OFFSET :offset;");
+        if ($search !== null) {
+            $req->bindValue('ts', $search);
+        }
 		$req->bindValue('limit', $limit, PDO::PARAM_INT);
         $req->bindValue('offset', ($page - 1) * $limit, PDO::PARAM_INT);
 		if (!$req->execute()) {

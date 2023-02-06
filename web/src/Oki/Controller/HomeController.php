@@ -7,6 +7,7 @@ namespace Oki\Controller;
 use Oki\DI\DI;
 use Oki\Http\HtmlResponse;
 use Oki\Http\HttpResponse;
+use Oki\Validator\PaginationValidator;
 
 class HomeController
 {
@@ -14,12 +15,13 @@ class HomeController
 
     public function index(DI $di, array $params): HttpResponse
     {
+        $search = PaginationValidator::getSearch($_GET);
         $nbPages = intval(ceil($di->getPackageGateway()->getCount() / self::PACKAGES_PER_PAGE));
         if ($nbPages === 0){
             $nbPages = 1;
         }
         $page = intval($params['page'] ?? '1');
-        $packages = $di->getPackageGateway()->listPackagesPagination(self::PACKAGES_PER_PAGE, $page);
+        $packages = $di->getPackageGateway()->listPackagesPagination($search, self::PACKAGES_PER_PAGE, $page);
         return new HtmlResponse(200, 'index', ['packages' => $packages, 'page' => $page, 'nbPages' => $nbPages]);
     }
 

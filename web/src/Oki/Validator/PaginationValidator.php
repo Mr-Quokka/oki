@@ -6,6 +6,14 @@ namespace Oki\Validator;
 
 class PaginationValidator
 {
+    public static function getSearch(array $get): ?string
+    {
+        if (!empty($get['search'])) {
+            return htmlspecialchars($get['search']);
+        }
+        return null;
+    }
+
     public static function getLimit(array $get): int
     {
         if (isset($get['limit']) && is_numeric($get['limit'])) {

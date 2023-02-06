@@ -20,4 +20,9 @@ class SQLiteConfig implements DatabaseConfig
 	{
 		return $exception->getCode() === '23000';
 	}
+
+    public function textSearch(string $column, string $placeholder): string
+    {
+        return "$column LIKE $placeholder";
+    }
 }

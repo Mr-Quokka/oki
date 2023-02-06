@@ -15,10 +15,11 @@ class ApiController
 {
     public function listPackages(DI $di): HttpResponse
     {
+        $search = PaginationValidator::getSearch($_GET);
         $limit = PaginationValidator::getLimit($_GET);
         $page = PaginationValidator::getPage($_GET);
         $total = $di->getPackageGateway()->getCount();
-        $packages = $di->getPackageGateway()->listPackagesPagination($limit, $page);
+        $packages = $di->getPackageGateway()->listPackagesPagination($search, $limit, $page);
         return new JsonResponse(200, [
             'pagination' => [
                 'count' => count($packages),

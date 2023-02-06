@@ -7,8 +7,13 @@ CREATE TABLE package (
     id_package SERIAL PRIMARY KEY,
     name VARCHAR(64) NOT NULL UNIQUE,
     description VARCHAR(256) NOT NULL,
-    language_id INT NOT NULL REFERENCES language(id_language)
+    language_id INT NOT NULL REFERENCES language(id_language),
+    ts tsvector GENERATED ALWAYS AS
+        (setweight(to_tsvector('english', name), 'A') ||
+        setweight(to_tsvector('english', description), 'B')) STORED
 );
+
+CREATE INDEX package_ts_idx ON package USING GIN (ts);
 
 CREATE TABLE version (
     id_version SERIAL PRIMARY KEY,

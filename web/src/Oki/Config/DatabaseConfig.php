@@ -11,4 +11,6 @@ interface DatabaseConfig
 	public function createPDO(): PDO;
 
 	public function isUniqueConstraintViolation(\PDOException $exception): bool;
+
+    public function textSearch(string $column, string $placeholder): string;
 }

@@ -2,9 +2,9 @@
 
 set -eu
 
-export OKI_USERNAME=xxxx
-export OKI_PASSWORD=x
-export OKI_REPOSITORY=https://oki-pkg.dev
+export OKI_USERNAME=test
+export OKI_PASSWORD=test
+export OKI_REPOSITORY=http://localhost:8000
 
 while [ $# -ne 0 ] ; do
     case "$1" in
@@ -25,10 +25,9 @@ else
     git clone https://codefirst.iut.uca.fr/git/oki/packages
 fi
 
-dest=$(dirname $(realpath "$0"))
 #L'ordre est important ! Publier un paquet qui dépend d'un paquet qui n'est pas encore publié empêche la publication.
-for package in packages/{guess-mime-type,linked-list,mths,static-string-builder,shell-escape} ; do
+for package in packages/{guess-mime-type,linked-list,mths,static-string-builder,shell-escape}; do
     packageName=$(basename $package)
-    echo "Publication du paquet $package"
+    echo "Publishing $packageName"
     (cd $package && oki publish)
 done
