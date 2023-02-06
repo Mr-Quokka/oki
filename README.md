@@ -64,8 +64,8 @@ Depending on the database you have chosen, the appropriate PDO extensions are al
 On Debian (versions may vary): `apt install php7.4-cli php7.4-pgsql php7.4-sqlite3`
 
 ### Command Line Interface
-A C++ 20 compiler like GCC is needed, with the [nlohmann/json](https://github.com/nlohmann/json), [curl](https://github.com/curl/curl), [toml++](https://github.com/marzer/tomlplusplus) and [minizip](https://github.com/madler/zlib/tree/master/contrib/minizip) libraries. Unit tests are using [doctest](https://github.com/doctest/doctest).
-On Debian: `apt install build-essential nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev doctest-dev`
+A C++ 20 compiler like GCC is needed, with the [nlohmann/json](https://github.com/nlohmann/json), [curl](https://github.com/curl/curl), [toml++](https://github.com/marzer/tomlplusplus), [boost::program_options](https://github.com/boostorg/program_options) and [minizip](https://github.com/madler/zlib/tree/master/contrib/minizip) libraries. Unit tests are using [doctest](https://github.com/doctest/doctest).
+On Debian: `apt install build-essential nlohmann-json3-dev libcurl4-openssl-dev libminizip-dev libboost-program-options-dev doctest-dev`
 
 Some commands also use some clang tools like [`clang-format`](https://clang.llvm.org/docs/ClangFormat.html) and [`gcovr`](https://github.com/gcovr/gcovr).
 On Debian: `apt install clang-format gcovr`
