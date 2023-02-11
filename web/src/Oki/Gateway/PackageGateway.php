@@ -29,21 +29,16 @@ class PackageGateway
 		$this->ownershipGateway = $ownershipGateway;
 	}
 
-	public function listPackages(): array
-	{
-        $req = $this->pdo->query('SELECT p.*, v1.identifier latest_version FROM package p
-            LEFT JOIN version v1 ON p.id_package = v1.package_id
-            LEFT JOIN version v2 ON v1.package_id = v2.package_id AND v2.published_date > v1.published_date
-            WHERE v2.published_date IS NULL;');
-		return $req->fetchAll(PDO::FETCH_CLASS, PackageResume::class);
-	}
-
 	public function listPackagesPagination(int $limit, int $page): array
 	{
         $req = $this->pdo->prepare('SELECT p.*, v1.identifier latest_version FROM package p
             LEFT JOIN version v1 ON p.id_package = v1.package_id
-            LEFT JOIN version v2 ON v1.package_id = v2.package_id AND v2.published_date > v1.published_date
-            WHERE v2.published_date IS NULL LIMIT :limit OFFSET :offset;');
+            LEFT JOIN version v2 ON v1.package_id = v2.package_id AND (
+                v2.major > v1.major
+                OR (v2.major = v1.major AND v2.minor > v1.minor)
+                OR (v2.major = v1.major AND v2.minor = v1.minor AND v2.patch > v1.patch)
+            )
+            WHERE v2.id_version IS NULL LIMIT :limit OFFSET :offset;');
 		$req->bindValue('limit', $limit, PDO::PARAM_INT);
         $req->bindValue('offset', ($page - 1) * $limit, PDO::PARAM_INT);
 		if (!$req->execute()) {
@@ -71,7 +66,7 @@ class PackageGateway
             return null;
         }
 
-		$reqVersion = $this->pdo->prepare('SELECT * FROM version WHERE package_id = :id ORDER BY published_date DESC;');
+		$reqVersion = $this->pdo->prepare('SELECT * FROM version WHERE package_id = :id ORDER BY major DESC, minor DESC, patch DESC, published_date DESC;');
 		$reqVersion->execute(['id' => $package->getId()]);
 		$reqVersion->setFetchMode(PDO::FETCH_CLASS, PackageVersion::class);
 		$versions = [];
@@ -193,9 +188,16 @@ class PackageGateway
 
 	public function insertVersionUnsafe(PackageManifest $manifest, int $fileSize): TransactionResult
 	{
-		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier, file_size) values (:package_id, :version, :file_size);');
+		$req = $this->pdo->prepare('INSERT INTO version (package_id, major, minor, patch, file_size) VALUES (:package_id, :major, :minor, :patch, :file_size);');
 		try {
-			if (!$req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion(), 'file_size' => $fileSize])) {
+            $version = explode('.', $manifest->getVersion());
+			if (!$req->execute([
+                'package_id' => $manifest->getPackageId(),
+                'major' => $version[0],
+                'minor' => $version[1],
+                'patch' => $version[2],
+                'file_size' => $fileSize
+            ])) {
 				return new TransactionResult($manifest->getPackageId(), 500, 'Cannot add new version');
 			}
 			$req = $this->pdo->prepare('UPDATE package SET description = :description WHERE id_package = :package_id;');

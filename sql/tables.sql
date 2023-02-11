@@ -13,10 +13,13 @@ CREATE TABLE package (
 CREATE TABLE version (
     id_version SERIAL PRIMARY KEY,
     package_id INT NOT NULL REFERENCES package(id_package),
-    identifier VARCHAR(64) NOT NULL,
+    identifier VARCHAR(64) GENERATED ALWAYS AS (major::TEXT || '.' || minor::TEXT || '.' || patch::TEXT) STORED,
+    major INT NOT NULL,
+    minor INT NOT NULL,
+    patch INT NOT NULL,
     file_size INT NOT NULL,
     published_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (package_id, identifier)
+    UNIQUE (package_id, major, minor, patch)
 );
 
 CREATE TABLE dependency (
