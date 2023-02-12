@@ -34,7 +34,8 @@ class HomeController
 
         $params = [
             'package' => $package,
-            'action' => $action
+            'owners' => $di->getOwnershipGateway()->getPackageOwnersUsers($package),
+            'action' => $action,
         ];
         if ($action === 'versions') {
             $di->getPackageGateway()->getPackageVersions($package);

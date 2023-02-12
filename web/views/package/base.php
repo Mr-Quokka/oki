@@ -79,6 +79,15 @@ $base = $router->url('package/' . $package->getName());
         </div>
         <div class="package-owners">
             <h3>Owners</h3>
+            <?php if (empty($params['owners'])): ?>
+                <p>This package doesn't have any owner.</p>
+            <?php else: ?>
+                <ul>
+                    <?php foreach ($params['owners'] as $owner): ?>
+                        <li><?= $owner->getLogin() ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
         </div>
     </aside>
 </div>
