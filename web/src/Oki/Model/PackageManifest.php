@@ -19,6 +19,8 @@ class PackageManifest
      */
     private array $dependencies;
 
+    private int $publisherId = -1;
+
     public function __construct(string $name, string $description, string $version, string $kind, array $dependencies)
     {
         $this->name = $name;
@@ -64,5 +66,15 @@ class PackageManifest
     public function setPackageId(int $packageId): void
     {
         $this->packageId = $packageId;
+    }
+
+    public function getPublisherId(): int
+    {
+        return $this->publisherId;
+    }
+
+    public function setPublisherId(int $publisherId): void
+    {
+        $this->publisherId = $publisherId;
     }
 }

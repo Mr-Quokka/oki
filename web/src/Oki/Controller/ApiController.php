@@ -66,6 +66,7 @@ class ApiController
         if (!empty($errors)) {
             return JsonResponse::badRequest($errors[0]);
         }
+        $manifest->setPublisherId($user->getId());
         if (!PublicationValidator::validateVersionContent($_FILES, $errors)) {
             return JsonResponse::badRequest($errors[0]);
         }

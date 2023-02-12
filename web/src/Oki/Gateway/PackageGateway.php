@@ -193,9 +193,14 @@ class PackageGateway
 
 	public function insertVersionUnsafe(PackageManifest $manifest, int $fileSize): TransactionResult
 	{
-		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier, file_size) values (:package_id, :version, :file_size);');
+		$req = $this->pdo->prepare('INSERT INTO version (package_id, identifier, file_size, publisher_id) values (:package_id, :version, :file_size, :publisher_id);');
 		try {
-			if (!$req->execute(['package_id' => $manifest->getPackageId(), 'version' => $manifest->getVersion(), 'file_size' => $fileSize])) {
+			if (!$req->execute([
+                'package_id' => $manifest->getPackageId(),
+                'version' => $manifest->getVersion(),
+                'file_size' => $fileSize,
+                'publisher_id' => $manifest->getPublisherId()
+            ])) {
 				return new TransactionResult($manifest->getPackageId(), 500, 'Cannot add new version');
 			}
 			$req = $this->pdo->prepare('UPDATE package SET description = :description WHERE id_package = :package_id;');

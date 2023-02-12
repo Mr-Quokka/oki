@@ -1,3 +1,11 @@
+CREATE TABLE registered_user (
+     id_user SERIAL PRIMARY KEY,
+     login VARCHAR(64) NOT NULL,
+     password VARCHAR(72) NOT NULL,
+     permissions INT NOT NULL,
+     UNIQUE (login)
+);
+
 CREATE TABLE language (
     id_language SERIAL PRIMARY KEY,
     designation VARCHAR(30)
@@ -16,6 +24,7 @@ CREATE TABLE version (
     identifier VARCHAR(64) NOT NULL,
     file_size INT NOT NULL,
     published_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    publisher_id INT NOT NULL REFERENCES registered_user(id_user),
     UNIQUE (package_id, identifier)
 );
 
@@ -25,15 +34,6 @@ CREATE TABLE dependency (
     constraint_value VARCHAR(64) NOT NULL,
     PRIMARY KEY (package_reference_id, constrainer_id)
 );
-
-CREATE TABLE registered_user (
-    id_user SERIAL PRIMARY KEY,
-    login VARCHAR(64) NOT NULL,
-    password VARCHAR(72) NOT NULL,
-    permissions INT NOT NULL,
-    UNIQUE (login)
-);
-
 
 CREATE TABLE ownership (
     user_id INT REFERENCES registered_user(id_user),
