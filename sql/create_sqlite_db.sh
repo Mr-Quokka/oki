@@ -2,7 +2,7 @@
 
 rm -f ../web/oki_packages.db
 
-sed 's/SERIAL PRIMARY KEY/INTEGER PRIMARY KEY AUTOINCREMENT/g' tables.sql | sqlite3 ../web/oki_packages.db
+sed 's/SERIAL PRIMARY KEY/INTEGER PRIMARY KEY AUTOINCREMENT/g' tables.sql | sed 's/::TEXT//g' | sqlite3 ../web/oki_packages.db
 
 sqlite3 ../web/oki_packages.db << EOF
 INSERT INTO language VALUES (1, 'c'), (2, 'cpp');
