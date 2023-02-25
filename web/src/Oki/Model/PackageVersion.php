@@ -18,6 +18,8 @@ class PackageVersion implements JsonSerializable
 
     private int $patch;
 
+	private string $checksum;
+
     private string $published_date;
 
     private int $file_size;
@@ -72,6 +74,16 @@ class PackageVersion implements JsonSerializable
         $this->dependencies[$dependency] = $constraint;
     }
 
+    public function setChecksum(string $checksum)
+    {
+    	$this->checksum = $checksum;
+    }
+
+    public function getChecksum(): string
+    {
+    	return $this->checksum;
+    }
+
     public function jsonSerialize(): array
     {
         $dict = [];
@@ -79,6 +91,7 @@ class PackageVersion implements JsonSerializable
         $dict["identifier"] = $this->getIdentifier();
         $dict["published_date"] = $this->published_date;
         $dict["download_url"] = $this->getDownloadUrl();
+        $dict['checksum'] = $this->checksum;
         $dict['dependencies'] = $this->dependencies;
         return $dict;
     }

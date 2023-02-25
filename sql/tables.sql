@@ -28,6 +28,7 @@ CREATE TABLE version (
     file_size INT NOT NULL,
     published_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     publisher_id INT NOT NULL REFERENCES registered_user(id_user),
+    checksum VARCHAR(64) DEFAULT 'TODO',
     UNIQUE (package_id, major, minor, patch)
 );
 
