@@ -18,7 +18,7 @@ class PackageVersion implements JsonSerializable
 
     private int $patch;
 
-	private string $checksum;
+	private string $checksum = '';
 
     private string $published_date;
 
