@@ -36,7 +36,7 @@ namespace config {
         static ManifestLock fromFile(const std::filesystem::path &fileName);
         static ManifestLock fromFileOrEmpty(const std::filesystem::path &fileName);
 
-        static ManifestLock readOrResolve(const std::filesystem::path &manifestFileName, const std::filesystem::path &lockFileName, repository::Repository &repository);
+        static ManifestLock readOrResolve(const std::filesystem::path &manifestFileName, const std::filesystem::path &lockFileName, repository::GlobalRepository &repository);
 
         void saveFile(const std::filesystem::path &fileName) const;
     };

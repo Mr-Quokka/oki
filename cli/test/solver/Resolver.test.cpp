@@ -1,14 +1,14 @@
 #include <algorithm>
 #include <doctest/doctest.h>
+#include <memory>
 #include <vector>
 
 #include "solver/Resolver.h"
 
 using namespace package;
 using namespace semver;
-using namespace solver;
 
-static PackageVersion pkg(const semver::Version &version, const Summaries &summaries = {}) {
+static package::PackageVersion pkg(const semver::Version &version, const Summaries &summaries = {}) {
     return {version, "", "", summaries};
 }
 
@@ -17,7 +17,7 @@ public:
     std::vector<package::Package> listPackages([[maybe_unused]] repository::SearchParameters &params) override {
         return {};
     }
-    package::Package getPackageInfo(std::string_view packageName) override {
+    Package getPackageInfo(std::string_view packageName) override {
         if (packageName == "foo") {
             return {"foo", "", {pkg(Version{2, 0, 0}), pkg(Version{1, 2, 0}), pkg(Version{1, 1, 1}), pkg(Version{1, 1, 0}), pkg(Version{1, 0, 0}), pkg(Version{0, 1, 0})}};
         }
@@ -43,13 +43,20 @@ public:
     }
 };
 
+class GlobalRepositoryMock : public repository::GlobalRepository {
+public:
+    GlobalRepositoryMock() {
+        addSource("local", std::make_unique<RepositoryMock>());
+    }
+};
+
 TEST_CASE("no indirect dependency - optimal solution") {
     Summaries summaries{
         {"foo", Range::parse("^1.0.0")},
         {"bar", Range::parse("~2.0.0")},
     };
-    RepositoryMock mock;
-    Resolved resolved = resolve(summaries, mock);
+    GlobalRepositoryMock mock;
+    solver::Resolved resolved = solver::resolve(summaries, mock);
     CHECK_EQ(resolved.size(), 2);
     CHECK_EQ(resolved.at("foo"), Version(1, 2, 0));
     CHECK_EQ(resolved.at("bar"), Version(2, 0, 1));
@@ -60,16 +67,16 @@ TEST_CASE("no indirect dependency - no solution") {
         {"foo", Range::parse("^1.0.0")},
         {"bar", Range::parse("^2.5.0")},
     };
-    RepositoryMock mock;
-    CHECK_THROWS_WITH(resolve(summaries, mock), "no matching version found for package bar");
+    GlobalRepositoryMock mock;
+    CHECK_THROWS_WITH(solver::resolve(summaries, mock), "no matching version found for package bar");
 }
 
 TEST_CASE("diamond dependency - optimal solution") {
     Summaries summaries{
         {"grault", Range::parse("^1.0.0")},
     };
-    RepositoryMock mock;
-    Resolved resolved = resolve(summaries, mock);
+    GlobalRepositoryMock mock;
+    solver::Resolved resolved = solver::resolve(summaries, mock);
     CHECK_EQ(resolved.size(), 4);
     CHECK_EQ(resolved.at("grault"), Version(1, 0, 0));
     CHECK_EQ(resolved.at("baz"), Version(1, 5, 0));
@@ -81,23 +88,23 @@ TEST_CASE("diamond dependency - no solution") {
     Summaries summaries{
         {"grault", Range::parse("~0.1.0")},
     };
-    RepositoryMock mock;
-    CHECK_THROWS_WITH(resolve(summaries, mock), "no matching version found for package foo");
+    GlobalRepositoryMock mock;
+    CHECK_THROWS_WITH(solver::resolve(summaries, mock), "no matching version found for package foo");
 }
 
 TEST_CASE("diamond dependency - version intersection") {
     std::string fred = "fred";
     std::string waldo = "waldo";
-    std::vector<Dependency> dependencies{
-        {fred, Range::parse("=1.0.0")},
-        {waldo, Range::parse("=1.5.1")},
+    std::vector<solver::Dependency> dependencies{
+        {fred, {Range::parse("=1.0.0"), std::nullopt}},
+        {waldo, {Range::parse("=1.5.1"), std::nullopt}},
     };
-    RepositoryMock mock;
-    Resolved resolved = resolve(dependencies, mock);
+    GlobalRepositoryMock mock;
+    solver::Resolved resolved = solver::resolve(dependencies, mock);
 
     // Vérification que l'ordre de déclaration des dépendances n'est pas déterministe
     std::reverse(dependencies.begin(), dependencies.end());
-    CHECK_EQ(resolved, resolve(dependencies, mock));
+    CHECK_EQ(resolved, solver::resolve(dependencies, mock));
 
     CHECK_EQ(resolved.size(), 3);
     CHECK_EQ(resolved.at("fred"), Version(1, 0, 0));

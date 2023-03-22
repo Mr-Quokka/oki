@@ -56,7 +56,24 @@ namespace repository {
          * @return Une liste de paquets.
          */
         std::vector<package::Package> listPackages(SearchParameters &params) override;
+
+        /**
+         * Récupère les informations d'un paquet en demandant à chaque dépôt.
+         *
+         * @param packageName Le nom du paquet.
+         * @return Les informations du paquet.
+         */
         package::Package getPackageInfo(std::string_view packageName) override;
+
+        /**
+         * Récupère les informations d'un paquet en ayant pour préférence un dépôt.
+         *
+         * @param packageName Le nom du paquet.
+         * @param preferredRegistry Le dépôt préféré à utiliser (ou nullptr).
+         * @return Les informations du paquet.
+         */
+        std::pair<package::Package, std::reference_wrapper<Repository>> getPackageInfo(std::string_view packageName, Repository *preferredRegistry);
+
         bool publish(config::Manifest &manifest, const std::filesystem::path &source) override;
     };
 }

@@ -84,6 +84,8 @@ namespace semver {
             return std::find_if(begin, end, [&](const Version &version) { return contains(version); });
         }
 
+        std::string str() const;
+
         /**
          * Crée une nouvelle intervalle en interprétant une chaîne de caractères.
          *
@@ -94,5 +96,17 @@ namespace semver {
          * @throw semver::ParseException Si l'intervalle ne peut pas être lu.
          */
         static Range parse(std::string_view s);
+
+        /**
+         * Crée un intervalle des versions compatibles en fonctionnalité (numéro majeur identique) avec une version donnée.
+         *
+         * @param version La version de référence.
+         * @return L'intervalle des versions compatibles.
+         */
+        static Range featureSatisfying(const Version &version);
+
+        friend std::ostream &operator<<(std::ostream &os, const Range &range);
     };
+
+    std::ostream &operator<<(std::ostream &os, const Range &range);
 }

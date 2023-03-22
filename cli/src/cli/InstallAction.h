@@ -11,7 +11,8 @@ namespace cli {
     class InstallAction : public CliAction {
     private:
         std::string packageName;
-        repository::Repository &repository;
+        std::optional<std::string> registry;
+        repository::GlobalRepository &repository;
 
     public:
         InstallAction(config::UserConfig &config, ArgMatches &&args);

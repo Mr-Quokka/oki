@@ -9,7 +9,7 @@
 
 namespace cli {
     InstallAction::InstallAction(config::UserConfig &config, ArgMatches &&args)
-        : packageName{args.require<std::string>("package")}, repository{args.getRegistry(config)} {}
+        : packageName{args.require<std::string>("package")}, registry{args.get<std::string>("registry")}, repository{config.getGlobalRepository()} {}
 
     int InstallAction::run() {
         package::Package p = repository.getPackageInfo(packageName);
@@ -18,7 +18,7 @@ namespace cli {
         } else {
             config::Manifest manifest = config::Manifest::fromFile(OKI_MANIFEST_FILE);
             package::PackageVersion latest = p.getVersions().front();
-            bool success = manifest.addDeclaredPackage(packageName, latest);
+            bool success = manifest.addDeclaredPackage(packageName, package::VersionRequirement{semver::Range::featureSatisfying(latest), registry});
 
             solver::Resolved resolved = solver::resolve(manifest.listDeclaredPackages(), repository);
             if (success) {
