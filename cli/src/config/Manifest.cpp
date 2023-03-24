@@ -156,7 +156,7 @@ namespace config {
                 filtered.insert(t.cbegin(), t.cend());
             });
         }
-        filtered.insert("checksum", io::checksumAsString(checksum));
+        filtered.insert("checksum", checksum.str());
         const toml::node *dependencies = table.get(DEPENDENCY_SECTION_NAME);
         if (dependencies != nullptr) {
             dependencies->visit([&](const toml::table &t) {

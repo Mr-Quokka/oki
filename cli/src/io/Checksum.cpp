@@ -1,4 +1,4 @@
-#include "checksum.h"
+#include "Checksum.h"
 
 #include <cstring>
 #include <fstream>
@@ -9,7 +9,24 @@
 #define BUF_LEN 32768
 
 namespace io {
-    Sha256Checksum computeSha256(const std::filesystem::path &path) {
+    Sha256Checksum::Sha256Checksum(const std::array<uint8_t, 32> &array)
+        : std::array<uint8_t, 32>{array} {}
+
+    Sha256Checksum::Sha256Checksum(std::string_view str) {
+        if (str.size() != SHA256_DIGEST_LENGTH * 2) {
+            throw std::invalid_argument{"Invalid checksum"};
+        }
+
+        for (size_t i = 0; i < SHA256_DIGEST_LENGTH; i++) {
+            char buf[3];
+            buf[0] = str[i * 2];
+            buf[1] = str[i * 2 + 1];
+            buf[2] = '\0';
+            (*this)[i] = static_cast<uint8_t>(std::strtol(buf, nullptr, 16));
+        }
+    }
+
+    Sha256Checksum Sha256Checksum::ofFile(const std::filesystem::path &path) {
         std::ifstream file{path, std::ios::binary};
         if (!file) {
             throw std::runtime_error{"Unable to open file"};
@@ -37,12 +54,17 @@ namespace io {
         return checksum;
     }
 
-    std::string checksumAsString(const Checksum &checksum) {
-        std::ostringstream out;
+    std::ostream &operator<<(std::ostream &out, const Sha256Checksum &checksum) {
         out << std::hex << std::setfill('0');
         for (unsigned char c : checksum) {
             out << std::setw(2) << static_cast<int>(c);
         }
+        return out;
+    }
+
+    std::string Sha256Checksum::str() const {
+        std::ostringstream out;
+        out << *this;
         return out.str();
     }
 }

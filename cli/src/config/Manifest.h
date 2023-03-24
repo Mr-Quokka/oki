@@ -5,7 +5,7 @@
 #include <toml.hpp>
 #include <unordered_map>
 
-#include "io/checksum.h"
+#include "io/Checksum.h"
 #include "make/BuildInfo.h"
 #include "make/ProjectKind.h"
 #include "package/Summary.h"
@@ -65,7 +65,7 @@ namespace config {
 
         /**
          * Récupére la version du paquet dans le fichier manifeste.
-         * 
+         *
          * @return La version du paquet.
          */
         semver::Version getPackageVersion() const;

@@ -1,8 +1,8 @@
 #include <nlohmann/json.hpp>
 
 #include "../io/Archive.h"
+#include "../io/Checksum.h"
 #include "../io/HttpRequest.h"
-#include "../io/checksum.h"
 #include "RemoteRepository.h"
 
 using json = nlohmann::json;
@@ -64,7 +64,7 @@ namespace repository {
     void RemoteRepository::publish(config::Manifest &manifest, const std::filesystem::path &source) {
         io::HttpRequest request = io::HttpRequest::createJson(apiUrl + "/api/publish");
         io::MimePart mime = request.addMime();
-        mime.addDataPart("manifest", manifest.asFilteredJson(io::computeSha256(source)));
+        mime.addDataPart("manifest", manifest.asFilteredJson(io::Sha256Checksum::ofFile(source)));
         mime.addFilePart("package", source);
         json data = tryReadRequest(authProvider, request);
     }
