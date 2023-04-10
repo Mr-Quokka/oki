@@ -42,3 +42,18 @@ TEST_CASE("findSatisfying") {
         Version(2, 0, 0)};
     CHECK(*range.findSatisfying(versions.cbegin(), versions.cend()) == Version(2, 2, 0));
 }
+
+TEST_CASE("str - ^") {
+    Range range = Range::featureSatisfying(Version(2, 4, 0));
+    CHECK_EQ(range.str(), "2.4.0");
+}
+
+TEST_CASE("str - ~") {
+    Range range(Version(1, 1, 1), Version(1, 2, 0));
+    CHECK_EQ(range.str(), "~1.1.1");
+}
+
+TEST_CASE("str - exotic") {
+    Range range(Version(1, 1, 1), Version(2, 2, 2));
+    CHECK_EQ(range.str(), ">=1.1.1, <2.2.2");
+}

@@ -83,12 +83,10 @@ namespace semver {
             os << range.minInclusive;
         } else if (range.minInclusive == Version{} && range.maxExclusive == Version::maxVersion()) {
             os << "*";
-        } else if (range.minInclusive.major == (range.maxExclusive.major + 1) && range.maxExclusive.patch == 0) {
-            if (range.minInclusive.minor == (range.maxExclusive.minor + 1)) {
-                os << "~" << range.minInclusive;
-            } else {
-                os << range.minInclusive;
-            }
+        } else if (range.maxExclusive.major == (range.minInclusive.major + 1) && range.maxExclusive.minor == 0 && range.maxExclusive.patch == 0) {
+            os << range.minInclusive;
+        } else if (range.maxExclusive.major == range.minInclusive.major && range.maxExclusive.minor == (range.minInclusive.minor + 1) && range.maxExclusive.patch == 0) {
+            os << "~" << range.minInclusive;
         } else {
             os << ">=" << range.minInclusive << ", <" << range.maxExclusive;
         }
