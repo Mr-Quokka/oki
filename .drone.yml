@@ -36,13 +36,6 @@ steps:
   - name: deploy-doc
     image: hub.codefirst.iut.uca.fr/maxime.batista/codefirst-docdeployer
     failure: ignore
-    volumes:
-      - name: docs
-        path: /docs
     commands:
       - /entrypoint.sh --type swagger --loc oki-api.yaml --branch 'main|ci/*'
-      - /entrypoint.sh --type mdbook --loc doc --dest book --branch 'main|ci/*'
-
-volumes:
-  - name: docs
-    temp: { }
+      - /entrypoint.sh --type mdbook --loc doc --branch 'main|ci/*'

@@ -27,8 +27,17 @@ Create a user and a database on your PostgreSQL server.
 ```console
 $ sudo -i -u postgres psql
 postgres=# CREATE DATABASE oki;
-postgres=# CREATE USER oki WITH ENCRYPTED 'password';
+postgres=# CREATE USER oki WITH ENCRYPTED PASSWORD 'password';
 postgres=# GRANT ALL PRIVILEGES ON DATABASE oki TO oki;
+```
+
+In PostgreSQL 15 onwards, users cannot create objects in the `public` schema by default.
+Oki only needs to create tables using the `tables.sql` script. You can temporarily give this permission to the user with the following statement:
+
+```console
+=# \c oki
+=# GRANT CREATE ON SCHEMA public TO oki;
+=# -- REVOKE CREATE ON SCHEMA public FROM oki;
 ```
 
 Clone the repository
