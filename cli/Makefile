@@ -85,7 +85,7 @@ doc: doc/html/index.html
 
 # Formate les sources
 format:
-	find src/ test/ \( -name '*.cpp' -o -name '*.h' \) -exec clang-format -i {} \;
+	find src/ test/ \( -name '*.cpp' -o -name '*.h' \) -exec clang-format -i {} +
 
 # Teste le programme
 check: $(TARGET_EXE)-test
