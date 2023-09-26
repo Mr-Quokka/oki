@@ -33,9 +33,31 @@ steps:
       - cd web
       - phpstan analyse src --level 3
 
-  - name: deploy-doc
-    image: hub.codefirst.iut.uca.fr/maxime.batista/codefirst-docdeployer
+  - name: deploy-swagger
+    image: hub.codefirst.iut.uca.fr/maxime.batista/codefirst-docdeployer:0.2
+    settings:
+      source: ./oki-api.yaml
+      target: api
+      transform: swagger
     failure: ignore
+    when:
+      branch:
+        - main
+        - ci/*
+
+  - name: build-book
+    image: ghcr.io/peaceiris/mdbook:v0.4.34
     commands:
-      - /entrypoint.sh --type swagger --loc oki-api.yaml --branch 'main|ci/*'
-      - /entrypoint.sh --type mdbook --loc doc --branch 'main|ci/*'
+      - mdbook build doc -d build
+
+  - name: deploy-book
+    image: hub.codefirst.iut.uca.fr/maxime.batista/codefirst-docdeployer:0.2
+    settings:
+      source: doc/build
+      target: book
+    failure: ignore
+    depends_on: [build-book]
+    when:
+      branch:
+        - main
+        - ci/*
