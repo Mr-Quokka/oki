@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oki\Security;
 
-use AssertionError;
 use Oki\Gateway\UserGateway;
 use Oki\Model\User;
 
@@ -43,9 +42,8 @@ final class Security
         return true;
     }
 
-    public function changeCurrentPassword(User $user, string $currentPassword, string $newPassword): bool
+    public function changeCurrentPassword(?User $user, string $currentPassword, string $newPassword): bool
     {
-        $user = $this->getCurrentUser();
         if ($user === null || !password_verify($currentPassword, $user->getPassword())) {
             return false;
         }
