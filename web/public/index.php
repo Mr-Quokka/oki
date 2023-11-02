@@ -6,6 +6,10 @@ $home = new \Oki\Controller\HomeController();
 $api = new \Oki\Controller\ApiController();
 $user = new \Oki\Controller\UserController();
 
+if (preg_match('/^\/api/', $_SERVER['REQUEST_URI'])) {
+    \Oki\Util\CrossOriginResourceSharing::enable();
+}
+
 $router = new \Oki\Router\Router($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
 $router->get('/^api\/list$/', [$api, 'listPackages']);
 $router->post('/^api\/publish$/', [$api, 'publish']);
