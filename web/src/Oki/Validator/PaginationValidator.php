@@ -17,7 +17,7 @@ class PaginationValidator
     public static function getPage(array $get): int
     {
         if (isset($get['page']) && is_numeric($get['page'])) {
-            return min(100, max(0, intval($get['page'])));
+            return min(100, max(1, intval($get['page'])));
         }
         return 1;
     }

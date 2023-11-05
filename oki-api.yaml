@@ -28,8 +28,8 @@ paths:
           name: page
           schema:
             type: integer
-            example: 0
-            minimum: 0
+            example: 1
+            minimum: 1
           description: Where to start searching
       responses:
         200:
