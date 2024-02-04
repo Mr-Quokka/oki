@@ -20,7 +20,7 @@ class HomeController
         }
         $page = intval($params['page'] ?? '1');
         $packages = $di->getPackageGateway()->listPackagesPagination(self::PACKAGES_PER_PAGE, $page);
-        return new HtmlResponse(200, 'index', ['packages' => $packages, 'page' => $page, 'nbPages' => $nbPages]);
+        return new HtmlResponse(HttpResponse::OK, 'index', ['packages' => $packages, 'page' => $page, 'nbPages' => $nbPages]);
     }
 
     public function packageInfo(DI $di, array $params): HttpResponse
@@ -54,6 +54,6 @@ class HomeController
                 $di->getPackageGateway()->getPackageDependencies($version);
             }
         }
-        return new HtmlResponse(200, 'package/base', $params);
+        return new HtmlResponse(HttpResponse::OK, 'package/base', $params);
     }
 }

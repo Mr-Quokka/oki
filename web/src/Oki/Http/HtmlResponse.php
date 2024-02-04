@@ -23,7 +23,7 @@ class HtmlResponse implements HttpResponse
 
     public static function notFound(string $message): HtmlResponse
     {
-        return new HtmlResponse(404, '404', ['message' => $message]);
+        return new HtmlResponse(HttpResponse::NOT_FOUND, '404', ['message' => $message]);
     }
 
     public function getStatusCode(): int
@@ -41,5 +41,18 @@ class HtmlResponse implements HttpResponse
         require $viewBasePath . '/' . $this->viewPath . '.php';
         $content = ob_get_clean();
         require $viewBasePath . '/layout.php';
+    }
+
+    /**
+     * @param string[] $errors
+     * @return $this
+     */
+    public function errors(array $errors): self
+    {
+        $this->viewParams['errors'] = $errors;
+        if (!empty($errors) && $this->status === HttpResponse::OK) {
+            $this->status = HttpResponse::BAD_REQUEST;
+        }
+        return $this;
     }
 }

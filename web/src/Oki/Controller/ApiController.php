@@ -19,7 +19,7 @@ class ApiController
         $page = PaginationValidator::getPage($_GET);
         $total = $di->getPackageGateway()->getCount();
         $packages = $di->getPackageGateway()->listPackagesPagination($limit, $page);
-        return new JsonResponse(200, [
+        return new JsonResponse(HttpResponse::OK, [
             'pagination' => [
                 'count' => count($packages),
                 'total' => $total
@@ -35,7 +35,7 @@ class ApiController
         if ($package === null) {
             return JsonResponse::notFound('Unknown package name');
         }
-        return new JsonResponse(200, $package);
+        return new JsonResponse(HttpResponse::OK, $package);
     }
 
     public function versionInfo(DI $di, array $params): HttpResponse
@@ -49,13 +49,13 @@ class ApiController
         if ($package === null) {
             return JsonResponse::notFound('Unknown package name or version');
         }
-        return new JsonResponse(200, $package);
+        return new JsonResponse(HttpResponse::OK, $package);
     }
 
     public function publish(DI $di): HttpResponse
     {
         if (!HttpAuth::authRequest($di->getSecurity())) {
-            return JsonResponse::error(401, 'Invalid credentials');
+            return JsonResponse::error(HttpResponse::UNAUTHORIZED, 'Invalid credentials');
         }
         $user = $di->getSecurity()->getCurrentUser();
         if ($user === null) {
@@ -76,7 +76,7 @@ class ApiController
         }
         $packageId = $packageRes->getDataId();
         if (!$di->getOwnershipGateway()->grantedAccess($user->getId(), $packageId)) {
-            return JsonResponse::error(403, 'Insufficient permissions');
+            return JsonResponse::error(HttpResponse::FORBIDDEN, 'Insufficient permissions');
         }
         $manifest->setPackageId($packageId);
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Oki\Gateway;
 
 use Oki\Config\DatabaseConfig;
+use Oki\Http\HttpResponse;
 use Oki\Model\Ownership;
 use Oki\Model\Package;
 use Oki\Model\PackageManifest;
@@ -105,11 +106,11 @@ class PackageGateway
 	{
 		$id = $this->getPackageId($manifest->getName());
 		if ($id !== null) {
-			return new TransactionResult($id, 200, 'Valid existing package name');
+			return new TransactionResult($id, HttpResponse::OK, 'Valid existing package name');
 		}
 		$languageId = $this->getLanguageId($manifest->getKind());
 		if ($languageId === null) {
-			return new TransactionResult(-1, 400, 'Unknown package kind');
+			return new TransactionResult(-1, HttpResponse::BAD_REQUEST, 'Unknown package kind');
 		}
 		try {
 			$this->pdo->beginTransaction();
@@ -199,13 +200,13 @@ class PackageGateway
                 'file_size' => $fileSize,
                 'publisher_id' => $manifest->getPublisherId()
             ])) {
-				return new TransactionResult($manifest->getPackageId(), 500, 'Cannot add new version');
+				return new TransactionResult($manifest->getPackageId(), HttpResponse::INTERNAL_SERVER_ERROR, 'Cannot add new version');
 			}
 			$req = $this->pdo->prepare('UPDATE package SET description = :description WHERE id_package = :package_id;');
 			$req->execute(['description' => $manifest->getDescription(), 'package_id' => $manifest->getPackageId()]);
 		} catch (PDOException $e) {
 			if ($this->config->isUniqueConstraintViolation($e)) {
-				return new TransactionResult($manifest->getPackageId(), 409, 'This version already exists');
+				return new TransactionResult($manifest->getPackageId(), HttpResponse::CONFLICT, 'This version already exists');
 			}
 			throw $e;
 		}
@@ -221,10 +222,10 @@ class PackageGateway
 			if (($package_reference_id = $this->getPackageId($package)) !== null) {
 				$req->execute(['package_reference_id' => $package_reference_id, 'constrainer_id' => $constrainer_id, 'constraint_value' => $range]);
 			} else {
-				return new TransactionResult($manifest->getPackageId(), 400, "The `$package` dependency is not present in the registry");
+				return new TransactionResult($manifest->getPackageId(), HttpResponse::BAD_REQUEST, "The `$package` dependency is not present in the registry");
 			}
 		}
-		return new TransactionResult($manifest->getPackageId(), 201, 'The version has been successfully published');
+		return new TransactionResult($manifest->getPackageId(), HttpResponse::CREATED, 'The version has been successfully published');
 	}
 
 	public function getCount(): int
